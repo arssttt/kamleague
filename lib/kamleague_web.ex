@@ -39,6 +39,7 @@ defmodule KamleagueWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
+      import KamleagueWeb.Helpers.CheckboxHelper
       import KamleagueWeb.ErrorHelpers
       import KamleagueWeb.Gettext
       alias KamleagueWeb.Router.Helpers, as: Routes

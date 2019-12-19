@@ -1,0 +1,27 @@
+<section class="section">
+  <div class="box">
+    <div class="columns is-variable is-8">
+      <div class="column">
+        <h1 class="title is-3">Current games</h1>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th class="has-text-centered">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for game <- @games do %>
+                <tr>
+                  <%= for player <- game.players do %>
+                    <td class="has-text-centered"><%= player.nickname %></td>
+                  <% end %>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+      </div>
+    </div>
+  </div>
+</section>

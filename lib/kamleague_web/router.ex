@@ -30,6 +30,7 @@ defmodule KamleagueWeb.Router do
 
     get "/", PageController, :index
     get "/maps", MapController, :index
+    resources "/games", GameController
   end
 
   scope "/", KamleagueWeb do

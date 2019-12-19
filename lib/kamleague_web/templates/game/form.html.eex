@@ -1,0 +1,15 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <div class="field">
+    <%=
+        multiselect_checkboxes(
+        f,
+        :players,
+        Enum.map(@players, fn a -> { a.nickname, a.id } end),
+        selected: Enum.map(@changeset.data.players,&(&1.id))
+        )
+    %>
+  </div>
+  <div class="field">
+    <%= submit "Add", class: "button is-primary is-medium" %>
+  </div>
+<% end %>

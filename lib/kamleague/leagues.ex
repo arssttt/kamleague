@@ -19,7 +19,11 @@ defmodule Kamleague.Leagues do
   Returns the list of active players.
   """
   def list_active_players do
-    Repo.all(from p in Player, where: p.active == true, order_by: [desc: p.elo])
+    Repo.all(
+      from p in Player,
+        where: p.active == true,
+        order_by: [desc: p.elo]
+    )
   end
 
   @doc """
@@ -37,6 +41,13 @@ defmodule Kamleague.Leagues do
 
   """
   def get_player!(id), do: Repo.get!(Player, id)
+
+  @doc """
+  Gets players from the ids
+  """
+  def get_players(ids) do
+    Repo.all(from p in Player, where: p.id in ^ids)
+  end
 
   @doc """
   Creates a player.
@@ -197,5 +208,109 @@ defmodule Kamleague.Leagues do
   """
   def change_map(%Map{} = map) do
     Map.changeset(map, %{})
+  end
+
+  alias Kamleague.Leagues.Game
+
+  @doc """
+  Returns the list of games.
+
+  ## Examples
+
+      iex> list_games()
+      [%Game{}, ...]
+
+  """
+  def list_games do
+    Repo.all(
+      from g in Game,
+        preload: [:players]
+    )
+  end
+
+  @doc """
+  Gets a single game.
+
+  Raises `Ecto.NoResultsError` if the Game does not exist.
+
+  ## Examples
+
+      iex> get_game!(123)
+      %Game{}
+
+      iex> get_game!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_game!(id), do: Repo.get!(Game, id)
+
+  @doc """
+  Creates a game.
+
+  ## Examples
+
+      iex> create_game(%{field: value})
+      {:ok, %Game{}}
+
+      iex> create_game(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_game(attrs \\ %{}) do
+    players = get_players(attrs["players"])
+
+    %Game{}
+    |> Game.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:players, players)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a game.
+
+  ## Examples
+
+      iex> update_game(game, %{field: new_value})
+      {:ok, %Game{}}
+
+      iex> update_game(game, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_game(%Game{} = game, attrs) do
+    game
+    |> Game.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Game.
+
+  ## Examples
+
+      iex> delete_game(game)
+      {:ok, %Game{}}
+
+      iex> delete_game(game)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_game(%Game{} = game) do
+    Repo.delete(game)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking game changes.
+
+  ## Examples
+
+      iex> change_game(game)
+      %Ecto.Changeset{source: %Game{}}
+
+  """
+  def change_game(%Game{} = game) do
+    changeset = Game.changeset(game, %{})
+    changeset = update_in(changeset.data, &Repo.preload(&1, :players))
+    changeset
   end
 end
