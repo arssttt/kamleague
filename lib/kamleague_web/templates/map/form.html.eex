@@ -1,0 +1,21 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <div class="field">
+    <%= label f, :name, "Name of the map", class: "label" %>
+    <div class="control">
+      <%= text_input f, :name, class: "input" %>
+    </div>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="field">
+    <%= label f, :locations, "Number of locations", class: "label" %>
+    <div class="control">
+      <%= number_input f, :locations, class: "input" %>
+    </div>
+    <%= error_tag f, :locations %>
+  </div>
+
+  <div class="field">
+    <%= submit "Add", class: "button is-primary is-medium" %>
+  </div>
+<% end %>

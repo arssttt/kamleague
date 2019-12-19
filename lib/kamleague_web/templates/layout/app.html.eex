@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Kamleague · Phoenix Framework</title>
+    <script src="https://kit.fontawesome.com/69b634ccb1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    
+  </head>
+  <body>
+    <header>
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item" href="https://bulma.io">
+              <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div id="navbar" class="navbar-menu">
+            <div class="navbar-start">
+              <%= link "Home", to: Routes.page_path(@conn, :index), class: "navbar-item" %>
+
+              <a class="navbar-item">
+                Information
+              </a>
+
+              <a class="navbar-item">
+                Statistics
+              </a>
+
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                  More
+                </a>
+
+                <div class="navbar-dropdown">
+                  <a class="navbar-item">
+                    About
+                  </a>
+                  <a class="navbar-item">
+                    Jobs
+                  </a>
+                  <a class="navbar-item">
+                    Contact
+                  </a>
+                  <hr class="navbar-divider">
+                  <a class="navbar-item">
+                    Report an issue
+                  </a>
+                </div>
+              </div>
+
+              <%= if @current_user && @current_user.role == "admin" do %>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link">
+                    Management
+                  </a>
+
+                  <div class="navbar-dropdown">
+                    <%= link "Maps", to: Routes.map_path(@conn, :new), class: "navbar-item" %>
+                    <a class="navbar-item">
+                      Users
+                    </a>
+                    <a class="navbar-item">
+                      Contact
+                    </a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item">
+                      Report an issue
+                    </a>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="navbar-end">
+              <%= if @current_user do %>
+                <div class="is-divider-vertical" data-content="OR"></div>
+                  <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                      <%= @current_user.player.nickname %>
+                    </a>
+                    <div class="navbar-dropdown">
+                      <a class="navbar-item">
+                        About
+                      </a>
+                      <a class="navbar-item">
+                        Jobs
+                      </a>
+                      <a class="navbar-item">
+                        Contact
+                      </a>
+                      <hr class="navbar-divider">
+                      <%= link "Logout", to: Routes.logout_path(@conn, :delete), method: :delete, class: "navbar-item" %>
+                    </div>
+                </div>
+              <% else %>
+                  <%= link "Register", to: Routes.signup_path(@conn, :new), class: "navbar-item" %>
+                  <%= link "Sign in", to: Routes.login_path(@conn, :new), class: "navbar-item" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main role="main" class="container">
+      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+        </p>
+      </div>
+    </footer>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+</html>
