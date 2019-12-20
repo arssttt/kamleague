@@ -15,7 +15,8 @@ config :kamleague, KamleagueWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "nF8lfhQpllrrwpoIM1DaKCZqmuQQOGVM10gc0sXJ3asRORjaGFTzVoHyW19YDeUa",
   render_errors: [view: KamleagueWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Kamleague.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Kamleague.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "UeHVDSO67TRINgujJUIZFiFisUtR3/1o"]
 
 # Configures Elixir's Logger
 config :logger, :console,
