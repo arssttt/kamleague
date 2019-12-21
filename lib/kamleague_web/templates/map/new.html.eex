@@ -19,8 +19,8 @@
 
                   <td>
                     <div class="buttons">
-                      <%= button "Edit", to: Routes.map_path(@conn, :edit, map), class: "button is-info" %>
-                      <%= button "Delete", to: Routes.map_path(@conn, :delete, map), method: :delete, class: "button is-danger", data: [confirm: "Are you sure?"] %>
+                      <%= link "Edit", to: Routes.map_path(@conn, :edit, map), class: "button is-info is-small" %>
+                      <%= button "Delete", to: Routes.map_path(@conn, :delete, map), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
                     </div>
                   </td>
                 </tr>
