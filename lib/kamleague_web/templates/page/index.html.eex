@@ -1,29 +1,29 @@
 <section class="section">
   <div class="tabs is-centered is-size-1 is-uppercase">
     <ul>
-      <li class="is-active"><a>Solo</a></li>
-      <li><a>Duo</a></li>
+      <li class="is-active"><h1 class="title is-1"><a>Solo</a></h1></li>
+      <li><h1 class="title is-1"><a>Duo</a></h1></li>
     </ul>
   </div>
   <div class="box">
     <table class="table is-fullwidth">
       <thead>
         <tr>
-          <th class="has-text-centered">#</th>
-          <th class="has-text-centered">PLAYER</th>
-          <th class="has-text-centered">TIER</th>
-          <th class="has-text-centered">ELO</th>
-          <th class="has-text-centered">WIN RATIO</th>
+          <th>#</th>
+          <th>Player</th>
+          <th>Tier</th>
+          <th>Elo</th>
+          <th>Win Ratio</th>
         </tr>
       </thead>
       <tbody>
         <%= for {player, index} <- Enum.with_index(@players) do %>
           <tr>
-            <td class="has-text-centered"><%= index + 1 %></td>
-            <td class="has-text-centered"><%= player.nickname %></td>
-            <td class="has-text-centered"></td>
-            <td class="has-text-centered"><%= player.elo %></td>
-            <td class="has-text-centered">57%</td>
+            <td><%= index + 1 %></td>
+            <td><%= player.nickname %></td>
+            <td></td>
+            <td><%= player.elo %></td>
+            <td>57%</td>
           </tr>
         <% end %>
       </tbody>
