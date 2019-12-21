@@ -53,7 +53,7 @@ defmodule KamleagueWeb.Router do
 
   scope "/", KamleagueWeb do
     pipe_through [:browser, :admin]
-
+    resources "/posts", PostController
     resources "/maps", MapController, only: [:new, :create, :edit, :delete]
   end
 end
