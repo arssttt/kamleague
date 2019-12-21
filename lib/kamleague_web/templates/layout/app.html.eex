@@ -36,6 +36,30 @@
               <a class="navbar-item">
                 Statistics
               </a>
+              <%= if @current_user do %>
+                <%= link "Add game", to: "#", class: "navbar-item", id: "map-modal" %>
+
+                <div class="modal">
+                  <div class="modal-background"></div>
+                  <div class="modal-card">
+                    <div class="box">
+                      <section class="modal-card-body has-text-centered">
+                        <h1 class="title is-3">Select map</h1>
+                        <div class="columns is-multiline is-variable is-2">
+                          <%= for map <- @maps do %>
+                            <div class="column is-one-quarter">
+                              <%= link to: Routes.map_game_path(@conn, :new, map) do %>
+                                <img src="https://via.placeholder.com/150" />
+                              <% end  %>
+                              <label class="label"><%= map.name %></label>
+                            </div>
+                          <% end %>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
 
               <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">

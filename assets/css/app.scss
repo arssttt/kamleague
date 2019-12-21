@@ -79,6 +79,15 @@ $label-color: $beige;
 form {
   margin-bottom: 1.5rem;
 }
+.select select {
+  color: $beige !important;
+}
+.location {
+  width: 32px;
+  height: 32px;
+  border: 2px solid $black-light;
+  border-radius: 100%;
+}
 
 // Button styles
 .button.is-primary {
@@ -86,6 +95,14 @@ form {
   box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.3),
     -1px 1px 10px 0px rgba(0, 0, 0, 0.8);
 }
+$button-static-background-color: $black;
+$button-static-color: $beige;
+
+// Radio button styles
+input[type="radio"]:checked + label > img {
+  border: 3px solid yellow;
+}
+
 // Footer styles
 $footer-background-color: $black;
 
@@ -98,10 +115,12 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/elements/table.sass";
 @import "../node_modules/bulma/sass/elements/box.sass";
 @import "../node_modules/bulma/sass/elements/image.sass";
+@import "../node_modules/bulma/sass/elements/other.sass";
 @import "../node_modules/bulma/sass/form/_all.sass";
 @import "../node_modules/bulma/sass/components/navbar.sass";
 @import "../node_modules/bulma/sass/components/tabs.sass";
 @import "../node_modules/bulma/sass/components/dropdown.sass";
+@import "../node_modules/bulma/sass/components/modal.sass";
 @import "../node_modules/bulma/sass/layout/footer.sass";
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/components/level.sass";

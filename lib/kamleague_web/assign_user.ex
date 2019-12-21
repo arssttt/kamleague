@@ -11,7 +11,9 @@ defmodule KamleagueWeb.AssignUser do
   def call(conn, _params) do
     case Pow.Plug.current_user(conn) do
       %User{} = user ->
-        assign(conn, :current_user, Repo.preload(user, :player))
+        conn
+        |> assign(:current_user, Repo.preload(user, :player))
+        |> assign(:maps, Kamleague.Leagues.list_maps())
 
       _ ->
         assign(conn, :current_user, nil)

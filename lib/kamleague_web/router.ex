@@ -30,8 +30,10 @@ defmodule KamleagueWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/maps", MapController, :index
-    resources "/games", GameController
+
+    resources "/maps", MapController, only: [:index] do
+      resources "/games", GameController
+    end
   end
 
   scope "/", KamleagueWeb do
