@@ -19,10 +19,10 @@ defmodule KamleagueWeb.MapController do
     maps = Leagues.list_maps()
 
     case Leagues.create_map(map_params) do
-      {:ok, map} ->
+      {:ok, _map} ->
         conn
         |> put_flash(:info, "Map created successfully.")
-        |> redirect(to: Routes.map_path(conn, :show, map))
+        |> redirect(to: Routes.map_path(conn, :new))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset, maps: maps)
