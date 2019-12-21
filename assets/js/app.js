@@ -39,3 +39,22 @@ document
         html.classList.remove("is-clipped");
       });
   });
+
+// Uncheck radio buttons if they are the same when selecting locations
+$(function() {
+  $('input[name="game[players][1][location]"]').on("change", function() {
+    var other = $('input[name="game[players][2][location]"]:checked');
+    // If other is already selected, uncheck it
+    if ($(this).val() == other.val()) {
+      other.prop("checked", false);
+    }
+  });
+
+  $('input[name="game[players][2][location]"]').on("change", function() {
+    var other = $('input[name="game[players][1][location]"]:checked');
+    // If other is already selected, uncheck it
+    if ($(this).val() == other.val()) {
+      other.prop("checked", false);
+    }
+  });
+});

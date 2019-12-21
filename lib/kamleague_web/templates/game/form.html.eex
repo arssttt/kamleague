@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
   <div class="columns is-multiline">
     <div class="field column is-full has-text-centered">
       <figure class="container image is-128x128">
@@ -16,7 +16,7 @@
         <%= for location <- 1..@map.locations do %>
           <label>
             <%= location %>:
-            <input name="game[players][1][location]" type="checkbox" value="<%= location %>">
+            <input name="game[players][1][location]" type="radio" value="<%= location %>" id="location[1]_<%= location %>">
           </label>
         <% end %>
       </div>
@@ -34,7 +34,7 @@
         <%= for location <- 1..@map.locations do %>
           <label>
             <%= location %>:
-            <input name="game[players][2][location]" type="checkbox" value="<%= location %>">
+            <input name="game[players][2][location]" type="radio" value="<%= location %>" id="location[2]_<%= location %>">
           </label>
         <% end %>
       </div>
