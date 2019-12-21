@@ -3,8 +3,8 @@ defmodule Kamleague.Leagues.Game do
   import Ecto.Changeset
 
   schema "games" do
-    field :map_id, :id
-    many_to_many(:players, Kamleague.Leagues.Player, join_through: Kamleague.Leagues.PlayersGames)
+    belongs_to :map, Kamleague.Leagues.Map
+    has_many :players_games, Kamleague.Leagues.PlayersGames
 
     timestamps()
   end

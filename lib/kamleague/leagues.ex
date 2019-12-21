@@ -256,14 +256,31 @@ defmodule Kamleague.Leagues do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_game(attrs \\ %{}) do
-    players = get_players(attrs["players"])
+  def create_game(%Map{} = map, attrs \\ %{}) do
+    players =
+      attrs["players"]
+      |> Elixir.Map.values()
+      |> Enum.map(fn x -> convert_to_atom_map(x) end)
 
     %Game{}
     |> Game.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:players, players)
+    |> Ecto.Changeset.put_change(:map_id, map.id)
+    |> Ecto.Changeset.put_assoc(:players_games, players)
     |> Repo.insert()
   end
+
+  @doc """
+  Changes String Map to Map of Atoms e.g. %{"c"=> "d", "x" => %{"yy" => "zz"}} to
+          %{c: d, x: %{yy: zz}}, i.e changes even the nested maps.
+  """
+  def convert_to_atom_map(map), do: to_atom_map(map)
+
+  defp to_atom_map(map) when is_map(map),
+    do: Elixir.Map.new(map, fn {k, v} -> {String.to_atom(k), to_atom_map(v)} end)
+
+  defp to_atom_map(v) when is_binary(v), do: String.to_integer(v)
+
+  defp to_atom_map(v) when is_integer(v), do: v
 
   @doc """
   Updates a game.
@@ -309,8 +326,6 @@ defmodule Kamleague.Leagues do
 
   """
   def change_game(%Game{} = game) do
-    changeset = Game.changeset(game, %{})
-    changeset = update_in(changeset.data, &Repo.preload(&1, :players))
-    changeset
+    Game.changeset(game, %{})
   end
 end

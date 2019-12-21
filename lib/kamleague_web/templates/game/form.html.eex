@@ -1,15 +1,46 @@
 <%= form_for @changeset, @action, fn f -> %>
-  <div class="field">
-    <%=
-        multiselect_checkboxes(
-        f,
-        :players,
-        Enum.map(@players, fn a -> { a.nickname, a.id } end),
-        selected: Enum.map(@changeset.data.players,&(&1.id))
-        )
-    %>
+  <div class="columns is-multiline">
+    <div class="field column is-full has-text-centered">
+      <figure class="container image is-128x128">
+        <img src="https://bulma.io/images/placeholders/256x256.png">
+      </figure>
+      <p class="label"><%= @map.name %></p>
+    </div>
+    <div class="field column is-half">
+      <%= label f, :player_1, "You", class: "label" %>
+      <a class="button is-static"><%= @current_user.player.nickname %></a>
+    </div>
+    <div class="field column is-half has-text-centered">
+      <%= label f, :location, "Location", class: "label" %>
+      <div class="level">
+        <%= for location <- 1..@map.locations do %>
+          <label>
+            <%= location %>:
+            <input name="game[players][1][location]" type="checkbox" value="<%= location %>">
+          </label>
+        <% end %>
+      </div>
+    </div>
+    <div class="field column is-half">
+      <%= label f, "Opponent", class: "label" %>
+      <div class="select">
+        <%= select f, :player_2,
+          Enum.map(@players, &{&1.nickname, &1.id}), prompt: "Select a player", name: "game[players][2][player_id]" %>
+      </div>
+    </div>
+    <div class="field column is-half has-text-centered">
+      <%= label f, :location, "Location", class: "label" %>
+      <div class="level">
+        <%= for location <- 1..@map.locations do %>
+          <label>
+            <%= location %>:
+            <input name="game[players][2][location]" type="checkbox" value="<%= location %>">
+          </label>
+        <% end %>
+      </div>
+    </div>
   </div>
   <div class="field">
-    <%= submit "Add", class: "button is-primary is-medium" %>
+    <%= submit "Add game", class: "button is-primary is-medium" %>
   </div>
 <% end %>

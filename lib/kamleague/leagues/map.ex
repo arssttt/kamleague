@@ -6,6 +6,7 @@ defmodule Kamleague.Leagues.Map do
     field :locations, :integer
     field :name, :string
 
+    has_many :games, Kamleague.Leagues.Game
     timestamps()
   end
 

@@ -53,6 +53,7 @@ defmodule KamleagueWeb do
 
       import KamleagueWeb.ErrorHelpers
       import KamleagueWeb.Gettext
+      import KamleagueWeb.Helpers.CheckboxHelper
       alias KamleagueWeb.Router.Helpers, as: Routes
     end
   end

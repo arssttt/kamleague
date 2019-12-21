@@ -23,13 +23,12 @@ defmodule KamleagueWeb.Helpers.CheckboxHelper do
     {selected, _} = get_selected_values(form, field, opts)
     selected_as_strings = Enum.map(selected, &"#{&1}")
 
-    for {value, key} <- options, into: [] do
-      content_tag(:label, class: "checkbox-inline") do
+    content_tag(:select) do
+      for {value, key} <- options, into: [] do
         [
-          tag(:input,
+          tag(:option,
             name: input_name(form, field) <> "[]",
             id: input_id(form, field, key),
-            type: "checkbox",
             value: key,
             checked: Enum.member?(selected_as_strings, "#{key}")
           ),

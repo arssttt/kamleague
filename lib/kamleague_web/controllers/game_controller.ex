@@ -9,21 +9,38 @@ defmodule KamleagueWeb.GameController do
     render(conn, "index.html", games: games)
   end
 
-  def new(conn, _params) do
-    players = Leagues.list_active_players()
+  def new(conn, %{"map_id" => map_id}) do
+    map = Leagues.get_map!(map_id)
+
+    players =
+      Enum.reject(Leagues.list_active_players(), fn player ->
+        player.id == Pow.Plug.current_user(conn).player.id
+      end)
+
     changeset = Leagues.change_game(%Game{})
-    render(conn, "new.html", changeset: changeset, players: players)
+    render(conn, "new.html", changeset: changeset, map: map, players: players)
   end
 
-  def create(conn, %{"game" => game_params}) do
-    case Leagues.create_game(game_params) do
+  def create(conn, %{"game" => game_params, "map_id" => map_id}) do
+    # Add the current user id to the first player
+    game_params =
+      put_in(game_params, ["players", "1", "player_id"], Pow.Plug.current_user(conn).player.id)
+
+    map = Leagues.get_map!(map_id)
+
+    case Leagues.create_game(map, game_params) do
       {:ok, _game} ->
         conn
         |> put_flash(:info, "Game created successfully.")
-        |> redirect(to: Routes.game_path(conn, :index))
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        players =
+          Enum.reject(Leagues.list_active_players(), fn player ->
+            player.id == Pow.Plug.current_user(conn).player.id
+          end)
+
+        render(conn, "new.html", changeset: changeset, map: map, players: players)
     end
   end
 

@@ -7,7 +7,7 @@ defmodule Kamleague.Leagues.Player do
     field :elo, :integer, default: 1000
     field :active, :boolean, default: false
     belongs_to :user, Kamleague.Accounts.User
-    many_to_many(:games, Kamleague.Leagues.Game, join_through: Kamleague.Leagues.PlayersGames)
+    has_many :players_games, Kamleague.Leagues.PlayersGames
 
     timestamps()
   end
