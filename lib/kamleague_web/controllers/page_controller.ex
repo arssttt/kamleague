@@ -7,7 +7,8 @@ defmodule KamleagueWeb.PageController do
   end
 
   def rules(conn, _params) do
-    post = Kamleague.Contents.get_post!(1)
+    # Fetch post with the tag rules since only one post is allowed to have the "rules" tag
+    post = Kamleague.Contents.get_post_by_tag!("Rules")
     render(conn, "rules.html", post: post)
   end
 end

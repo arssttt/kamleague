@@ -37,6 +37,11 @@ defmodule Kamleague.Contents do
   """
   def get_post!(id), do: Repo.get!(Post, id)
 
+  def get_post_by_tag!(name) do
+    tag = Repo.get_by(Kamleague.Contents.Tag, name: name)
+    Repo.get_by(Post, tag_id: tag.id)
+  end
+
   @doc """
   Creates a post.
 
