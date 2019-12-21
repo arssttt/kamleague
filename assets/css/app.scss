@@ -1,7 +1,17 @@
 @charset "utf-8";
 
-// Import a Google Font
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+@font-face {
+  font-family: "Beaufort";
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/Beaufort-Regular.woff) format("woff");
+}
+@font-face {
+  font-family: "Beaufort";
+  font-style: bold;
+  font-weight: 700;
+  src: url(/fonts/Beaufort-Bold.woff) format("woff");
+}
 
 // Set your brand colors
 $purple: #8a4d76;
@@ -14,7 +24,7 @@ $black: #121212;
 $black-light: #262626;
 
 // Update Bulma's global variables
-$family-sans-serif: "Nunito", sans-serif;
+$family-sans-serif: "Beaufort", sans-serif;
 $scheme-main: $black;
 $grey-dark: $brown;
 $grey-light: $beige-light;
