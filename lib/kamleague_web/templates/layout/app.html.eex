@@ -29,9 +29,24 @@
             <div class="navbar-start">
               <%= link "Home", to: Routes.page_path(@conn, :index), class: "navbar-item" %>
 
-              <a class="navbar-item">
-                Information
-              </a>
+             <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                  Information
+                </a>
+
+                <div class="navbar-dropdown">
+                  <a class="navbar-item">
+                    How to play
+                  </a>
+                  <%= link "Rules", to: Routes.page_path(@conn, :rules), class: "navbar-item" %>
+                  <a class="navbar-item">
+                    FAQ
+                  </a>
+                  <a class="navbar-item">
+                    Updates
+                  </a>
+                </div>
+              </div>
 
               <a class="navbar-item">
                 Statistics
@@ -94,13 +109,7 @@
                     <a class="navbar-item">
                       Users
                     </a>
-                    <a class="navbar-item">
-                      Contact
-                    </a>
-                    <hr class="navbar-divider">
-                    <a class="navbar-item">
-                      Report an issue
-                    </a>
+                      <%= link "Posts", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
                   </div>
                 </div>
               <% end %>

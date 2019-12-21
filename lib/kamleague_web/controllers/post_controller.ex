@@ -2,20 +2,23 @@ defmodule KamleagueWeb.PostController do
   use KamleagueWeb, :controller
 
   alias Kamleague.Contents
-  alias Kamleague.Contents.Post
+  alias Kamleague.Contents.{Post, Tag}
 
   def index(conn, _params) do
     posts = Contents.list_posts()
-    render(conn, "index.html", posts: posts)
+    tags = Contents.list_tags()
+    changeset = Contents.change_tag(%Tag{})
+    render(conn, "index.html", changeset: changeset, posts: posts, tags: tags)
   end
 
   def new(conn, _params) do
+    tags = Contents.list_tags()
     changeset = Contents.change_post(%Post{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, tags: tags)
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Contents.create_post(post_params) do
+    case Contents.create_post(Pow.Plug.current_user(conn), post_params) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")

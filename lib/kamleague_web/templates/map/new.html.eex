@@ -2,7 +2,7 @@
   <div class="box">
     <div class="columns is-variable is-8">
       <div class="column">
-        <h1 class="title is-3">Current maps</h1>
+        <h1 class="title is-3">Maps</h1>
         <table class="table is-fullwidth">
           <thead>
             <tr>
@@ -14,7 +14,7 @@
           <tbody>
             <%= for map <- @maps do %>
                 <tr>
-                  <td class="has-text-centered  is-vcentered"><%= map.name %></td>
+                  <td class="has-text-centered"><%= map.name %></td>
                   <td class="has-text-centered"><%= map.locations %></td>
 
                   <td>

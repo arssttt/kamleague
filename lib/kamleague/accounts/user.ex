@@ -9,6 +9,7 @@ defmodule Kamleague.Accounts.User do
     pow_user_fields()
 
     has_one :player, Kamleague.Leagues.Player
+    has_many :posts, Kamleague.Contents.Post
 
     timestamps()
   end

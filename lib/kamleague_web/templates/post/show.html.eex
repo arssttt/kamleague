@@ -1,18 +1,9 @@
-<h1>Show Post</h1>
-
-<ul>
-
-  <li>
-    <strong>Title:</strong>
-    <%= @post.title %>
-  </li>
-
-  <li>
-    <strong>Body:</strong>
-    <%= @post.body %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
-<span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+<section class="section">
+  <div class="box">
+    <div class="content">
+      <%= {:safe, markdown(@post.body)} %>
+    </div>
+    <span><%= link "Edit", to: Routes.post_path(@conn, :edit, @post) %></span>
+    <span><%= link "Back", to: Routes.post_path(@conn, :index) %></span>
+  </div>
+</section>

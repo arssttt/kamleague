@@ -5,13 +5,32 @@
     </div>
   <% end %>
 
-  <%= label f, :title %>
-  <%= text_input f, :title %>
-  <%= error_tag f, :title %>
 
-  <%= label f, :body %>
-  <%= text_input f, :body %>
-  <%= error_tag f, :body %>
+  <div class="field">
+    <%= label f, :title, "Title", class: "label" %>
+    <div class="control">
+      <%= text_input f, :title, class: "input" %>
+    </div>
+    <%= error_tag f, :title %>
+  </div>
+
+  <div class="field">
+    <%= label f, :tag_id, "Tag", class: "label" %>
+    <div class="select">
+      <%= select f, :tag_id,
+        Enum.map(@tags, &{&1.name, &1.id}), prompt: "Select a tag" %>
+    </div>
+    <%= error_tag f, :tag_id %>
+  </div>
+
+  <%= textarea f, :body, id: "editor" %>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+  <script>
+    var simplemde = new SimpleMDE({ element: document.getElementById("editor") });
+  </script>
 
   <div>
     <%= submit "Save" %>

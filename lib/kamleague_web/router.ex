@@ -30,6 +30,7 @@ defmodule KamleagueWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/rules", PageController, :rules
 
     resources "/maps", MapController, only: [:index] do
       resources "/games", GameController
@@ -54,6 +55,7 @@ defmodule KamleagueWeb.Router do
   scope "/", KamleagueWeb do
     pipe_through [:browser, :admin]
     resources "/posts", PostController
+    resources "/tags", TagController
     resources "/maps", MapController, only: [:new, :create, :edit, :delete]
   end
 end

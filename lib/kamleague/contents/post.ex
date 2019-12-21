@@ -5,7 +5,8 @@ defmodule Kamleague.Contents.Post do
   schema "posts" do
     field :body, :string
     field :title, :string
-    field :user_id, :id
+    belongs_to :user, Kamleague.Accounts.User
+    belongs_to :tag, Kamleague.Contents.Tag
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Kamleague.Contents.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:title, :body])
-    |> validate_required([:title, :body])
+    |> cast(attrs, [:title, :body, :tag_id])
+    |> validate_required([:title, :body, :tag_id])
   end
 end
