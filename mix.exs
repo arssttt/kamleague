@@ -44,7 +44,8 @@ defmodule Kamleague.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.15"},
-      {:phoenix_live_view, "~> 0.4.0"}
+      {:phoenix_live_view, "~> 0.4.0"},
+      {:earmark, "~> 1.4.3"}
     ]
   end
 
