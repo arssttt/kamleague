@@ -3,7 +3,6 @@ defmodule Kamleague.Leagues.PlayersGames do
 
   import Ecto.Changeset
 
-  @primary_key false
   schema "players_games" do
     belongs_to :player, Kamleague.Leagues.Player
     belongs_to :game, Kamleague.Leagues.Game
