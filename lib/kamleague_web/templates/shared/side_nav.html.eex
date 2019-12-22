@@ -1,0 +1,27 @@
+<aside class="menu">
+  <h1 class="title is-3">Menu</h1>
+  <ul class="menu-list">
+    <li><a>Home</a></li>
+    <li>
+      <p class="menu-label">
+        Information
+      </p>
+      <ul>
+        <li><a>How to play</a></li>
+        <li><a>Rules</a></li>
+        <li><a>FAQ</a></li>
+        <li><a>Updates</a></li>
+      </ul>  
+    </li>
+    <li>
+      <p class="menu-label">
+        Statistics
+      </p>
+      <ul>
+        <li><a>Recent games</a></li>
+        <li><a>Map statistics</a></li>
+      </ul>  
+    </li>
+    <li><a>Downloads</a></li>
+  </ul>
+</aside>

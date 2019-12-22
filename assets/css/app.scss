@@ -20,6 +20,7 @@ $purple: #8a4d76;
 $pink: #fa7c91;
 $brown: #757763;
 $beige: #f1e6d0;
+$white: #fff;
 $grey: #ccc;
 $beige-light: #eff0eb;
 $black: #121212;
@@ -43,7 +44,7 @@ $body-background-color: $black;
 $navbar-item-hover-background-color: "transparent";
 $navbar-item-color: $link;
 $navbar-item-hover-color: $link-hover;
-
+$navbar-item-active-color: $white;
 .navbar {
   border-bottom: 2px solid $black-light;
 
@@ -137,6 +138,25 @@ input[type="radio"]:checked + label > img {
   border: 3px solid yellow;
 }
 
+// Menu styles
+$menu-item-color: $beige;
+$menu-item-hover-background-color: "transparent";
+$menu-list-link-padding: 0 0 0.5rem 0;
+$menu-label-font-size: 1rem;
+$menu-label-color: $beige;
+.menu-list {
+  font-family: "Beaufort", "Roboto";
+  font-weight: bold;
+  text-transform: uppercase;
+
+  li ul li:last-child a {
+    padding-bottom: 0;
+  }
+  .menu-label:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+}
+
 // Footer styles
 $footer-background-color: $black;
 
@@ -156,6 +176,7 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/components/tabs.sass";
 @import "../node_modules/bulma/sass/components/dropdown.sass";
 @import "../node_modules/bulma/sass/components/modal.sass";
+@import "../node_modules/bulma/sass/components/menu.sass";
 @import "../node_modules/bulma/sass/layout/footer.sass";
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/components/level.sass";
