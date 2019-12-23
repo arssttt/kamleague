@@ -221,10 +221,12 @@ defmodule Kamleague.Leagues do
       [%Game{}, ...]
 
   """
-  def list_games do
+  def list_games(current_page, per_page) do
     Repo.all(
       from g in Game,
-        preload: [:players]
+        preload: [[players: :player_info], :map],
+        offset: ^((current_page - 1) * per_page),
+        limit: ^per_page
     )
   end
 
@@ -242,7 +244,7 @@ defmodule Kamleague.Leagues do
       ** (Ecto.NoResultsError)
 
   """
-  def get_game!(id), do: Repo.get!(Game, id)
+  def get_game!(id), do: Repo.get!(Game, id) |> Repo.preload([[players: :player_info], :map])
 
   @doc """
   Creates a game.
@@ -265,7 +267,7 @@ defmodule Kamleague.Leagues do
     %Game{}
     |> Game.changeset(attrs)
     |> Ecto.Changeset.put_change(:map_id, map.id)
-    |> Ecto.Changeset.put_assoc(:players_games, players)
+    |> Ecto.Changeset.put_assoc(:players, players)
     |> Repo.insert()
   end
 

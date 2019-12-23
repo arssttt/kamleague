@@ -4,7 +4,7 @@ defmodule Kamleague.Leagues.PlayersGames do
   import Ecto.Changeset
 
   schema "players_games" do
-    belongs_to :player, Kamleague.Leagues.Player
+    belongs_to :player_info, Kamleague.Leagues.Player, foreign_key: :player_id
     belongs_to :game, Kamleague.Leagues.Game
     field :location, :integer
 

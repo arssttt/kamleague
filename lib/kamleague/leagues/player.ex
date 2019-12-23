@@ -7,7 +7,7 @@ defmodule Kamleague.Leagues.Player do
     field :elo, :integer, default: 1000
     field :active, :boolean, default: false
     belongs_to :user, Kamleague.Accounts.User
-    has_many :players_games, Kamleague.Leagues.PlayersGames
+    has_many :games, Kamleague.Leagues.PlayersGames
 
     timestamps()
   end

@@ -1,0 +1,56 @@
+<section class="section">
+  <div class="box">
+    <div class="columns is-variable is-8">
+      <div class="column has-text-centered is-8">
+        <h1 class="title is-3">Recent games</h1>
+        <table class="table is-fullwidth is-hoverable">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Players</th>
+              <th></th>
+              <th>Map</th>
+              <th>Winner</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for game <- @games do %>
+              <tr phx-click="select_game" phx-value-id="<%= game.id %>">
+                <%= for {player, index} <- Enum.with_index(game.players) do %>
+                  <td><%= player.player_info.nickname %></td>
+                  <%= unless index + 1 == length(game.players)  do %>
+                    <td>VS</td>
+                  <% end %>
+                <% end %>
+                <td><%= game.map.name %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <%= unless is_nil(@game) do %>
+          <h1 class="title is-3 has-text-centered">Game stats</h1>
+          <div>
+            <figure class="image is-128x128">
+              <img src="https://bulma.io/images/placeholders/256x256.png">
+            </figure>
+            <p class="label"><%= @game.map.name %> (24.12.2019)</p>
+          </div>
+          <%= for player <- @game.players do %>
+            <div>
+              <p class="label is-size-4"><%= player.player_info.nickname %> (W)</p>
+              <ul>
+                <li><p class="label">Location: <%= player.location %></p></li>
+                <li><p class="label">Elo: <strike>1000</strike> ⇒ 1025</p></li>
+                <li><p class="label">Wins/Losses: <strike>13/2</strike> ⇒ 14/2</p></li>
+                <li><p class="label">Win ratio: <strike>56%</strike> ⇒ 65%</p></li>
+              </ul>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

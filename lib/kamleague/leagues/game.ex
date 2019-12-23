@@ -4,8 +4,7 @@ defmodule Kamleague.Leagues.Game do
 
   schema "games" do
     belongs_to :map, Kamleague.Leagues.Map
-    has_many :players_games, Kamleague.Leagues.PlayersGames
-    has_many :players, through: [:players_games, :player]
+    has_many :players, Kamleague.Leagues.PlayersGames
 
     timestamps()
   end

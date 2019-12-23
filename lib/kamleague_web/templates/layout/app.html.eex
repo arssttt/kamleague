@@ -57,7 +57,7 @@
                   Statistics
                 </a>
                 <div class="navbar-dropdown">
-                  <%= link "Recent games", to: Routes.statistics_path(@conn, :games), class: "navbar-item" %>
+                  <%= link "Recent games", to: Routes.live_path(@conn, KamleagueWeb.StatisticsLive.Games), class: "navbar-item" %>
 
                   <a class="navbar-item">
                     Map statistics

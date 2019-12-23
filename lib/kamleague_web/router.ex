@@ -1,6 +1,7 @@
 defmodule KamleagueWeb.Router do
   use KamleagueWeb, :router
   use Pow.Phoenix.Router
+  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -33,7 +34,7 @@ defmodule KamleagueWeb.Router do
     get "/rules", PageController, :rules
 
     scope "/statistics" do
-      get "/games", StatisticsController, :games
+      live "/games", StatisticsLive.Games
     end
 
     resources "/maps", MapController, only: [:index] do
