@@ -6,6 +6,7 @@ defmodule Kamleague.Leagues do
   import Ecto.Query, warn: false
   alias Kamleague.Repo
 
+  alias Timex
   alias Kamleague.Leagues.Player
 
   @doc """
@@ -263,6 +264,27 @@ defmodule Kamleague.Leagues do
       attrs["players"]
       |> Elixir.Map.values()
       |> Enum.map(fn x -> convert_to_atom_map(x) end)
+      |> Enum.map(fn x ->
+        case x.player_id == String.to_integer(attrs["winner_id"]) do
+          true -> Elixir.Map.put(x, :win, true)
+          false -> Elixir.Map.put(x, :win, false)
+        end
+      end)
+
+    attrs =
+      case Elixir.Map.fetch(attrs, "played_at") do
+        {:ok, _} ->
+          Elixir.Map.put(
+            attrs,
+            "played_at",
+            Timex.parse!(attrs["played_at"], "%d-%m-%Y %H:%M", :strftime)
+          )
+
+        :error ->
+          attrs
+      end
+
+    IO.inspect(attrs)
 
     %Game{}
     |> Game.changeset(attrs)

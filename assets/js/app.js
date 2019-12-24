@@ -17,9 +17,20 @@ import "phoenix_html";
 // import socket from "./socket"
 import { Socket } from "phoenix";
 import LiveSocket from "phoenix_live_view";
+import flatpickr from "flatpickr";
 
 let liveSocket = new LiveSocket("/live", Socket);
 liveSocket.connect();
+
+var coeff = 1000 * 60 * 5;
+var date = new Date(Date.now());
+// Datetime picker
+flatpickr("#played_at", {
+  enableTime: true,
+  dateFormat: "d-m-Y H:i",
+  maxDate: new Date(Math.round(date.getTime() / coeff) * coeff),
+  defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff)
+});
 
 // Modal trigger
 document

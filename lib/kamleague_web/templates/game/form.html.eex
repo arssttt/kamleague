@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
   <div class="columns is-multiline">
     <div class="field column is-full has-text-centered">
@@ -20,6 +21,7 @@
           </label>
         <% end %>
       </div>
+      <%= error_tag f, :location %>
     </div>
     <div class="field column is-half">
       <%= label f, "Opponent", class: "label" %>
@@ -38,9 +40,50 @@
           </label>
         <% end %>
       </div>
+      <%= error_tag f, :location %>
+    </div>
+    <div class="field column is-half">
+      <%= label f, :win, "Winner", class: "label" %>
+      <div>
+        <label>
+          <input name="game[winner_id]" type="radio" value="<%= @current_user.player.id %>">
+          <a class="button"><%= @current_user.player.nickname %></a>
+        </label>
+      </div>
+      <div id="opponent">
+        
+      </div>
+    </div>
+    <div class="field column is-half has-text-centered">
+      <%= label f, :played_at, "Played on", class: "label" %>
+      <input id="played_at" name="game[played_at]", class="input">
+      <%= error_tag f, :played_at %>
     </div>
   </div>
   <div class="field">
-    <%= submit "Add game", class: "button is-primary is-medium" %>
+    <%= submit "Add game", class: "button is-primary is-large" %>
   </div>
 <% end %>
+
+<script>
+  $("#game_player_2").on("change", function(){  
+    var value = $(this).val();
+    var name = $(this).find('option:selected').text();
+    if ($(this).val() == "") {
+      $("#opponent").empty();
+    }
+    else {
+      var $label = $("<label>").appendTo($("#opponent"));
+
+      $("<input>", {
+        "name": "game[winner_id]",
+        "type": "radio",
+        "value": value
+      }).appendTo($label);
+      $("<a>", {
+        "class": "button",
+        "text": name
+      }).appendTo($label);
+    }
+});
+</script>
