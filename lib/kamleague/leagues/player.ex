@@ -19,4 +19,9 @@ defmodule Kamleague.Leagues.Player do
     |> validate_required([:nickname])
     |> unique_constraint(:nickname)
   end
+
+  def changeset_elo(player_or_changeset, attrs) do
+    player_or_changeset
+    |> Ecto.Changeset.cast(attrs, [:elo])
+  end
 end

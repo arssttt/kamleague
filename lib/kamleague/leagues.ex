@@ -5,6 +5,7 @@ defmodule Kamleague.Leagues do
 
   import Ecto.Query, warn: false
   alias Kamleague.Repo
+  alias Kamleague.Elo
 
   alias Timex
   alias Kamleague.Leagues.Player
@@ -260,17 +261,46 @@ defmodule Kamleague.Leagues do
 
   """
   def create_game(%Map{} = map, attrs \\ %{}) do
+    # Convert the players map to atoms and add win parameter
     players =
       attrs["players"]
       |> Elixir.Map.values()
       |> Enum.map(fn x -> convert_to_atom_map(x) end)
-      |> Enum.map(fn x ->
-        case x.player_id == String.to_integer(attrs["winner_id"]) do
-          true -> Elixir.Map.put(x, :win, true)
-          false -> Elixir.Map.put(x, :win, false)
-        end
-      end)
 
+    # Get winner information
+    winner =
+      players
+      |> Enum.filter(fn player ->
+        player.player_id == String.to_integer(attrs["winner_id"])
+      end)
+      |> List.first()
+
+    winner_info = get_player!(winner.player_id)
+
+    # Get loser information
+    loser =
+      Enum.filter(players, fn player ->
+        player.player_id != String.to_integer(attrs["winner_id"])
+      end)
+      |> List.first()
+
+    loser_info = get_player!(loser.player_id)
+
+    {winner_new_elo, loser_new_elo} = Elo.rate(winner_info.elo, loser_info.elo, :win)
+
+    winner =
+      winner
+      |> Elixir.Map.put(:win, true)
+      |> Elixir.Map.put(:new_elo, winner_new_elo)
+      |> Elixir.Map.put(:old_elo, winner_info.elo)
+
+    loser =
+      loser
+      |> Elixir.Map.put(:win, false)
+      |> Elixir.Map.put(:new_elo, loser_new_elo)
+      |> Elixir.Map.put(:old_elo, loser_info.elo)
+
+    # Format played_at to a DateTime
     attrs =
       case Elixir.Map.fetch(attrs, "played_at") do
         {:ok, _} ->
@@ -284,13 +314,25 @@ defmodule Kamleague.Leagues do
           attrs
       end
 
-    IO.inspect(attrs)
+    game_changeset =
+      %Game{}
+      |> Game.changeset(attrs)
+      |> Ecto.Changeset.put_change(:map_id, map.id)
+      |> Ecto.Changeset.put_assoc(:players, [winner, loser])
 
-    %Game{}
-    |> Game.changeset(attrs)
-    |> Ecto.Changeset.put_change(:map_id, map.id)
-    |> Ecto.Changeset.put_assoc(:players, players)
-    |> Repo.insert()
+    winner_changeset =
+      winner_info
+      |> Player.changeset_elo(%{elo: winner.new_elo})
+
+    loser_changeset =
+      loser_info
+      |> Player.changeset_elo(%{elo: loser.new_elo})
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:game, game_changeset)
+    |> Ecto.Multi.update(:winner, winner_changeset)
+    |> Ecto.Multi.update(:loser, loser_changeset)
+    |> Repo.transaction()
   end
 
   @doc """
