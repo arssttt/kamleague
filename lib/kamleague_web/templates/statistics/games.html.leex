@@ -24,6 +24,14 @@
                   <% end %>
                 <% end %>
                 <td><%= game.map.name %></td>
+                <td>
+                  <%= for player <- game.players do %>
+                    <%= if player.win do %> 
+                      <%= player.player_info.nickname %>
+                    <% end %>
+                  <% end %>
+                </td>
+                <td><%= Timex.format!(game.played_at, "%d.%m", :strftime) %></td>
               </tr>
             <% end %>
           </tbody>
@@ -36,11 +44,19 @@
             <figure class="image is-128x128">
               <img src="https://bulma.io/images/placeholders/256x256.png">
             </figure>
-            <p class="label"><%= @game.map.name %> (24.12.2019)</p>
+            <p class="label"><%= @game.map.name %></p>
+            <p class="label"><%= Timex.format!(@game.played_at, "%d.%m.%Y", :strftime) %> (<%= Timex.format!(@game.played_at, "%H:%M", :strftime) %>)</p>
           </div>
           <%= for player <- @game.players do %>
             <div>
-              <p class="label is-size-4"><%= player.player_info.nickname %> (W)</p>
+              <p class="label is-size-4">
+                <%= player.player_info.nickname %> 
+                <%= if player.win do %>
+                  (W)
+                <% else %>
+                  (L)
+                <% end  %>
+              </p>
               <ul>
                 <li><p class="label">Location: <%= player.location %></p></li>
                 <li><p class="label">Elo: <strike>1000</strike> ⇒ 1025</p></li>
