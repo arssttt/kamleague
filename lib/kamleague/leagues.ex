@@ -227,6 +227,7 @@ defmodule Kamleague.Leagues do
     Repo.all(
       from g in Game,
         preload: [[players: :player_info], :map],
+        order_by: [desc: g.played_at],
         offset: ^((current_page - 1) * per_page),
         limit: ^per_page
     )
