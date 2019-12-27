@@ -25,7 +25,8 @@ secret_key_base =
 
 config :kamleague, KamleagueWeb.Endpoint,
   http: [host: "localhost", port: System.fetch_env!("PORT") || 4000],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  server: true
 
 # ## Using releases (Elixir v1.9+)
 #
