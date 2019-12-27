@@ -4,13 +4,13 @@
   font-family: "Beaufort";
   font-style: normal;
   font-weight: 400;
-  src: url(/fonts/Beaufort-Regular.woff) format("woff");
+  src: url("/fonts/Beaufort-Regular.woff") format("woff");
 }
 @font-face {
   font-family: "Beaufort";
   font-style: bold;
   font-weight: 700;
-  src: url(/fonts/Beaufort-Bold.woff) format("woff");
+  src: url("/fonts/Beaufort-Bold.woff") format("woff");
 }
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
@@ -45,6 +45,7 @@ $navbar-item-hover-background-color: "transparent";
 $navbar-item-color: $link;
 $navbar-item-hover-color: $link-hover;
 $navbar-item-active-color: $white;
+$navbar-divider-background-color: $black-light;
 .navbar {
   border-bottom: 2px solid $black-light;
 
@@ -56,11 +57,31 @@ $navbar-item-active-color: $white;
   }
 }
 
-// Avatar styles
-.avatar {
-  border: 2px solid;
-  border-color: #8f7514 #c9a932;
-  margin-right: 10px;
+// Dropdown styles
+$dropdown-divider-background-color: $black-light;
+.dropdown {
+  .info-icon {
+    background-image: url("/images/info-sprites.png");
+    background-position: 0px -40px;
+    width: 30px;
+    height: 30px;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      background-position: -40px 0px;
+    }
+  }
+  &.is-active .info-icon {
+    background-position: 0px 0px;
+  }
+
+  form {
+    margin-bottom: 0;
+  }
+}
+.dropdown-divider {
+  height: 2px !important;
 }
 
 // Tabs styles

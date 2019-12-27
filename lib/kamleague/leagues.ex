@@ -116,6 +116,12 @@ defmodule Kamleague.Leagues do
     Player.changeset(player, %{})
   end
 
+  def set_active(player, attrs) do
+    player
+    |> Player.changeset_active(attrs)
+    |> Repo.update()
+  end
+
   alias Kamleague.Leagues.Map
 
   @doc """

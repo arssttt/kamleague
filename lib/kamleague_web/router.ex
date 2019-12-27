@@ -53,7 +53,7 @@ defmodule KamleagueWeb.Router do
 
   scope "/", KamleagueWeb do
     pipe_through [:browser, :protected]
-
+    resources "/players", PlayerController, only: [:update]
     delete "/logout", SessionController, :delete, as: :logout
   end
 

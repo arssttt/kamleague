@@ -114,24 +114,48 @@
 
             <div class="navbar-end">
               <%= if @current_user do %>
-                <div class="is-divider-vertical" data-content="OR"></div>
-                  <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                      <%= @current_user.player.nickname %>
-                    </a>
-                    <div class="navbar-dropdown">
-                      <a class="navbar-item">
-                        About
-                      </a>
-                      <a class="navbar-item">
-                        Jobs
-                      </a>
-                      <a class="navbar-item">
-                        Contact
-                      </a>
-                      <hr class="navbar-divider">
-                      <%= link "Logout", to: Routes.logout_path(@conn, :delete), method: :delete, class: "navbar-item" %>
+                <div class="navbar-item">
+                  <div class="dropdown">
+                    <div class="dropdown-trigger">
+                      <span class="info-icon"></span>
                     </div>
+                    <div class="dropdown-menu" role="menu">
+                      <div class="dropdown-content">
+                        <%= if !@current_user.player.active do %>
+                        <div class="dropdown-item">
+                          <p>You are currently marked as <strong>inactive</strong> and will not be displayed on the rankings.</p>
+                          <%= form_for @conn, Routes.player_path(@conn, :update, @current_user.player), [method: :put], fn f -> %>
+                              <%= hidden_input f, :active, value: true %>
+
+                            <%= submit "Mark as active", class: "button is-primary is-small" %>
+                          <% end %>
+                        </div>
+                        <hr class="dropdown-divider">
+                        <% end %>
+                        <div class="dropdown-item">
+                          <p>You have no unapproved games at the moment.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link">
+                    <%= @current_user.player.nickname %>
+                  </a>
+                  <div class="navbar-dropdown">
+                    <a class="navbar-item">
+                      About
+                    </a>
+                    <a class="navbar-item">
+                      Jobs
+                    </a>
+                    <a class="navbar-item">
+                      Contact
+                    </a>
+                    <hr class="navbar-divider">
+                    <%= link "Logout", to: Routes.logout_path(@conn, :delete), method: :delete, class: "navbar-item" %>
+                  </div>
                 </div>
               <% else %>
                   <%= link "Register", to: Routes.signup_path(@conn, :new), class: "navbar-item" %>

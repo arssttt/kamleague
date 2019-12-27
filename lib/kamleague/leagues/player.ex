@@ -24,4 +24,9 @@ defmodule Kamleague.Leagues.Player do
     player_or_changeset
     |> Ecto.Changeset.cast(attrs, [:elo])
   end
+
+  def changeset_active(player_or_changeset, attrs) do
+    player_or_changeset
+    |> Ecto.Changeset.cast(attrs, [:active])
+  end
 end
