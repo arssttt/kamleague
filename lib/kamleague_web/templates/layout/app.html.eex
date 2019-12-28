@@ -102,7 +102,8 @@
                           <%= for map <- @maps do %>
                             <div class="column is-one-quarter">
                               <%= link to: Routes.map_game_path(@conn, :new, map) do %>
-                                <img src="https://via.placeholder.com/150" />
+                                <div class="map-background" style="background-image: url(/images/<%= map.name %>.jpg)">
+                                </div>
                               <% end  %>
                               <label class="label"><%= map.name %></label>
                             </div>
@@ -173,9 +174,7 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-          is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+          &copy; 2018-2019 Kamleague. All Rights Reserved.
         </p>
       </div>
     </footer>

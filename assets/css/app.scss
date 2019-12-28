@@ -241,6 +241,15 @@ input[type="radio"]:checked + label > img {
   border: 3px solid yellow;
 }
 
+// Image styles
+.map-background {
+  width: 97px;
+  height: 97px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+
 // Menu styles
 $menu-item-color: $beige;
 $menu-item-hover-background-color: "transparent";
