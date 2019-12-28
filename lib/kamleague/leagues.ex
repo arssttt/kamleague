@@ -239,6 +239,14 @@ defmodule Kamleague.Leagues do
     )
   end
 
+  def list_unapproved_games(player) do
+    Repo.all(
+      from g in Game,
+        preload: [[players: :player_info], :map],
+        order_by: [desc: g.played_at]
+    )
+  end
+
   @doc """
   Gets a single game.
 
@@ -354,6 +362,8 @@ defmodule Kamleague.Leagues do
   defp to_atom_map(v) when is_binary(v), do: String.to_integer(v)
 
   defp to_atom_map(v) when is_integer(v), do: v
+
+  defp to_atom_map(v) when is_boolean(v), do: v
 
   @doc """
   Updates a game.

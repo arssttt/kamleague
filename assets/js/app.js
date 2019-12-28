@@ -32,7 +32,7 @@ flatpickr("#played_at", {
   defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff)
 });
 
-let dropdown = document.querySelector(".dropdown");
+let dropdown = document.querySelector("#info-dropdown");
 dropdown.addEventListener("click", function(event) {
   event.stopPropagation();
   dropdown.classList.toggle("is-active");

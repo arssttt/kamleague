@@ -31,7 +31,21 @@
                     <% end %>
                   <% end %>
                 </td>
-                <td><%= Timex.format!(game.played_at, "%d.%m", :strftime) %></td>
+                <td>
+                  <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+                  <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                      <span class="warning-icon"></span>
+                    </div>
+                    <div class="dropdown-menu" role="menu">
+                      <div class="dropdown-content">
+                        <div class="dropdown-item">
+                          <p>This game has not yet been approved.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
             <% end %>
           </tbody>
@@ -40,12 +54,20 @@
       <div class="column">
         <%= unless is_nil(@game) do %>
           <h1 class="title is-3 has-text-centered">Game stats</h1>
-          <div>
-            <figure class="image is-128x128">
-              <img src="https://bulma.io/images/placeholders/256x256.png">
-            </figure>
-            <p class="label"><%= @game.map.name %></p>
-            <p class="label"><%= Timex.format!(@game.played_at, "%d.%m.%Y", :strftime) %> (<%= Timex.format!(@game.played_at, "%H:%M", :strftime) %>)</p>
+          <div class="columns is-variable is-0">
+            <div class="column">
+              <figure class="image is-128x128">
+                <img src="https://bulma.io/images/placeholders/256x256.png">
+              </figure>
+            </div>
+            <div class="column">
+              <p class="label"><%= @game.map.name %></p>
+              <p class="label"><%= Timex.format!(@game.played_at, "%d.%m.%Y", :strftime) %> (<%= Timex.format!(@game.played_at, "%H:%M", :strftime) %>)</p>
+              <p>
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                This game is not yet approved.
+              </p>
+            </div>
           </div>
           <%= for player <- @game.players do %>
             <div>
@@ -59,7 +81,7 @@
               </p>
               <ul>
                 <li><p class="label">Location: <%= player.location %></p></li>
-                <li><p class="label">Elo: <strike>1000</strike> ⇒ 1025</p></li>
+                <li><p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p></li>
                 <li><p class="label">Wins/Losses: <strike>13/2</strike> ⇒ 14/2</p></li>
                 <li><p class="label">Win ratio: <strike>56%</strike> ⇒ 65%</p></li>
               </ul>

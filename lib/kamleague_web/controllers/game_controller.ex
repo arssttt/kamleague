@@ -24,7 +24,9 @@ defmodule KamleagueWeb.GameController do
   def create(conn, %{"game" => game_params, "map_id" => map_id}) do
     # Add the current user id to the first player
     game_params =
-      put_in(game_params, ["players", "1", "player_id"], Pow.Plug.current_user(conn).player.id)
+      game_params
+      |> put_in(["players", "1", "player_id"], Pow.Plug.current_user(conn).player.id)
+      |> put_in(["players", "1", "approved"], true)
 
     map = Leagues.get_map!(map_id)
 
@@ -55,17 +57,17 @@ defmodule KamleagueWeb.GameController do
     render(conn, "edit.html", game: game, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "map" => map_params}) do
-    map = Leagues.get_map!(id)
+  def update(conn, %{"id" => id, "game" => game_params}) do
+    game = Leagues.get_game!(id)
 
-    case Leagues.update_map(map, map_params) do
-      {:ok, map} ->
+    case Leagues.update_game(game, game_params) do
+      {:ok, _game} ->
         conn
         |> put_flash(:info, "Map updated successfully.")
-        |> redirect(to: Routes.game_path(conn, :show, map))
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", map: map, changeset: changeset)
+        render(conn, "edit.html", changeset: changeset)
     end
   end
 

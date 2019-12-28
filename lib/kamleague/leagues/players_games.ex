@@ -11,13 +11,23 @@ defmodule Kamleague.Leagues.PlayersGames do
     field :old_elo, :integer
     field :new_elo, :integer
     field :k_factor, :integer
+    field :approved, :boolean, default: false
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:player_id, :game_id, :location, :win, :old_elo, :new_elo, :k_factor])
+    |> cast(params, [
+      :player_id,
+      :game_id,
+      :location,
+      :win,
+      :old_elo,
+      :new_elo,
+      :k_factor,
+      :approved
+    ])
     |> validate_required([:player_id, :game_id, :location, :win, :old_elo, :new_elo, :k_factor])
   end
 end

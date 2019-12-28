@@ -60,6 +60,8 @@ $navbar-divider-background-color: $black-light;
 // Dropdown styles
 $dropdown-divider-background-color: $black-light;
 .dropdown {
+  margin-left: 1rem;
+  vertical-align: middle !important;
   .info-icon {
     background-image: url("/images/info-sprites.png");
     background-position: 0px -40px;
@@ -74,6 +76,19 @@ $dropdown-divider-background-color: $black-light;
   }
   &.is-active .info-icon {
     background-position: 0px 0px;
+  }
+
+  .warning-icon {
+    background-image: url("/images/info-sprites.png");
+    background-position: 50px -80px;
+    width: 30px;
+    height: 30px;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      background-position: 90px -80px;
+    }
   }
 
   form {
@@ -98,8 +113,14 @@ $box-radius: 0;
 $table-head-cell-color: $beige;
 $table-cell-border-width: 2px 0 0;
 $table-color: $beige;
+$table-row-hover-background-color: $primary;
 table th {
   font-family: "Beaufort", "Roboto";
+}
+
+table td:not([align]),
+table th:not([align]) {
+  vertical-align: middle;
 }
 
 // Title styles
