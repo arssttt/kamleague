@@ -337,11 +337,11 @@ defmodule Kamleague.Leagues do
 
     winner_changeset =
       winner_info
-      |> Player.changeset_elo(%{elo: winner.new_elo})
+      |> Player.changeset_game(%{elo: winner.new_elo, wins: winner_info.wins + 1})
 
     loser_changeset =
       loser_info
-      |> Player.changeset_elo(%{elo: loser.new_elo})
+      |> Player.changeset_game(%{elo: loser.new_elo, losses: loser_info.losses + 1})
 
     Ecto.Multi.new()
     |> Ecto.Multi.insert(:game, game_changeset)

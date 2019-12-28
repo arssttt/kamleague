@@ -6,6 +6,8 @@ defmodule Kamleague.Leagues.Player do
     field :nickname, :string
     field :elo, :integer, default: 1000
     field :active, :boolean, default: false
+    field :wins, :integer, default: 0
+    field :losses, :integer, default: 0
     belongs_to :user, Kamleague.Accounts.User
     has_many :games, Kamleague.Leagues.PlayersGames
 
@@ -20,9 +22,9 @@ defmodule Kamleague.Leagues.Player do
     |> unique_constraint(:nickname)
   end
 
-  def changeset_elo(player_or_changeset, attrs) do
+  def changeset_game(player_or_changeset, attrs) do
     player_or_changeset
-    |> Ecto.Changeset.cast(attrs, [:elo])
+    |> Ecto.Changeset.cast(attrs, [:elo, :wins, :losses])
   end
 
   def changeset_active(player_or_changeset, attrs) do
