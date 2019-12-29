@@ -6,6 +6,7 @@ defmodule Kamleague.Leagues.Game do
     belongs_to :map, Kamleague.Leagues.Map
     has_many :players, Kamleague.Leagues.PlayersGames
     field :played_at, :utc_datetime
+    field :deleted, :boolean, default: false
     timestamps()
   end
 
