@@ -33,6 +33,7 @@
                 </td>
                 <td>
                   <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+                  <%= if not game.approved do %>
                   <div class="dropdown is-hoverable">
                     <div class="dropdown-trigger">
                       <span class="warning-icon"></span>
@@ -45,6 +46,7 @@
                       </div>
                     </div>
                   </div>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
@@ -63,29 +65,62 @@
             <div class="column">
               <p class="label"><%= @game.map.name %></p>
               <p class="label"><%= Timex.format!(@game.played_at, "%d.%m.%Y", :strftime) %> (<%= Timex.format!(@game.played_at, "%H:%M", :strftime) %>)</p>
+              <%= if not @game.approved do %>
               <p>
                 <i class="fas fa-info-circle" aria-hidden="true"></i>
                 This game is not yet approved.
               </p>
+              <% end %>
             </div>
           </div>
-          <%= for player <- @game.players do %>
-            <div>
-              <p class="label is-size-4">
-                <%= player.player_info.nickname %> 
-                <%= if player.win do %>
-                  (W)
-                <% else %>
-                  (L)
-                <% end  %>
-              </p>
-              <ul>
-                <li><p class="label">Location: <%= player.location %></p></li>
-                <li><p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p></li>
-                <li><p class="label">Wins/Losses: <strike>13/2</strike> ⇒ 14/2</p></li>
-                <li><p class="label">Win ratio: <strike>56%</strike> ⇒ 65%</p></li>
-              </ul>
-            </div>
+          <%= if @game.approved do %>
+            <%= for player <- @game.players do %>
+              <div>
+                <p class="label is-size-4">
+                  <%= player.player_info.nickname %> 
+                  <%= if player.win do %>
+                    (W)
+                  <% else %>
+                    (L)
+                  <% end  %>
+                </p>
+                <ul>
+                  <li><p class="label">Location: <%= player.location %></p></li>
+                  <li><p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p></li>
+                  <%= if player.win do %>
+                    <li>
+                      <p class="label">
+                        Wins/Losses: <strike><%= player.player_info.wins - 1 %>/<%= player.player_info.losses %></strike>
+                        ⇒
+                        <%= player.player_info.wins %>/<%= player.player_info.losses %>
+                      </p>
+                    </li>
+                    <li>
+                      <p class="label">
+                        Win ratio: <strike><%= round((player.player_info.wins - 1) / (player.player_info.wins + player.player_info.losses) * 100) %>%</strike>
+                        ⇒
+                        <%= round(player.player_info.wins / (player.player_info.wins + player.player_info.losses) * 100) %>%
+                      </p>
+                    </li>
+                  <% else %>
+                    <li>
+                      <p class="label">
+                        Wins/Losses: <strike><%= player.player_info.wins %>/<%= player.player_info.losses - 1 %></strike>
+                        ⇒
+                        <%= player.player_info.wins %>/<%= player.player_info.losses %>
+                      </p>
+                    </li>
+                    <li>
+                      <p class="label">
+                        Win ratio: <strike><%= round(player.player_info.wins / (player.player_info.wins + abs(player.player_info.losses)) * 100) %>%</strike>
+                        ⇒
+                        <%= round(player.player_info.wins / (player.player_info.wins + player.player_info.losses) * 100) %>%
+                      </p>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
       </div>
