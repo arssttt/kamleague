@@ -235,6 +235,20 @@ label,
   border: 2px solid $black-light;
   border-radius: 100%;
 }
+.button.is-player {
+  color: $beige;
+  margin-bottom: 1rem;
+
+  &.is-active {
+    color: $beige;
+    border-color: $beige;
+  }
+
+  &.is-active:active {
+    color: $beige;
+    border-color: $beige;
+  }
+}
 
 // Radio button styles
 input[type="radio"]:checked + label > img {

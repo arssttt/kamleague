@@ -15,10 +15,12 @@
       <%= label f, :location, "Location", class: "label" %>
       <div class="level">
         <%= for location <- 1..@map.locations do %>
-          <label>
-            <%= location %>:
-            <input name="game[players][1][location]" type="radio" value="<%= location %>" id="location[1]_<%= location %>">
-          </label>
+          <div class="level-item">
+            <div>
+              <label class="label"><%= location %></label>
+              <input name="game[players][1][location]" type="radio" value="<%= location %>" id="location[1]_<%= location %>">
+            </div>
+          </div>
         <% end %>
       </div>
       <%= error_tag f, :location %>
@@ -34,10 +36,12 @@
       <%= label f, :location, "Location", class: "label" %>
       <div class="level">
         <%= for location <- 1..@map.locations do %>
-          <label>
-            <%= location %>:
-            <input name="game[players][2][location]" type="radio" value="<%= location %>" id="location[2]_<%= location %>">
-          </label>
+          <div class="level-item">
+            <div>
+              <label class="label"><%= location %></label>
+              <input name="game[players][2][location]" type="radio" value="<%= location %>" id="location[2]_<%= location %>">
+            </div>
+          </div>
         <% end %>
       </div>
       <%= error_tag f, :location %>
@@ -46,8 +50,8 @@
       <%= label f, :win, "Winner", class: "label" %>
       <div>
         <label>
-          <input name="game[winner_id]" type="radio" value="<%= @current_user.player.id %>">
-          <a class="button"><%= @current_user.player.nickname %></a>
+          <input name="game[winner_id]" type="radio" value="<%= @current_user.player.id %>" class="is-hidden">
+          <a class="button is-player"><%= @current_user.player.nickname %></a>
         </label>
       </div>
       <div id="opponent">
@@ -67,6 +71,7 @@
 
 <script>
   $("#game_player_2").on("change", function(){  
+    $("#opponent").empty();
     var value = $(this).val();
     var name = $(this).find('option:selected').text();
     if ($(this).val() == "") {
@@ -78,12 +83,18 @@
       $("<input>", {
         "name": "game[winner_id]",
         "type": "radio",
+        "class": "is-hidden",
         "value": value
       }).appendTo($label);
       $("<a>", {
-        "class": "button",
+        "class": "button is-player",
         "text": name
       }).appendTo($label);
     }
-});
+  });
+
+  $(document).on("click", "a.is-player", function (e) {
+    $("a.is-player").removeClass("is-active");
+    $(this).addClass("is-active");
+  });
 </script>
