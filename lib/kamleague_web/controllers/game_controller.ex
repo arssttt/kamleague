@@ -57,11 +57,13 @@ defmodule KamleagueWeb.GameController do
     render(conn, "edit.html", game: game, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "game" => game_params}) do
+  def update(conn, %{"id" => id, "approved" => approved}) do
     game = Leagues.get_game!(id)
 
-    case Leagues.update_game(game, game_params) do
+    case Leagues.approve_game(game, approved, Pow.Plug.current_user(conn).player.id) do
       {:ok, _game} ->
+        Kamleague.Leagues.calculate_elo()
+
         conn
         |> put_flash(:info, "Map updated successfully.")
         |> redirect(to: Routes.page_path(conn, :index))
@@ -72,11 +74,13 @@ defmodule KamleagueWeb.GameController do
   end
 
   def delete(conn, %{"id" => id}) do
-    map = Leagues.get_map!(id)
-    {:ok, _map} = Leagues.delete_map(map)
+    game = Leagues.get_game!(id)
+
+    {:ok, _game} = Leagues.delete_game(game)
+    Kamleague.Leagues.calculate_elo()
 
     conn
-    |> put_flash(:info, "Map deleted successfully.")
-    |> redirect(to: Routes.map_path(conn, :new))
+    |> put_flash(:info, "Game deleted successfully.")
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end

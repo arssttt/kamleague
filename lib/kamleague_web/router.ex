@@ -53,6 +53,7 @@ defmodule KamleagueWeb.Router do
 
   scope "/", KamleagueWeb do
     pipe_through [:browser, :protected]
+    resources "/games", GameController, only: [:update, :delete]
     resources "/players", PlayerController, only: [:update]
     delete "/logout", SessionController, :delete, as: :logout
   end
@@ -61,6 +62,7 @@ defmodule KamleagueWeb.Router do
     pipe_through [:browser, :admin]
     resources "/posts", PostController
     resources "/tags", TagController
-    resources "/maps", MapController, only: [:new, :create, :edit, :delete]
+    resources "/maps", Admin.MapController, only: [:new, :create, :edit, :delete]
+    resources "/games", Admin.GameController, only: [:index, :delete]
   end
 end

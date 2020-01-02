@@ -6,7 +6,9 @@ defmodule Kamleague.Leagues.Game do
     belongs_to :map, Kamleague.Leagues.Map
     has_many :players, Kamleague.Leagues.PlayersGames
     field :played_at, :utc_datetime
+    field :k_factor, :integer
     field :deleted, :boolean, default: false
+    field :approved, :boolean, default: false
     timestamps()
   end
 
@@ -16,6 +18,30 @@ defmodule Kamleague.Leagues.Game do
     |> cast(attrs, [:played_at])
     |> validate_required([:played_at])
     |> validate_current_or_past_date(:played_at)
+  end
+
+  def changeset_k_factor(game_or_changset, attrs) do
+    game_or_changset
+    |> cast(attrs, [:k_factor])
+    |> validate_required([:k_factor])
+  end
+
+  def changeset_approve(game_or_changeset) do
+    changeset = Ecto.Changeset.change(game_or_changeset)
+
+    case changeset do
+      %{data: %{approved: false}} -> Ecto.Changeset.change(changeset, approved: true)
+      changeset -> changeset
+    end
+  end
+
+  def changeset_delete(game_or_changeset) do
+    changeset = Ecto.Changeset.change(game_or_changeset)
+
+    case changeset do
+      %{data: %{deleted: false}} -> Ecto.Changeset.change(changeset, deleted: true)
+      changeset -> changeset
+    end
   end
 
   def validate_current_or_past_date(%{changes: changes} = changeset, field) do

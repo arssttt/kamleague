@@ -6,9 +6,10 @@ defmodule Kamleague.Leagues do
   import Ecto.Query, warn: false
   alias Kamleague.Repo
   alias Kamleague.Elo
+  alias Ecto.Multi
 
   alias Timex
-  alias Kamleague.Leagues.Player
+  alias Kamleague.Leagues.{Player, PlayersGames}
 
   @doc """
   Returns the list of players.
@@ -43,6 +44,12 @@ defmodule Kamleague.Leagues do
 
   """
   def get_player!(id), do: Repo.get!(Player, id)
+
+  def get_player_with_games!(id) do
+    Player
+    |> Repo.get!(id)
+    |> Repo.preload(:games)
+  end
 
   @doc """
   Gets players from the ids
@@ -233,18 +240,31 @@ defmodule Kamleague.Leagues do
     Repo.all(
       from g in Game,
         preload: [[players: :player_info], :map],
+        where: not g.deleted,
         order_by: [desc: g.played_at],
         offset: ^((current_page - 1) * per_page),
         limit: ^per_page
     )
   end
 
-  def list_unapproved_games(player) do
+  def list_all_games() do
     Repo.all(
       from g in Game,
         preload: [[players: :player_info], :map],
         order_by: [desc: g.played_at]
     )
+  end
+
+  def list_unapproved_games(player) do
+    query =
+      from game in Game,
+        join: p in PlayersGames,
+        on:
+          p.player_id == ^player.id and not p.approved and p.game_id == game.id and
+            not game.deleted,
+        preload: [[players: :player_info], :map]
+
+    Repo.all(query)
   end
 
   @doc """
@@ -282,7 +302,7 @@ defmodule Kamleague.Leagues do
       |> Elixir.Map.values()
       |> Enum.map(fn x -> convert_to_atom_map(x) end)
 
-    # Get winner information
+    # Get winner
     winner =
       players
       |> Enum.filter(fn player ->
@@ -290,30 +310,20 @@ defmodule Kamleague.Leagues do
       end)
       |> List.first()
 
-    winner_info = get_player!(winner.player_id)
-
-    # Get loser information
+    # Get loser
     loser =
       Enum.filter(players, fn player ->
         player.player_id != String.to_integer(attrs["winner_id"])
       end)
       |> List.first()
 
-    loser_info = get_player!(loser.player_id)
-
-    {winner_new_elo, loser_new_elo} = Elo.rate(winner_info.elo, loser_info.elo, :win)
-
     winner =
       winner
       |> Elixir.Map.put(:win, true)
-      |> Elixir.Map.put(:new_elo, winner_new_elo)
-      |> Elixir.Map.put(:old_elo, winner_info.elo)
 
     loser =
       loser
       |> Elixir.Map.put(:win, false)
-      |> Elixir.Map.put(:new_elo, loser_new_elo)
-      |> Elixir.Map.put(:old_elo, loser_info.elo)
 
     # Format played_at to a DateTime
     attrs =
@@ -329,25 +339,11 @@ defmodule Kamleague.Leagues do
           attrs
       end
 
-    game_changeset =
-      %Game{}
-      |> Game.changeset(attrs)
-      |> Ecto.Changeset.put_change(:map_id, map.id)
-      |> Ecto.Changeset.put_assoc(:players, [winner, loser])
-
-    winner_changeset =
-      winner_info
-      |> Player.changeset_game(%{elo: winner.new_elo, wins: winner_info.wins + 1})
-
-    loser_changeset =
-      loser_info
-      |> Player.changeset_game(%{elo: loser.new_elo, losses: loser_info.losses + 1})
-
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:game, game_changeset)
-    |> Ecto.Multi.update(:winner, winner_changeset)
-    |> Ecto.Multi.update(:loser, loser_changeset)
-    |> Repo.transaction()
+    %Game{}
+    |> Game.changeset(attrs)
+    |> Ecto.Changeset.put_change(:map_id, map.id)
+    |> Ecto.Changeset.put_assoc(:players, [winner, loser])
+    |> Repo.insert()
   end
 
   @doc """
@@ -364,6 +360,94 @@ defmodule Kamleague.Leagues do
   defp to_atom_map(v) when is_integer(v), do: v
 
   defp to_atom_map(v) when is_boolean(v), do: v
+
+  @doc """
+  Calculates the elo for all the games. This calculates all the games from the beginning
+  to calculate the elo correctly when approving and deleting games.
+  """
+  def calculate_elo() do
+    # Reset all player data
+    Repo.update_all(Player, set: [elo: 1000, wins: 0, losses: 0])
+
+    games =
+      Game
+      |> preload(:players)
+      |> order_by([g], asc: g.played_at)
+      |> where([g], g.deleted == false and g.approved == true)
+      |> Repo.all()
+
+    for game <- games do
+      # Get winner and loser information
+      winner = Enum.find(game.players, fn player -> player.win end)
+      winner_info = get_player_with_games!(winner.player_id)
+      loser = Enum.find(game.players, fn player -> !player.win end)
+      loser_info = get_player!(loser.player_id)
+
+      # Set the k factor
+      set_k_factor(game, games, [winner.player_id, loser.player_id])
+
+      # Calculate their new elos
+      {winner_new_elo, loser_new_elo} =
+        Elo.rate(winner_info.elo, loser_info.elo, :win, round: true, k_factor: game.k_factor)
+
+      game_changeset =
+        game
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:players, [
+          %{
+            id: winner.id,
+            game_id: winner.game_id,
+            player_id: winner.player_id,
+            new_elo: winner_new_elo,
+            old_elo: winner_info.elo
+          },
+          %{
+            id: loser.id,
+            game_id: loser.game_id,
+            player_id: loser.player_id,
+            new_elo: loser_new_elo,
+            old_elo: loser_info.elo
+          }
+        ])
+
+      winner_changeset =
+        winner_info
+        |> Player.changeset_game(%{elo: winner_new_elo, wins: winner_info.wins + 1})
+
+      loser_changeset =
+        loser_info
+        |> Player.changeset_game(%{elo: loser_new_elo, losses: loser_info.losses + 1})
+
+      Multi.new()
+      |> Multi.update(:game, game_changeset)
+      |> Multi.update(:winner, winner_changeset)
+      |> Multi.update(:loser, loser_changeset)
+      |> Repo.transaction()
+    end
+  end
+
+  defp set_k_factor(game, games, ids) do
+    count =
+      games
+      |> Enum.filter(fn g -> Enum.all?(g.players, fn p -> p.player_id in ids end) end)
+      |> Enum.filter(fn g -> g.played_at <= game.played_at end)
+      |> Enum.filter(fn g ->
+        g.played_at >= Timex.beginning_of_month(game.played_at) and
+          g.played_at <= Timex.end_of_month(game.played_at)
+      end)
+      |> Enum.count()
+
+    k_factor =
+      cond do
+        count == 1 -> 100
+        count == 2 -> 75
+        count > 2 -> 50
+      end
+
+    game
+    |> Game.changeset_k_factor(%{k_factor: k_factor})
+    |> Repo.update()
+  end
 
   @doc """
   Updates a game.
@@ -384,6 +468,26 @@ defmodule Kamleague.Leagues do
   end
 
   @doc """
+  Approves a game
+  """
+  def approve_game(game, approved, id) do
+    player = Enum.find(game.players, fn player -> player.player_id == id end)
+
+    game_changeset =
+      game
+      |> Game.changeset_approve()
+
+    player_changeset =
+      player
+      |> PlayersGames.changeset_approve(%{approved: approved})
+
+    Multi.new()
+    |> Multi.update(:game, game_changeset)
+    |> Multi.update(:player, player_changeset)
+    |> Repo.transaction()
+  end
+
+  @doc """
   Deletes a Game.
 
   ## Examples
@@ -395,8 +499,10 @@ defmodule Kamleague.Leagues do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_game(%Game{} = game) do
-    Repo.delete(game)
+  def delete_game(game) do
+    game
+    |> Game.changeset_delete()
+    |> Repo.update()
   end
 
   @doc """

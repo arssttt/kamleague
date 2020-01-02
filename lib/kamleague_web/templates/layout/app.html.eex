@@ -76,11 +76,13 @@
                   </a>
 
                   <div class="navbar-dropdown">
+                    <%= link "Games", to: Routes.game_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Maps", to: Routes.map_path(@conn, :new), class: "navbar-item" %>
                     <a class="navbar-item">
                       Users
                     </a>
-                      <%= link "Posts", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Posts", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
+
                   </div>
                 </div>
               <% end %>
@@ -125,15 +127,48 @@
                         <div class="dropdown-item">
                           <p>You are currently marked as <strong>inactive</strong> and will not be displayed on the rankings.</p>
                           <%= form_for @conn, Routes.player_path(@conn, :update, @current_user.player), [method: :put], fn f -> %>
-                              <%= hidden_input f, :active, value: true %>
-
+                            <%= hidden_input f, :active, value: true %>
                             <%= submit "Mark as active", class: "button is-primary is-small" %>
                           <% end %>
                         </div>
                         <hr class="dropdown-divider">
                         <% end %>
                         <div class="dropdown-item">
-                          <p>You have no unapproved games at the moment.</p>
+                          <%= if length(@unapproved_games) > 0 do %>
+                            <p>You have unapproved games.</p>
+                            <%= for game <- @unapproved_games do %>
+                              <hr class="dropdown-divider">
+                              <p class="label"><%= game.map.name %> (<%= Timex.format!(game.played_at, "%d.%m", :strftime) %>)</p>
+                              <%= for {player, index} <- Enum.with_index(game.players) do %>
+                                <span>
+                                  <%= player.player_info.nickname %>
+                                  (<%= player.location %>)
+                                </span>
+                                <%= unless index + 1 == length(game.players)  do %>
+                                  <span>VS</span>
+                                <% end %>
+                              <% end %>
+                              <p class="label">Winner: 
+                                <%= for player <- game.players do %>
+                                  <%= if player.win do %> 
+                                    <%= player.player_info.nickname %>
+                                  <% end %>
+                                <% end %>
+                              </p>
+                              <%= form_for @conn, Routes.game_path(@conn, :update, game.id), [method: :put], fn f -> %>
+                                <%= hidden_input f, :approved, value: true %>
+
+                                <%= submit "Approve", class: "button is-primary is-small" %>
+                              <% end %>
+                              <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
+                                <%= hidden_input f, :deleted, value: true %>
+
+                                <%= submit "Delete", class: "button is-danger is-small" %>
+                              <% end %>
+                            <% end %>
+                          <% else %>
+                            <p>You have no unapproved games.</p>
+                          <% end %>
                         </div>
                       </div>
                     </div>
