@@ -33,7 +33,7 @@
                   <% end %>
                   <td class="has-text-centered"><%= game.played_at %></td>
                   <td class="has-text-centered"><%= game.deleted %></td>
-                  <td class="has-text-centered">false</td>
+                  <td class="has-text-centered"><%= game.approved %></td>
                   <td><%= button "Delete", to: Routes.game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %></td>
                 </tr>
             <% end %>
