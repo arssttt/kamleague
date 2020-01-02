@@ -384,15 +384,15 @@ defmodule Kamleague.Leagues do
       loser_info = get_player!(loser.player_id)
 
       # Set the k factor
-      set_k_factor(game, games, [winner.player_id, loser.player_id])
+      k_factor = set_k_factor(game, games, [winner.player_id, loser.player_id])
 
       # Calculate their new elos
       {winner_new_elo, loser_new_elo} =
-        Elo.rate(winner_info.elo, loser_info.elo, :win, round: true, k_factor: game.k_factor)
+        Elo.rate(winner_info.elo, loser_info.elo, :win, round: true, k_factor: k_factor)
 
       game_changeset =
         game
-        |> Ecto.Changeset.change()
+        |> Game.changeset_k_factor(%{k_factor: k_factor})
         |> Ecto.Changeset.put_assoc(:players, [
           %{
             id: winner.id,
@@ -437,16 +437,11 @@ defmodule Kamleague.Leagues do
       end)
       |> Enum.count()
 
-    k_factor =
-      cond do
-        count == 1 -> 100
-        count == 2 -> 75
-        count > 2 -> 50
-      end
-
-    game
-    |> Game.changeset_k_factor(%{k_factor: k_factor})
-    |> Repo.update()
+    cond do
+      count == 1 -> 100
+      count == 2 -> 75
+      count > 2 -> 50
+    end
   end
 
   @doc """

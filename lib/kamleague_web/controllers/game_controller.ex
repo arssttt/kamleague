@@ -62,7 +62,7 @@ defmodule KamleagueWeb.GameController do
 
     case Leagues.approve_game(game, approved, Pow.Plug.current_user(conn).player.id) do
       {:ok, _game} ->
-        Kamleague.Leagues.calculate_elo()
+        Leagues.calculate_elo()
 
         conn
         |> put_flash(:info, "Map updated successfully.")
