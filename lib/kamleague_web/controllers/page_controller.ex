@@ -3,7 +3,8 @@ defmodule KamleagueWeb.PageController do
 
   def index(conn, _params) do
     players = Kamleague.Leagues.list_active_players()
-    render(conn, "index.html", players: players)
+    teams = Kamleague.Leagues.list_teams()
+    render(conn, "index.html", players: players, teams: teams)
   end
 
   def rules(conn, _params) do

@@ -162,6 +162,14 @@ $dropdown-divider-background-color: $black-light;
 
 // Tabs styles
 $tabs-border-bottom-style: "none";
+.tab-content {
+  padding: 1rem;
+  display: none;
+}
+
+.tab-content.is-active {
+  display: block;
+}
 
 // Box styles
 $box-padding: 3rem 5rem;

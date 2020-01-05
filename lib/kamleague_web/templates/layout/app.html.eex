@@ -94,6 +94,12 @@
 
             <div class="navbar-end">
               <%= if @current_user do %>
+                <%= if length(@current_user.player.teams) < 2 do %>
+                <div class="navbar-item">
+                  <%= link "Create team", to: "#", class: "button is-primary is-small" %>
+                </div>
+                <% end %>
+
                 <div class="navbar-item">
                   <%= link "Add game", to: "#", class: "button is-primary is-small", id: "map-modal" %>
                 </div>
@@ -184,14 +190,13 @@
                   </a>
                   <div class="navbar-dropdown">
                     <a class="navbar-item">
-                      About
+                      Profile
                     </a>
-                    <a class="navbar-item">
-                      Jobs
-                    </a>
-                    <a class="navbar-item">
-                      Contact
-                    </a>
+                    <%= for player_team <- @current_user.player.teams do %>
+                      <a class="navbar-item">
+                        <%= player_team.team.name %>
+                      </a>
+                    <% end %>
                     <hr class="navbar-divider">
                     <%= link "Logout", to: Routes.logout_path(@conn, :delete), method: :delete, class: "navbar-item" %>
                   </div>

@@ -71,7 +71,7 @@
 
           <div class="field">
             <%= submit "Register", class: "button is-fullwidth is-primary is-large" %>
-            </div>
+          </div>
         <% end %>
       </div>
     </div>

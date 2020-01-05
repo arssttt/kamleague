@@ -6,65 +6,130 @@
     </ul>
   </div>
   <div class="box">
-    <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Player</th>
-          <th>Tier</th>
-          <th>Elo</th>
-          <th>Win Ratio</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= for {player, index} <- Enum.with_index(@players) do %>
+    <div class="tab-content">
+      <table class="table is-fullwidth">
+        <thead>
           <tr>
-            <td><%= index + 1 %></td>
-            <td><%= player.nickname %></td>
-            <td></td>
-            <td><%= player.elo %></td>
-            <td>
-              <%= cond do %>
-                <% player.wins == 0 -> %>
-                  <%= if player.losses == 0 do %>
-                    <div class="graph">
-                      <div class="fill left" style="width: 50%"></div>
-                      <div class="text left"><%= player.wins %></div>
-                      <div class="fill right"></div>
-                      <div class="text right"><%= player.losses %></div>
-                    </div>
-                  <% else %>
-                    <div class="graph">
-                      <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%"></div>
-                      <div class="text left"><%= player.wins %></div>
-                      <div class="fill right"></div>
-                      <div class="text right"><%= player.losses %></div>
-                    </div>
-                    <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
-                  <% end %>
-                <% player.wins != 0 -> %>
-                  <%= if player.losses == 0 do %>
-                    <div class="graph">
-                      <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;"></div>
-                      <div class="text left"><%= player.wins %></div>
-                      <div class="fill right"></div>
-                      <div class="text right"><%= player.losses %></div>
-                    </div>
-                    <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
-                  <% else %>
-                    <div class="graph">
-                      <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%"></div>
-                      <div class="text left"><%= player.wins %></div>
-                      <div class="fill right"></div>
-                      <div class="text right"><%= player.losses %></div>
-                    </div>
-                    <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
-                  <% end %>
-              <% end %>
-            </td>
+            <th>#</th>
+            <th>Player</th>
+            <th>Tier</th>
+            <th>Elo</th>
+            <th>Win Ratio</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <%= for {player, index} <- Enum.with_index(@players) do %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= player.nickname %></td>
+              <td></td>
+              <td><%= player.elo %></td>
+              <td>
+                <%= cond do %>
+                  <% player.wins == 0 -> %>
+                    <%= if player.losses == 0 do %>
+                      <div class="graph">
+                        <div class="fill left" style="width: 50%"></div>
+                        <div class="text left"><%= player.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= player.losses %></div>
+                      </div>
+                    <% else %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%"></div>
+                        <div class="text left"><%= player.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= player.losses %></div>
+                      </div>
+                      <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
+                    <% end %>
+                  <% player.wins != 0 -> %>
+                    <%= if player.losses == 0 do %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;"></div>
+                        <div class="text left"><%= player.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= player.losses %></div>
+                      </div>
+                      <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
+                    <% else %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(player.wins / (player.wins + player.losses) * 100) %>%"></div>
+                        <div class="text left"><%= player.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= player.losses %></div>
+                      </div>
+                      <span><%= round(player.wins / (player.wins + player.losses) * 100) %>%</span>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-content">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Teams</th>
+            <th>Tier</th>
+            <th>Elo</th>
+            <th>Win Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for {team, index} <- Enum.with_index(@teams) do %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= team.name %></td>
+              <td></td>
+              <td><%= team.elo %></td>
+              <td>
+                <%= cond do %>
+                  <% team.wins == 0 -> %>
+                    <%= if team.losses == 0 do %>
+                      <div class="graph">
+                        <div class="fill left" style="width: 50%"></div>
+                        <div class="text left"><%= team.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= team.losses %></div>
+                      </div>
+                    <% else %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(team.wins / (team.wins + team.losses) * 100) %>%"></div>
+                        <div class="text left"><%= team.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= team.losses %></div>
+                      </div>
+                      <span><%= round(team.wins / (team.wins + team.losses) * 100) %>%</span>
+                    <% end %>
+                  <% team.wins != 0 -> %>
+                    <%= if team.losses == 0 do %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(team.wins / (team.wins + team.losses) * 100) %>%; border-top-right-radius: 4px; border-bottom-right-radius: 4px;"></div>
+                        <div class="text left"><%= team.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= team.losses %></div>
+                      </div>
+                      <span><%= round(team.wins / (team.wins + team.losses) * 100) %>%</span>
+                    <% else %>
+                      <div class="graph">
+                        <div class="fill left" style="width: <%= round(team.wins / (team.wins + team.losses) * 100) %>%"></div>
+                        <div class="text left"><%= team.wins %></div>
+                        <div class="fill right"></div>
+                        <div class="text right"><%= team.losses %></div>
+                      </div>
+                      <span><%= round(team.wins / (team.wins + team.losses) * 100) %>%</span>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
