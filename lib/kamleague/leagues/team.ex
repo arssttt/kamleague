@@ -4,6 +4,9 @@ defmodule Kamleague.Leagues.Team do
 
   schema "teams" do
     field :name, :string
+    field :elo, :integer, default: 1000
+    field :wins, :integer, default: 0
+    field :losses, :integer, default: 0
     belongs_to :owner, Kamleague.Leagues.Player
     has_many :players, Kamleague.Leagues.PlayersTeams
 
