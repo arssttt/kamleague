@@ -10,6 +10,7 @@ defmodule Kamleague.Leagues.Player do
     field :losses, :integer, default: 0
     belongs_to :user, Kamleague.Accounts.User
     has_many :games, Kamleague.Leagues.PlayersGames
+    has_many :teams, Kamleague.Leagues.PlayersTeams
 
     timestamps()
   end

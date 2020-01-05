@@ -1,0 +1,38 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label f, :name, "Name", class: "label" %>
+    <div class="control">
+      <%= text_input f, :name, class: "input" %>
+    </div>
+    <%= error_tag f, :name %>
+    <p class="help">Offensive team names will not be tolerated.</p>
+  </div>
+
+  <div class="field">
+    <%= label f, :teammate, "Teammate", class: "label" %>
+    <div class="select is-fullwidth">
+      <%= select f, :teammate, Enum.map(@players, &{&1.nickname, &1.id}) %>
+    </div>
+    <%= error_tag f, :teammate %>
+  </div>
+
+  <div class="field">
+    <p>
+      <i class="fas fa-info-circle" aria-hidden="true"></i>
+      Creating a team will not add the teammate to the team immediately. 
+      The teammate will be sent an invitation to the team and has to accept it before he/she will be displayed as a member of the team.
+    </p>
+  </div>
+
+  <div class="field">
+    <%= submit "Create team", class: "button is-fullwidth is-primary is-large" %>
+  </div>
+<% end %>
+
+
