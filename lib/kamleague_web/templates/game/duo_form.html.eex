@@ -2,8 +2,12 @@
 <%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
   <div class="columns is-multiline">
     <div class="field column is-half">
-      <%= label f, :player_1, "You", class: "label" %>
+      <%= label f, :team_1, "Your team", class: "label" %>
       <a class="button is-static"><%= @current_user.player.nickname %></a>
+      <div class="select">
+        <%= select f, :player_2,
+          Enum.map(@players, &{&1.nickname, &1.id}), prompt: "Select your team", name: "game[players][2][player_id]" %>
+      </div>
     </div>
     <div class="field column is-half has-text-centered">
       <%= label f, :location, "Location", class: "label" %>
@@ -20,7 +24,7 @@
       <%= error_tag f, :location %>
     </div>
     <div class="field column is-half">
-      <%= label f, "Opponent", class: "label" %>
+      <%= label f, "Opponent team", class: "label" %>
       <div class="select">
         <%= select f, :player_2,
           Enum.map(@players, &{&1.nickname, &1.id}), prompt: "Select a player", name: "game[players][2][player_id]" %>

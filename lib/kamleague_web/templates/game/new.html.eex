@@ -3,7 +3,24 @@
     <div class="column is-6">
       <div class="box">
         <h1 class="title is-3 has-text-centered">Game information</h1>
-        <%= render "form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create, @map.id)) %>
+        <div class="tabs is-centered is-size-1 is-uppercase">
+          <ul>
+            <li class="is-active"><h1 class="title is-3"><a>Solo</a></h1></li>
+            <li><h1 class="title is-3"><a>Duo</a></h1></li>
+          </ul>
+        </div>
+        <div class="has-text-centered">
+          <figure class="container image is-128x128">
+            <img src="https://bulma.io/images/placeholders/256x256.png">
+          </figure>
+          <p class="label"><%= @map.name %></p>
+        </div>
+        <div class="tab-content">
+          <%= render "form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create, @map.id)) %>
+        </div>
+        <div class="tab-content">
+          <%= render "duo_form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create, @map.id)) %>
+        </div>
       </div>
     </div>
   </div>

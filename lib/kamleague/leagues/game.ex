@@ -5,6 +5,7 @@ defmodule Kamleague.Leagues.Game do
   schema "games" do
     belongs_to :map, Kamleague.Leagues.Map
     has_many :players, Kamleague.Leagues.PlayersGames
+    has_many :teams, Kamleague.Leagues.TeamsGames
     field :played_at, :utc_datetime
     field :k_factor, :integer
     field :deleted, :boolean, default: false
