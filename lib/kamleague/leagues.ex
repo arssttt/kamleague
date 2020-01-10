@@ -43,6 +43,7 @@ defmodule Kamleague.Leagues do
       ** (Ecto.NoResultsError)
 
   """
+  def get_player!(%_{} = user), do: Repo.get_by!(Player, user_id: user.id)
   def get_player!(id), do: Repo.get!(Player, id)
 
   def get_player_with_games!(id) do
@@ -525,7 +526,9 @@ defmodule Kamleague.Leagues do
 
   """
   def list_teams do
-    Repo.all(Team)
+    Team
+    |> preload(players: :player_info)
+    |> Repo.all()
   end
 
   @doc """
