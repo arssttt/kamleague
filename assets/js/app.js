@@ -33,10 +33,12 @@ flatpickr("#played_at", {
 });
 
 let dropdown = document.querySelector("#info-dropdown");
-dropdown.addEventListener("click", function(event) {
-  event.stopPropagation();
-  dropdown.classList.toggle("is-active");
-});
+if (dropdown != null) {
+  dropdown.addEventListener("click", function(event) {
+    event.stopPropagation();
+    dropdown.classList.toggle("is-active");
+  });
+}
 
 // Tabs
 let tabsWithContent = (function() {
