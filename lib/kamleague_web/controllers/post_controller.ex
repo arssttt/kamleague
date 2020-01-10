@@ -36,8 +36,9 @@ defmodule KamleagueWeb.PostController do
 
   def edit(conn, %{"id" => id}) do
     post = Contents.get_post!(id)
+    tags = Contents.list_tags()
     changeset = Contents.change_post(post)
-    render(conn, "edit.html", post: post, changeset: changeset)
+    render(conn, "edit.html", post: post, changeset: changeset, tags: tags)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
