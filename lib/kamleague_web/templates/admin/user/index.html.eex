@@ -1,0 +1,38 @@
+<section class="section">
+  <div class="box">
+    <div class="columns is-variable is-8">
+      <div class="column">
+        <h1 class="title is-3">All users</h1>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th class="has-text-centered">Id</th>
+              <th class="has-text-centered">Username</th>
+              <th class="has-text-centered">Email</th>
+              <th class="has-text-centered">Nickname</th>
+              <th class="has-text-centered">Elo</th>
+              <th class="has-text-centered">Active</th>
+              <th class="has-text-centered">Role</th>
+              <th class="has-text-centered">IP</th>
+              <th class="has-text-centered">Locked</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for user <- @users do %>
+                <tr>
+                  <td class="has-text-centered"><%= user.id %></td>
+                  <td class="has-text-centered"><%= user.username %></td>
+                  <td class="has-text-centered"><%= user.email %></td>
+                  <td class="has-text-centered"><%= user.player.nickname %></td>
+                  <td class="has-text-centered"><%= user.player.elo %></td>
+                  <td class="has-text-centered"><%= user.player.active %></td>
+                  <td class="has-text-centered"><%= user.role %></td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

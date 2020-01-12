@@ -8,8 +8,8 @@ defmodule KamleagueWeb.PageController do
   end
 
   def rules(conn, _params) do
-    # Fetch post with the tag rules since only one post is allowed to have the "rules" tag
-    post = Kamleague.Contents.get_post_by_tag!("Rules")
-    render(conn, "rules.html", post: post)
+    rules = Kamleague.Contents.get_post_by_tag!("Rules")
+    map_list = Kamleague.Contents.get_post_by_tag!("Maplist")
+    render(conn, "rules.html", rules: rules, map_list: map_list)
   end
 end

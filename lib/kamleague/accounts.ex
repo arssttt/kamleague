@@ -3,6 +3,12 @@ defmodule Kamleague.Accounts do
 
   @type t :: %User{}
 
+  def list_users() do
+    User
+    |> Repo.all()
+    |> Repo.preload(:player)
+  end
+
   @spec create_admin(map()) :: {:ok, t()} | {:error, Ecto.Changeset.t()}
   def create_admin(params) do
     %User{}

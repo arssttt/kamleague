@@ -82,9 +82,7 @@
                   <div class="navbar-dropdown">
                     <%= link "Games", to: Routes.game_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Maps", to: Routes.map_path(@conn, :new), class: "navbar-item" %>
-                    <a class="navbar-item">
-                      Users
-                    </a>
+                    <%= link "Users", to: Routes.user_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Posts", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
 
                   </div>
@@ -185,7 +183,7 @@
                   </div>
                 </div>
                 <div class="navbar-item has-dropdown is-hoverable">
-                  <a class="navbar-link">
+                  <a class="navbar-link nickname">
                     <%= @current_user.player.nickname %>
                   </a>
                   <div class="navbar-dropdown">

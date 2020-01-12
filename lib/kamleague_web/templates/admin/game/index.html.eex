@@ -11,6 +11,7 @@
               <th class="has-text-centered">Winner (Location)</th>
               <th class="has-text-centered">Loser (Location)</th>
               <th class="has-text-centered">Played at</th>
+              <th class="has-text-centered">K factor</th>
               <th class="has-text-centered">Deleted</th>
               <th class="has-text-centered">Approved</th>
               <th></th>
@@ -31,6 +32,7 @@
                       <td class="has-text-centered"><%= player.player_info.nickname %> (<%= player.location %>)</td>
                     <% end %>
                   <% end %>
+                  <td class="has-text-centered"><%= game.k_factor %></td>
                   <td class="has-text-centered"><%= game.played_at %></td>
                   <td class="has-text-centered"><%= game.deleted %></td>
                   <td class="has-text-centered"><%= game.approved %></td>

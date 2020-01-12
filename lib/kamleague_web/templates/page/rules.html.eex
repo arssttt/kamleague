@@ -1,8 +1,18 @@
 <section class="section">
   <div class="box">
-    <h1 class="title is-1"><%= @post.title %><h1>
-    <div class="content">
-      <%= {:safe, markdown(@post.body)} %>
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1"><%= @rules.title %><h1>
+        <div class="content">
+          <%= {:safe, markdown(@rules.body)} %>
+        </div>
+      </div>
+      <div class="column">
+        <h1 class="title is-1"><%= @map_list.title %><h1>
+        <div class="content">
+          <%= {:safe, markdown(@map_list.body)} %>
+        </div>
+      </div>
     </div>
   </div>
 </section>
