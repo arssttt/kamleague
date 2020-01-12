@@ -5,6 +5,7 @@ defmodule Kamleague.Accounts.User do
   schema "users" do
     field :username, :string
     field :role, :string, default: "user"
+    field :locked_at, :utc_datetime
 
     pow_user_fields()
 
@@ -17,15 +18,27 @@ defmodule Kamleague.Accounts.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
-    |> Ecto.Changeset.cast(attrs, [:username])
+    |> Ecto.Changeset.cast(attrs, [:username, :locked_at])
     |> Ecto.Changeset.cast_assoc(:player)
     |> Ecto.Changeset.validate_required([:username, :player])
   end
 
-  @spec changeset_role(Ecto.Schema.t() | Ecto.Changeset.t(), map()) :: Ecto.Changeset.t()
-  def changeset_role(user_or_changeset, attrs) do
+  def update_changeset(user_or_changeset, attrs) do
     user_or_changeset
-    |> Ecto.Changeset.cast(attrs, [:role])
+    |> Ecto.Changeset.cast(attrs, [:username, :role, :locked_at])
+    |> Ecto.Changeset.cast_assoc(:player)
     |> Ecto.Changeset.validate_inclusion(:role, ~w(user admin))
+    |> Ecto.Changeset.validate_required([:username, :player])
+  end
+
+  @spec lock_changeset(Ecto.Schema.t() | Ecto.Changeset.t()) :: Ecto.Changeset.t()
+  def lock_changeset(user_or_changeset) do
+    changeset = Ecto.Changeset.change(user_or_changeset)
+    locked_at = DateTime.from_unix!(System.system_time(:second), :second)
+
+    case changeset do
+      %{data: %{locked_at: nil}} -> Ecto.Changeset.change(changeset, locked_at: locked_at)
+      changeset -> changeset
+    end
   end
 end

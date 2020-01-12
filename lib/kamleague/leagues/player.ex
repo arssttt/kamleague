@@ -18,7 +18,7 @@ defmodule Kamleague.Leagues.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:nickname])
+    |> cast(attrs, [:nickname, :active])
     |> validate_required([:nickname])
     |> unique_constraint(:nickname)
   end

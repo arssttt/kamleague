@@ -11,6 +11,7 @@ defmodule KamleagueWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug KamleagueWeb.AssignUser
+    plug KamleagueWeb.EnsureUserNotLockedPlug
   end
 
   pipeline :protected do
@@ -65,6 +66,6 @@ defmodule KamleagueWeb.Router do
     resources "/tags", TagController
     resources "/maps", Admin.MapController, only: [:new, :create, :edit, :delete]
     resources "/games", Admin.GameController, only: [:index, :delete]
-    resources "/users", Admin.UserController, only: [:index, :delete]
+    resources "/users", Admin.UserController
   end
 end

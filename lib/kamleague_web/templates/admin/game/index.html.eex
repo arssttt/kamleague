@@ -1,47 +1,43 @@
 <section class="section">
   <div class="box">
-    <div class="columns is-variable is-8">
-      <div class="column">
-        <h1 class="title is-3">All games</h1>
-        <table class="table is-fullwidth">
-          <thead>
+    <h1 class="title is-3">All games</h1>
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th class="has-text-centered">Id</th>
+          <th class="has-text-centered">Map name</th>
+          <th class="has-text-centered">Winner (Location)</th>
+          <th class="has-text-centered">Loser (Location)</th>
+          <th class="has-text-centered">Played at</th>
+          <th class="has-text-centered">K factor</th>
+          <th class="has-text-centered">Deleted</th>
+          <th class="has-text-centered">Approved</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for game <- @games do %>
             <tr>
-              <th class="has-text-centered">Id</th>
-              <th class="has-text-centered">Map name</th>
-              <th class="has-text-centered">Winner (Location)</th>
-              <th class="has-text-centered">Loser (Location)</th>
-              <th class="has-text-centered">Played at</th>
-              <th class="has-text-centered">K factor</th>
-              <th class="has-text-centered">Deleted</th>
-              <th class="has-text-centered">Approved</th>
-              <th></th>
+              <td class="has-text-centered"><%= game.id %></td>
+              <td class="has-text-centered"><%= game.map.name %></td>
+              <%= for player <- game.players do %>
+                <%= if player.win do %>
+                  <td class="has-text-centered"><%= player.player_info.nickname %> (<%= player.location %>)</td>
+                <% end %>
+              <% end %>
+              <%= for player <- game.players do %>
+                <%= if not player.win do %>
+                  <td class="has-text-centered"><%= player.player_info.nickname %> (<%= player.location %>)</td>
+                <% end %>
+              <% end %>
+              <td class="has-text-centered"><%= game.k_factor %></td>
+              <td class="has-text-centered"><%= game.played_at %></td>
+              <td class="has-text-centered"><%= game.deleted %></td>
+              <td class="has-text-centered"><%= game.approved %></td>
+              <td><%= button "Delete", to: Routes.game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %></td>
             </tr>
-          </thead>
-          <tbody>
-            <%= for game <- @games do %>
-                <tr>
-                  <td class="has-text-centered"><%= game.id %></td>
-                  <td class="has-text-centered"><%= game.map.name %></td>
-                  <%= for player <- game.players do %>
-                    <%= if player.win do %>
-                      <td class="has-text-centered"><%= player.player_info.nickname %> (<%= player.location %>)</td>
-                    <% end %>
-                  <% end %>
-                  <%= for player <- game.players do %>
-                    <%= if not player.win do %>
-                      <td class="has-text-centered"><%= player.player_info.nickname %> (<%= player.location %>)</td>
-                    <% end %>
-                  <% end %>
-                  <td class="has-text-centered"><%= game.k_factor %></td>
-                  <td class="has-text-centered"><%= game.played_at %></td>
-                  <td class="has-text-centered"><%= game.deleted %></td>
-                  <td class="has-text-centered"><%= game.approved %></td>
-                  <td><%= button "Delete", to: Routes.game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %></td>
-                </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </section>

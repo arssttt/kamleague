@@ -1,0 +1,60 @@
+<section class="section">
+  <div class="columns is-mobile is-centered">
+    <div class="column is-6">
+      <div class="box">
+        <h1 class="title is-3">Edit user</h1>
+        <%= form_for @changeset, Routes.user_path(@conn, :update, @user), fn f -> %>
+          <div class="field">
+            <%= label f, :username, "Username", class: "label" %>
+            <div class="control">
+              <%= text_input f, :username, class: "input" %>
+            </div>
+            <%= error_tag f, :username %>
+          </div>
+
+          <div class="field">
+            <%= label f, :email, "Email", class: "label" %>
+            <div class="control">
+              <%= email_input f, :email, class: "input" %>
+            </div>
+            <%= error_tag f, :email %>
+          </div>
+
+          <div class="field">
+          <%= inputs_for f, :player, fn player -> %>
+            <%= label player, :nickname, "Display name", class: "label" %>
+            <div class="control">
+              <%= text_input player, :nickname, class: "input" %>
+            </div>
+             <%= error_tag player, :nickname %>
+            <% end %>
+            <p class="help">Will be displayed in rankings. Should be the same as the ingame name.</p>
+          </div>
+
+          <div class="field">
+            <%= label f, :role, "Role", class: "label" %>
+            <div class="control">
+              <%= text_input f, :role, class: "input" %>
+            </div>
+            <%= error_tag f, :role %>
+          </div>
+
+          <div class="field">
+            <%= inputs_for f, :player, fn player -> %>
+              <%= label player, :active, "Active", class: "label" %>
+              <div class="control">
+                <%= checkbox player, :active %>
+              </div>
+              <%= error_tag player, :active %>
+            <% end %>
+          </div>
+
+          <div class="field">
+            <%= submit "Save", class: "button is-fullwidth is-primary is-large" %>
+          </div>
+        <% end %>
+        <%= link "Back", to: Routes.user_path(@conn, :index), class: "button is-fullwidth is-info is-large" %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -9,18 +9,27 @@ defmodule Kamleague.Accounts do
     |> Repo.preload(:player)
   end
 
-  @spec create_admin(map()) :: {:ok, t()} | {:error, Ecto.Changeset.t()}
-  def create_admin(params) do
-    %User{}
-    |> User.changeset(params)
-    |> User.changeset_role(%{role: "admin"})
-    |> Repo.insert()
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload(:player)
   end
 
-  @spec set_admin_role(t()) :: {:ok, t()} | {:error, Ecto.Changeset.t()}
-  def set_admin_role(user) do
+  def change_user(%User{} = user) do
+    User.changeset(user, %{})
+  end
+
+  def update_user(user, attrs) do
     user
-    |> User.changeset_role(%{role: "admin"})
+    |> User.update_changeset(attrs)
+    |> IO.inspect()
+    |> Repo.update()
+  end
+
+  @spec lock(map()) :: {:ok, map()} | {:error, map()}
+  def lock(user) do
+    user
+    |> User.lock_changeset()
     |> Repo.update()
   end
 end
