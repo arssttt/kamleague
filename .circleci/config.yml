@@ -76,7 +76,7 @@ jobs:
     docker:
       - image: circleci/elixir:1.9
         environment:
-          APP_PATH: ~/kamleague/website
+          APP_PATH: ~/kamleague
           MIX_ENV: prod
           SERVICE_NAME: kamleague-website.service
 
@@ -103,7 +103,7 @@ jobs:
 
       - run:
           name: Build the project
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website; ./build.sh
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website && ./build.sh
 
       - run:
           name: Restart service
