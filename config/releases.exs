@@ -14,7 +14,7 @@ database_url =
 config :kamleague, Kamleague.Repo,
   # ssl: true,
   url: database_url,
-  pool_size: System.fetch_env!("POOL_SIZE") || 10
+  pool_size: 10
 
 secret_key_base =
   System.fetch_env!("SECRET_KEY_BASE") ||
@@ -24,7 +24,8 @@ secret_key_base =
     """
 
 config :kamleague, KamleagueWeb.Endpoint,
-  http: [host: "localhost", port: System.fetch_env!("PORT") || 4000],
+  url: [host: "beta.kamleague.com", port: 80],
+  http: [:inet6, port: 4000],
   secret_key_base: secret_key_base,
   server: true
 
