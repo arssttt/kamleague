@@ -32,69 +32,64 @@ flatpickr("#played_at", {
   defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff)
 });
 
-let dropdown = document.querySelector("#info-dropdown");
+let dropdown = $("#info-dropdown");
 if (dropdown != null) {
-  dropdown.addEventListener("click", function(event) {
+  dropdown.on("click", function(event) {
     event.stopPropagation();
-    dropdown.classList.toggle("is-active");
+    dropdown.toggleClass("is-active");
   });
 }
 
 // Tabs
 let tabsWithContent = (function() {
-  let tabs = document.querySelectorAll(".tabs li");
-  let tabsContent = document.querySelectorAll(".tab-content");
-
+  let tabs = $(".tabs li");
+  let tabsContent = $(".tab-content");
   let deactvateAllTabs = function() {
-    tabs.forEach(function(tab) {
-      tab.classList.remove("is-active");
+    tabs.each(function() {
+      $(this).removeClass("is-active");
     });
   };
 
   let hideTabsContent = function() {
-    tabsContent.forEach(function(tabContent) {
-      tabContent.classList.remove("is-active");
+    tabsContent.each(function() {
+      $(this).removeClass("is-active");
     });
   };
 
   let activateTabsContent = function(tab) {
-    tabsContent[getIndex(tab)].classList.add("is-active");
+    tabsContent.eq(tab.index()).addClass("is-active");
   };
 
   let getIndex = function(el) {
     return [...el.parentElement.children].indexOf(el);
   };
 
-  tabs.forEach(function(tab) {
-    tab.addEventListener("click", function() {
+  tabs.each(function() {
+    $(this).on("click", function() {
       deactvateAllTabs();
       hideTabsContent();
-      tab.classList.add("is-active");
-      activateTabsContent(tab);
+      $(this).addClass("is-active");
+      activateTabsContent($(this));
     });
   });
 
-  tabs[0].click();
+  tabs.first().click();
 })();
 
 // Modal trigger
-document
-  .querySelector("a#map-modal")
-  .addEventListener("click", function(event) {
-    event.preventDefault();
-    var modal = document.querySelector(".modal"); // assuming you have only 1
-    var html = document.querySelector("html");
-    modal.classList.add("is-active");
-    html.classList.add("is-clipped");
+$("a#map-modal").on("click", function(event) {
+  event.preventDefault();
+  var modal = $(".modal");
+  var html = $("html");
+  modal.addClass("is-active");
+  html.addClass("is-clipped");
 
-    modal
-      .querySelector(".modal-background")
-      .addEventListener("click", function(e) {
-        e.preventDefault();
-        modal.classList.remove("is-active");
-        html.classList.remove("is-clipped");
-      });
+  $(".modal-background").on("click", function(e) {
+    e.preventDefault();
+    modal.removeClass("is-active");
+    html.removeClass("is-clipped");
   });
+});
 
 // Uncheck radio buttons if they are the same when selecting locations
 $(function() {

@@ -48,7 +48,7 @@ html {
 body {
   height: 100%;
   margin: 0;
-  background: url("/images/backgound1.jpg") no-repeat;
+  background: url("/images/background2.jpg") no-repeat;
   background-size: cover;
   background-position: center;
 }
@@ -70,6 +70,10 @@ $navbar-divider-background-color: $black-light;
     font-weight: bold;
     font-family: "Beaufort", "Roboto";
     transition: color 1s cubic-bezier(0.06, 1, 0, 1);
+  }
+
+  .nickname {
+    text-transform: none;
   }
 }
 
@@ -138,7 +142,7 @@ $dropdown-divider-background-color: $black-light;
     position: absolute;
     left: 0;
     top: 0;
-    background: $pink;
+    background: #f14668;
     height: 100%;
     width: 100%;
     border-radius: 4px;
@@ -199,6 +203,9 @@ $table-head-cell-color: $beige;
 $table-cell-border-width: 2px 0 0;
 $table-color: $beige;
 $table-row-hover-background-color: $primary;
+table form {
+  margin-bottom: 0;
+}
 table th {
   font-family: "Beaufort", "Roboto";
 }
