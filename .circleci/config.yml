@@ -103,7 +103,7 @@ jobs:
 
       - run:
           name: Build the project
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website && ./build.sh
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/website && ./build.sh"
 
       - run:
           name: Restart service
