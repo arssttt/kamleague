@@ -77,7 +77,6 @@ jobs:
       - image: circleci/elixir:1.9
         environment:
           APP_PATH: ~/kamleague/website
-          BUILD_PATH: _build/prod/rel/kamleague
           MIX_ENV: prod
           SERVICE_NAME: kamleague-website.service
 
@@ -87,47 +86,24 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "17:5b:cc:32:77:0d:41:0b:bf:20:d0:54:3f:7f:b7:ef"
-      - run:
-          name: Set up hex and rebar
-          command: mix local.hex --force && mix local.rebar --force
 
       - run:
           name: Install OpenSSL
           command: sudo apt-get install -y openssl
-
-      - restore_cache:
-          keys:
-            - v1-deps-cache{{ checksum "mix.lock" }}
-            - v1-deps-cache
-
-      - run:
-          name: Install and compile Elixir dependencies
-          command: mix do deps.get, compile
-
-      - save_cache:
-          key: v1-deps-cache{{ checksum "mix.lock" }}
-          paths:
-            - _build
-            - deps
-            - ~/.mix
-
-      - run:
-          name: Compile project
-          command: mix compile
-
-      - run:
-          name: Build release
-          command: mix release --overwrite
 
       - run:
           name: Install rsync
           command: sudo apt install -y rsync
 
       - run:
-          name: Move the release to the server
+          name: Move the project to the server
           command:
             rsync -av -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --rsync-path="sudo rsync"
-            $BUILD_PATH deploy@beta.kamleague.com:$APP_PATH --delete
+            deploy@beta.kamleague.com:$APP_PATH --delete
+
+      - run:
+          name: Build the project
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website && ./build.sh
 
       - run:
           name: Restart service
