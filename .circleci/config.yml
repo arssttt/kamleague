@@ -1,0 +1,143 @@
+# Elixir CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-elixir/ for more details
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/elixir:1.9
+        environment:
+          MIX_ENV: test
+          PGHOST: 127.0.0.1
+          POSTGRES_USER: circleci
+      - image: circleci/postgres:10.1-alpine
+        environment:
+          POSTGRES_USER: circleci
+
+    working_directory: ~/kamleague/website
+    steps:
+      - checkout
+      - run:
+          name: Set up hex and rebar
+          command: mix local.hex --force && mix local.rebar --force
+
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+
+      - run:
+          name: Install and compile Elixir dependencies
+          command: mix do deps.get, compile
+
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache
+          paths: "deps"
+
+      - save_cache:
+          key: v1-build-cache-{{ .Branch }}
+          paths: "_build"
+      - save_cache:
+          key: v1-build-cache
+          paths: "_build"
+
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Check Elixir formatting
+          command: mix format --check-formatted
+
+      - run:
+          name: Create dir for test results
+          command: mkdir -p /tmp/test-results
+
+      - run:
+          name: Run tests
+          command: mix test
+
+      - store_test_results:
+          path: /tmp/test-results
+
+  deploy:
+    docker:
+      - image: circleci/elixir:1.9
+        environment:
+          APP_PATH: ~/kamleague/website
+          BUILD_PATH: _build/prod/rel/kamleague
+          MIX_ENV: prod
+          SERVICE_NAME: kamleague-website.service
+
+    working_directory: ~/kamleague/website
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "17:5b:cc:32:77:0d:41:0b:bf:20:d0:54:3f:7f:b7:ef"
+      - run:
+          name: Set up hex and rebar
+          command: mix local.hex --force && mix local.rebar --force
+
+      - run:
+          name: Install OpenSSL
+          command: sudo apt-get install -y openssl
+
+      - restore_cache:
+          keys:
+            - v1-deps-cache{{ checksum "mix.lock" }}
+            - v1-deps-cache
+
+      - run:
+          name: Install and compile Elixir dependencies
+          command: mix do deps.get, compile
+
+      - save_cache:
+          key: v1-deps-cache{{ checksum "mix.lock" }}
+          paths:
+            - _build
+            - deps
+            - ~/.mix
+
+      - run:
+          name: Compile project
+          command: mix compile
+
+      - run:
+          name: Build release
+          command: mix release --overwrite
+
+      - run:
+          name: Install rsync
+          command: sudo apt install -y rsync
+
+      - run:
+          name: Move the release to the server
+          command:
+            rsync -av -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --rsync-path="sudo rsync"
+            $BUILD_PATH deploy@beta.kamleague.com:$APP_PATH --delete
+
+      - run:
+          name: Restart service
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com sudo systemctl start $SERVICE_NAME
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test

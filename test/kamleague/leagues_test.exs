@@ -3,11 +3,12 @@ defmodule Kamleague.LeaguesTest do
 
   alias Kamleague.Leagues
 
+  """
   describe "players" do
     alias Kamleague.Leagues.Player
 
-    @valid_attrs %{elo: 42, nickname: "some nickname"}
-    @update_attrs %{elo: 43, nickname: "some updated nickname"}
+    @valid_attrs %{nickname: "some nickname"}
+    @update_attrs %{nickname: "some updated nickname"}
     @invalid_attrs %{elo: nil, nickname: nil}
 
     def player_fixture(attrs \\ %{}) do
@@ -31,7 +32,6 @@ defmodule Kamleague.LeaguesTest do
 
     test "create_player/1 with valid data creates a player" do
       assert {:ok, %Player{} = player} = Leagues.create_player(@valid_attrs)
-      assert player.elo == 42
       assert player.nickname == "some nickname"
     end
 
@@ -42,7 +42,6 @@ defmodule Kamleague.LeaguesTest do
     test "update_player/2 with valid data updates the player" do
       player = player_fixture()
       assert {:ok, %Player{} = player} = Leagues.update_player(player, @update_attrs)
-      assert player.elo == 43
       assert player.nickname == "some updated nickname"
     end
 
@@ -240,4 +239,5 @@ defmodule Kamleague.LeaguesTest do
       assert %Ecto.Changeset{} = Leagues.change_team(team)
     end
   end
+  """
 end
