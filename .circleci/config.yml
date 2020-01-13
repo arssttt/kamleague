@@ -99,11 +99,11 @@ jobs:
           name: Move the project to the server
           command:
             rsync -av -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --rsync-path="sudo rsync"
-            deploy@beta.kamleague.com:$APP_PATH --delete
+            ~/kamleague/website deploy@beta.kamleague.com:$APP_PATH --delete
 
       - run:
           name: Build the project
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website && ./build.sh
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com cd kamleague/website; ./build.sh
 
       - run:
           name: Restart service
