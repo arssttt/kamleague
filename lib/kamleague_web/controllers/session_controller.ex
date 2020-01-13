@@ -12,6 +12,8 @@ defmodule KamleagueWeb.SessionController do
     |> Pow.Plug.authenticate_user(user_params)
     |> case do
       {:ok, conn} ->
+        Kamleague.Accounts.update_user_ip(conn)
+
         conn
         |> redirect(to: Routes.page_path(conn, :index))
 

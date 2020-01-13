@@ -12,6 +12,8 @@ defmodule KamleagueWeb.RegistrationController do
     |> Pow.Plug.create_user(user_params)
     |> case do
       {:ok, _user, conn} ->
+        Kamleague.Accounts.update_user_ip(conn)
+
         conn
         |> redirect(to: Routes.page_path(conn, :index))
 

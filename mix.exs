@@ -46,7 +46,8 @@ defmodule Kamleague.MixProject do
       {:pow, "~> 1.0.15"},
       {:phoenix_live_view, "~> 0.4.0"},
       {:earmark, "~> 1.4.3"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:remote_ip, "~> 0.2.0"}
     ]
   end
 

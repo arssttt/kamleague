@@ -45,6 +45,6 @@ defmodule KamleagueWeb.Endpoint do
     signing_salt: "a/+6oLmm"
 
   plug Pow.Plug.Session, otp_app: :kamleague
-
+  plug RemoteIp
   plug KamleagueWeb.Router
 end

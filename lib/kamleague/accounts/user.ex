@@ -11,6 +11,7 @@ defmodule Kamleague.Accounts.User do
 
     has_one :player, Kamleague.Leagues.Player
     has_many :posts, Kamleague.Contents.Post
+    has_many :ip_addresses, Kamleague.Accounts.IpAddress
 
     timestamps()
   end
