@@ -1,6 +1,8 @@
 defmodule Kamleague.Accounts do
   alias Kamleague.{Repo, Accounts.IpAddress, Accounts.User}
 
+  import Ecto.Query
+
   @type t :: %User{}
 
   def list_users() do
@@ -28,7 +30,13 @@ defmodule Kamleague.Accounts do
   def update_user_ip(conn) do
     user = conn.assigns.current_user
 
-    case Repo.get_by(IpAddress, ip_address: to_string(:inet_parse.ntoa(conn.remote_ip))) do
+    query =
+      from i in IpAddress,
+        where:
+          i.ip_address == ^to_string(:inet_parse.ntoa(conn.remote_ip)) and i.user_id == ^user.id
+
+    Repo.one(query)
+    |> case do
       nil -> %IpAddress{ip_address: to_string(:inet_parse.ntoa(conn.remote_ip))}
       ip_address -> ip_address
     end
