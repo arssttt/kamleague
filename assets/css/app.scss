@@ -86,6 +86,9 @@ $navbar-divider-background-color: $black-light;
   }
 }
 
+// Modal styles
+$modal-content-width: 840px;
+
 // Dropdown styles
 $dropdown-divider-background-color: $black-light;
 .dropdown {
@@ -302,6 +305,7 @@ input[type="radio"]:checked + label > img {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
+  margin: 0 auto;
 }
 
 // Menu styles
