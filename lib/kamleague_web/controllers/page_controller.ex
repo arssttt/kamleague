@@ -29,7 +29,7 @@ defmodule KamleagueWeb.PageController do
   end
 
   def downloads(conn, _params) do
-    post = Kamleague.Contents.list_posts("Downloads")
+    post = Kamleague.Contents.get_post_by_tag!("Downloads")
     render(conn, "downloads.html", post: post)
   end
 end
