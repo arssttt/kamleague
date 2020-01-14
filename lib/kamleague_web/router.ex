@@ -36,6 +36,7 @@ defmodule KamleagueWeb.Router do
     get "/rules", PageController, :rules
     get "/faq", PageController, :faq
     get "/news", PageController, :news
+    get "/downloads", PageController, :downloads
 
     scope "/statistics" do
       live "/games", StatisticsLive.Games

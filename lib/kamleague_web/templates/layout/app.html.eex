@@ -63,9 +63,7 @@
                 </div>
               </div>
 
-              <a class="navbar-item">
-                Downloads
-              </a>
+              <%= link "Downloads", to: Routes.page_path(@conn, :downloads), class: "navbar-item" %>
 
               <%= if @current_user && @current_user.role == "admin" do %>
                 <div class="navbar-item has-dropdown is-hoverable">

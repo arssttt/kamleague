@@ -56,6 +56,10 @@ main {
   height: 100%;
 }
 
+.box {
+  opacity: 0.9;
+}
+
 // Navbar styles
 $navbar-item-hover-background-color: "transparent";
 $navbar-item-color: $link;

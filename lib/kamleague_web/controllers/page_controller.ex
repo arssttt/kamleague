@@ -8,7 +8,7 @@ defmodule KamleagueWeb.PageController do
   end
 
   def howtoplay(conn, _params) do
-    post = Kamleague.Contents.get_post_by_tag!("how-to-play")
+    post = Kamleague.Contents.get_post_by_tag!("HowToPlay")
     render(conn, "how_to_play.html", post: post)
   end
 
@@ -26,5 +26,10 @@ defmodule KamleagueWeb.PageController do
   def news(conn, _params) do
     posts = Kamleague.Contents.list_posts("News")
     render(conn, "news.html", posts: posts)
+  end
+
+  def downloads(conn, _params) do
+    post = Kamleague.Contents.list_posts("Downloads")
+    render(conn, "downloads.html", post: post)
   end
 end
