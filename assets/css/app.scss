@@ -314,6 +314,15 @@ $menu-label-color: $beige;
   }
 }
 
+// Article styles
+article {
+  padding: 2rem;
+  border-bottom: 2px solid $black-light;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
 // Footer styles
 $footer-background-color: $black;
 

@@ -1,4 +1,4 @@
-defmodule KamleagueWeb.TagController do
+defmodule KamleagueWeb.Admin.TagController do
   use KamleagueWeb, :controller
 
   alias Kamleague.Contents

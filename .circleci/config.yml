@@ -106,7 +106,11 @@ jobs:
           command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/website && ./build.sh"
 
       - run:
-          name: Restart service
+          name: Stop service
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com sudo systemctl stop $SERVICE_NAME
+
+      - run:
+          name: Start service
           command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com sudo systemctl start $SERVICE_NAME
 
 workflows:

@@ -18,7 +18,14 @@ defmodule Kamleague.Contents do
 
   """
   def list_posts do
-    Repo.all(Post)
+    Post
+    |> Repo.all()
+    |> Repo.preload(:tag)
+  end
+
+  def list_posts(name) do
+    tag = Repo.get_by(Kamleague.Contents.Tag, name: name)
+    Repo.all(from p in Post, where: p.tag_id == ^tag.id, order_by: [desc: p.inserted_at])
   end
 
   @doc """

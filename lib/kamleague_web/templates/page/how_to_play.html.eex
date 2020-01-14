@@ -1,0 +1,8 @@
+<section class="section">
+  <div class="box">
+    <h1 class="title is-1"><%= @post.title %><h1>
+    <div class="content">
+        <%= {:safe, markdown(@post.body)} %>
+    </div>
+  </div>
+</section>

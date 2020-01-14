@@ -1,4 +1,4 @@
-defmodule KamleagueWeb.PostController do
+defmodule KamleagueWeb.Admin.PostController do
   use KamleagueWeb, :controller
 
   alias Kamleague.Contents
@@ -18,6 +18,8 @@ defmodule KamleagueWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
+    tags = Contents.list_tags()
+
     case Contents.create_post(Pow.Plug.current_user(conn), post_params) do
       {:ok, post} ->
         conn
@@ -25,7 +27,7 @@ defmodule KamleagueWeb.PostController do
         |> redirect(to: Routes.post_path(conn, :show, post))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, tags: tags)
     end
   end
 

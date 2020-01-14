@@ -1,4 +1,4 @@
-defmodule KamleagueWeb.PostView do
+defmodule KamleagueWeb.Admin.PostView do
   use KamleagueWeb, :view
 
   def markdown(body) do

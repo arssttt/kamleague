@@ -16,7 +16,7 @@
             <%= for post <- @posts do %>
                 <tr>
                   <td class="has-text-centered"><%= post.title %></td>
-                  <td class="has-text-centered"><%= post.title %></td>
+                  <td class="has-text-centered"><%= post.tag.name %></td>
 
                   <td>
                     <div class="buttons">
@@ -55,7 +55,7 @@
       </div>
       <div class="column">
         <h1 class="title is-3">New tag</h1>
-        <%= render KamleagueWeb.TagView, "form.html", Map.put(assigns, :action, Routes.tag_path(@conn, :create)) %>
+        <%= render KamleagueWeb.Admin.TagView, "form.html", Map.put(assigns, :action, Routes.tag_path(@conn, :create)) %>
       </div>
     </div>
   </div>
