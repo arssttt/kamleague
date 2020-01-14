@@ -17,8 +17,10 @@ defmodule KamleagueWeb.GameController do
         player.id == Pow.Plug.current_user(conn).player.id
       end)
 
+    teams = Leagues.list_teams()
+
     changeset = Leagues.change_game(%Game{})
-    render(conn, "new.html", changeset: changeset, map: map, players: players)
+    render(conn, "new.html", changeset: changeset, map: map, players: players, teams: teams)
   end
 
   def create(conn, %{"game" => game_params, "map_id" => map_id}) do

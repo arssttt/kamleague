@@ -3,11 +3,18 @@
   <div class="columns is-multiline">
     <div class="field column is-half">
       <%= label f, :team_1, "Your team", class: "label" %>
-      <a class="button is-static"><%= @current_user.player.nickname %></a>
       <div class="select">
-        <%= select f, :player_2,
-          Enum.map(@players, &{&1.nickname, &1.id}), prompt: "Select your team", name: "game[players][2][player_id]" %>
+        <%= select f, :team_1,
+          Enum.map(@teams, &{&1.name, &1.id}), prompt: "Select your team", name: "game[teams][1][team_id]" %>
       </div>
+      <%= for team <- @teams do %>
+      <div class="field">
+        <%= label f, "Players", class: "label" %>
+      </div>
+        <%= for player <- team.players do %>
+          <p class="button is-static"><%= player.player_info.nickname %></p>
+        <% end %>
+      <% end %>
     </div>
     <div class="field column is-half has-text-centered">
       <%= label f, :location, "Location", class: "label" %>

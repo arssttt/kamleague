@@ -5,6 +5,7 @@ defmodule Kamleague.Leagues.Map do
   schema "maps" do
     field :locations, :integer
     field :name, :string
+    field :slug, :string
 
     has_many :games, Kamleague.Leagues.Game
     timestamps()
@@ -13,8 +14,9 @@ defmodule Kamleague.Leagues.Map do
   @doc false
   def changeset(map, attrs) do
     map
-    |> cast(attrs, [:name, :locations])
-    |> validate_required([:name, :locations])
+    |> cast(attrs, [:name, :locations, :slug])
+    |> validate_required([:name, :locations, :slug])
     |> unique_constraint(:name)
+    |> unique_constraint(:slug)
   end
 end

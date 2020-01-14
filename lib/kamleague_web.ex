@@ -23,7 +23,6 @@ defmodule KamleagueWeb do
 
       import Plug.Conn
       import KamleagueWeb.Gettext
-      import Phoenix.LiveView.Controller
       alias KamleagueWeb.Router.Helpers, as: Routes
     end
   end
@@ -40,17 +39,6 @@ defmodule KamleagueWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Phoenix.LiveView,
-        only: [
-          live_render: 2,
-          live_render: 3,
-          live_link: 1,
-          live_link: 2,
-          live_component: 2,
-          live_component: 3,
-          live_component: 4
-        ]
-
       import KamleagueWeb.ErrorHelpers
       import KamleagueWeb.Gettext
       import KamleagueWeb.Helpers.CheckboxHelper
@@ -61,7 +49,6 @@ defmodule KamleagueWeb do
   def router do
     quote do
       use Phoenix.Router
-      import Phoenix.LiveView.Router
       import Plug.Conn
       import Phoenix.Controller
     end

@@ -1,10 +1,19 @@
 <%= form_for @changeset, @action, fn f -> %>
   <div class="field">
-    <%= label f, :name, "Name of the map", class: "label" %>
+    <%= label f, :name, "Name", class: "label" %>
     <div class="control">
       <%= text_input f, :name, class: "input" %>
     </div>
     <%= error_tag f, :name %>
+  </div>
+
+  <div class="field">
+    <%= label f, :slug, "Slug", class: "label" %>
+    <div class="control">
+      <%= text_input f, :slug, class: "input" %>
+    </div>
+    <%= error_tag f, :slug %>
+    <p class="help">Should be all lowercase letters and no spaces.</p>
   </div>
 
   <div class="field">
@@ -15,7 +24,8 @@
     <%= error_tag f, :locations %>
   </div>
 
-  <div class="field">
+  <div class="field buttons">
     <%= submit "Add", class: "button is-primary is-medium" %>
+    <%= link "Back", to: Routes.admin_map_path(@conn, :index), class: "button is-info is-medium" %>
   </div>
 <% end %>

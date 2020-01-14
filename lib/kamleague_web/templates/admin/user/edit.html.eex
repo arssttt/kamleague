@@ -3,7 +3,7 @@
     <div class="column is-6">
       <div class="box">
         <h1 class="title is-3">Edit user</h1>
-        <%= form_for @changeset, Routes.user_path(@conn, :update, @user), fn f -> %>
+        <%= form_for @changeset, Routes.admin_user_path(@conn, :update, @user), fn f -> %>
           <div class="field">
             <%= label f, :username, "Username", class: "label" %>
             <div class="control">
@@ -53,7 +53,7 @@
             <%= submit "Save", class: "button is-fullwidth is-primary is-large" %>
           </div>
         <% end %>
-        <%= link "Back", to: Routes.user_path(@conn, :index), class: "button is-fullwidth is-info is-large" %>
+        <%= link "Back", to: Routes.admin_user_path(@conn, :index), class: "button is-fullwidth is-info is-large" %>
       </div>
     </div>
   </div>

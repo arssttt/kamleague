@@ -23,7 +23,7 @@ defmodule KamleagueWeb.Admin.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: Routes.user_path(conn, :index))
+        |> redirect(to: Routes.admin_user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
@@ -38,11 +38,11 @@ defmodule KamleagueWeb.Admin.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, "User locked successfully.")
-        |> redirect(to: Routes.user_path(conn, :index))
+        |> redirect(to: Routes.admin_user_path(conn, :index))
 
       {:error, _changeset} ->
         conn
-        |> redirect(to: Routes.user_path(conn, :index))
+        |> redirect(to: Routes.admin_user_path(conn, :index))
     end
   end
 end

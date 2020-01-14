@@ -20,15 +20,15 @@
 
                   <td>
                     <div class="buttons">
-                      <%= link "Edit", to: Routes.post_path(@conn, :edit, post), class: "button is-info is-small" %>
-                      <%= button "Delete", to: Routes.post_path(@conn, :delete, post), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
+                      <%= link "Edit", to: Routes.admin_post_path(@conn, :edit, post), class: "button is-info is-small" %>
+                      <%= button "Delete", to: Routes.admin_post_path(@conn, :delete, post), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
                     </div>
                   </td>
                 </tr>
             <% end %>
           </tbody>
         </table>
-        <%= link "Add new post", to: Routes.post_path(@conn, :new), class: "button is-primary" %>
+        <%= link "Add new post", to: Routes.admin_post_path(@conn, :new), class: "button is-primary" %>
       </div>
       <div class="column">
         <h1 class="title is-3">Tags</h1>
@@ -44,8 +44,7 @@
                   <td class="has-text-centered"><%= tag.name %></td>
                   <td>
                     <div class="buttons">
-                      <%= button "Edit", to: Routes.tag_path(@conn, :edit, tag), class: "button is-info is-small" %>
-                      <%= button "Delete", to: Routes.tag_path(@conn, :delete, tag), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
+                      <%= button "Delete", to: Routes.admin_tag_path(@conn, :delete, tag), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
                     </div>
                   </td>
                 </tr>
@@ -55,7 +54,19 @@
       </div>
       <div class="column">
         <h1 class="title is-3">New tag</h1>
-        <%= render KamleagueWeb.Admin.TagView, "form.html", Map.put(assigns, :action, Routes.tag_path(@conn, :create)) %>
+        <%= form_for @changeset, Routes.admin_tag_path(@conn, :create), fn f -> %>
+          <div class="field">
+            <%= label f, :name, "Tag name", class: "label" %>
+            <div class="control">
+              <%= text_input f, :name, class: "input" %>
+            </div>
+            <%= error_tag f, :name %>
+          </div>
+
+          <div class="field">
+            <%= submit "Add", class: "button is-primary" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

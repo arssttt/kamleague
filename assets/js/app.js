@@ -15,12 +15,8 @@ import "phoenix_html";
 //
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
-import { Socket } from "phoenix";
-import LiveSocket from "phoenix_live_view";
+//import { Socket } from "phoenix";
 import flatpickr from "flatpickr";
-
-let liveSocket = new LiveSocket("/live", Socket);
-liveSocket.connect();
 
 var coeff = 1000 * 60 * 5;
 var date = new Date(Date.now());

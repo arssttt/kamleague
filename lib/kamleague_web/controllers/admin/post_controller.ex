@@ -21,10 +21,10 @@ defmodule KamleagueWeb.Admin.PostController do
     tags = Contents.list_tags()
 
     case Contents.create_post(Pow.Plug.current_user(conn), post_params) do
-      {:ok, post} ->
+      {:ok, _post} ->
         conn
         |> put_flash(:info, "Post created successfully.")
-        |> redirect(to: Routes.post_path(conn, :show, post))
+        |> redirect(to: Routes.admin_post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset, tags: tags)
@@ -47,10 +47,10 @@ defmodule KamleagueWeb.Admin.PostController do
     post = Contents.get_post!(id)
 
     case Contents.update_post(post, post_params) do
-      {:ok, post} ->
+      {:ok, _post} ->
         conn
         |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: Routes.post_path(conn, :show, post))
+        |> redirect(to: Routes.admin_post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", post: post, changeset: changeset)
@@ -63,6 +63,6 @@ defmodule KamleagueWeb.Admin.PostController do
 
     conn
     |> put_flash(:info, "Post deleted successfully.")
-    |> redirect(to: Routes.post_path(conn, :index))
+    |> redirect(to: Routes.admin_post_path(conn, :index))
   end
 end

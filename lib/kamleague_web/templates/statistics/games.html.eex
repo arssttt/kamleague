@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="box">
+    <h1 class="title is-3">Recent games</h1>
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Players</th>
+          <th></th>
+          <th>Map</th>
+          <th>Winner</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for game <- @games do %>
+          <tr phx-click="select_game" phx-value-id="<%= game.id %>">
+            <%= for {player, index} <- Enum.with_index(game.players) do %>
+              <td><strong><%= player.player_info.nickname %></strong></td>
+              <%= unless index + 1 == length(game.players)  do %>
+                <td>VS</td>
+              <% end %>
+            <% end %>
+            <td><%= game.map.name %></td>
+            <td>
+              <%= for player <- game.players do %>
+                <%= if player.win do %> 
+                  <strong><%= player.player_info.nickname %></strong>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

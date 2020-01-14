@@ -55,7 +55,7 @@
                   Statistics
                 </a>
                 <div class="navbar-dropdown">
-                  <%= link "Recent games", to: Routes.live_path(@conn, KamleagueWeb.StatisticsLive.Games), class: "navbar-item" %>
+                  <%= link "Recent games", to: Routes.statistics_path(@conn, :games), class: "navbar-item" %>
 
                   <a class="navbar-item">
                     Map statistics
@@ -72,10 +72,10 @@
                   </a>
 
                   <div class="navbar-dropdown">
-                    <%= link "Games", to: Routes.game_path(@conn, :index), class: "navbar-item" %>
-                    <%= link "Maps", to: Routes.map_path(@conn, :new), class: "navbar-item" %>
-                    <%= link "Users", to: Routes.user_path(@conn, :index), class: "navbar-item" %>
-                    <%= link "Posts", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Games", to: Routes.admin_game_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Maps", to: Routes.admin_map_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Users", to: Routes.admin_user_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Posts", to: Routes.admin_post_path(@conn, :index), class: "navbar-item" %>
 
                   </div>
                 </div>
@@ -104,7 +104,7 @@
                           <%= for map <- @maps do %>
                             <div class="column is-one-quarter">
                               <%= link to: Routes.map_game_path(@conn, :new, map) do %>
-                                <div class="map-background" style="background-image: url(/images/<%= map.name %>.jpg)">
+                                <div class="map-background" style="background-image: url(/images/maps/no_locs/<%= map.slug %>.jpg)">
                                 </div>
                               <% end  %>
                               <label class="label"><%= map.name %></label>

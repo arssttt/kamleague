@@ -143,6 +143,7 @@ defmodule Kamleague.Leagues do
   """
   def list_maps do
     Repo.all(Map)
+    |> Enum.sort(&(&1.slug < &2.slug))
   end
 
   @doc """
@@ -355,6 +356,8 @@ defmodule Kamleague.Leagues do
 
   defp to_atom_map(map) when is_map(map),
     do: Elixir.Map.new(map, fn {k, v} -> {String.to_atom(k), to_atom_map(v)} end)
+
+  defp to_atom_map(v) when v == "", do: nil
 
   defp to_atom_map(v) when is_binary(v), do: String.to_integer(v)
 

@@ -6,13 +6,8 @@ defmodule KamleagueWeb.Admin.MapController do
 
   def index(conn, _params) do
     maps = Leagues.list_maps()
-    render(conn, "index.html", maps: maps)
-  end
-
-  def new(conn, _params) do
-    maps = Leagues.list_maps()
     changeset = Leagues.change_map(%Map{})
-    render(conn, "new.html", changeset: changeset, maps: maps)
+    render(conn, "index.html", changeset: changeset, maps: maps)
   end
 
   def create(conn, %{"map" => map_params}) do
@@ -22,16 +17,11 @@ defmodule KamleagueWeb.Admin.MapController do
       {:ok, _map} ->
         conn
         |> put_flash(:info, "Map created successfully.")
-        |> redirect(to: Routes.map_path(conn, :new))
+        |> redirect(to: Routes.admin_map_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset, maps: maps)
+        render(conn, "index.html", changeset: changeset, maps: maps)
     end
-  end
-
-  def show(conn, %{"id" => id}) do
-    map = Leagues.get_map!(id)
-    render(conn, "show.html", map: map)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -44,10 +34,10 @@ defmodule KamleagueWeb.Admin.MapController do
     map = Leagues.get_map!(id)
 
     case Leagues.update_map(map, map_params) do
-      {:ok, map} ->
+      {:ok, _map} ->
         conn
         |> put_flash(:info, "Map updated successfully.")
-        |> redirect(to: Routes.map_path(conn, :show, map))
+        |> redirect(to: Routes.admin_map_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", map: map, changeset: changeset)
@@ -60,6 +50,6 @@ defmodule KamleagueWeb.Admin.MapController do
 
     conn
     |> put_flash(:info, "Map deleted successfully.")
-    |> redirect(to: Routes.map_path(conn, :new))
+    |> redirect(to: Routes.admin_map_path(conn, :index))
   end
 end

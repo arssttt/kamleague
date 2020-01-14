@@ -11,6 +11,7 @@ defmodule KamleagueWeb.Admin.GameController do
   def delete(conn, %{"id" => id}) do
     game = Leagues.get_game!(id)
     {:ok, _game} = Leagues.delete_game(game)
+    Leagues.calculate_elo()
 
     conn
     |> put_flash(:info, "Game deleted successfully.")

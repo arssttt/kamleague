@@ -1,5 +1,67 @@
-<h1>Edit Map</h1>
+<section class="section">
+  <div class="box">
+    <div class="columns is-variable is-8">
+      <div class="column">
+        <h1 class="title is-3">Maps</h1>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th class="has-text-centered">Name</th>
+              <th class="has-text-centered">Locations</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for map <- @maps do %>
+                <tr>
+                  <td class="has-text-centered"><%= map.name %></td>
+                  <td class="has-text-centered"><%= map.locations %></td>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.map_path(@conn, :update, @map)) %>
+                  <td>
+                    <div class="buttons">
+                      <%= link "Edit", to: Routes.admin_map_path(@conn, :edit, map), class: "button is-info is-small" %>
+                      <%= button "Delete", to: Routes.admin_map_path(@conn, :delete, map), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
+                    </div>
+                  </td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="column">
+        <h1 class="title is-3">Edit map</h1>
+        <%= form_for @changeset, Routes.admin_map_path(@conn, :update, @map), fn f -> %>
+          <div class="field">
+              <%= label f, :name, "Name", class: "label" %>
+              <div class="control">
+              <%= text_input f, :name, class: "input" %>
+              </div>
+              <%= error_tag f, :name %>
+          </div>
 
-<span><%= link "Back", to: Routes.map_path(@conn, :index) %></span>
+          <div class="field">
+              <%= label f, :slug, "Slug", class: "label" %>
+              <div class="control">
+              <%= text_input f, :slug, class: "input" %>
+              </div>
+              <%= error_tag f, :slug %>
+              <p class="help">Should be all lowercase letters and no spaces.</p>
+          </div>
+
+          <div class="field">
+              <%= label f, :locations, "Number of locations", class: "label" %>
+              <div class="control">
+              <%= number_input f, :locations, class: "input" %>
+              </div>
+              <%= error_tag f, :locations %>
+          </div>
+
+          <div class="field buttons">
+              <%= submit "Save", class: "button is-primary is-medium" %>
+              <%= link "Back", to: Routes.admin_map_path(@conn, :index), class: "button is-info is-medium" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

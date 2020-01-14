@@ -1,13 +1,11 @@
 defmodule KamleagueWeb.Router do
   use KamleagueWeb, :router
   use Pow.Phoenix.Router
-  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug KamleagueWeb.AssignUser
@@ -39,7 +37,7 @@ defmodule KamleagueWeb.Router do
     get "/downloads", PageController, :downloads
 
     scope "/statistics" do
-      live "/games", StatisticsLive.Games
+      get "/games", StatisticsController, :games
     end
 
     resources "/maps", MapController, only: [:index] do
@@ -64,11 +62,11 @@ defmodule KamleagueWeb.Router do
     delete "/logout", SessionController, :delete, as: :logout
   end
 
-  scope "/", KamleagueWeb do
+  scope "/admin", KamleagueWeb, as: :admin do
     pipe_through [:browser, :admin]
     resources "/posts", Admin.PostController
     resources "/tags", Admin.TagController
-    resources "/maps", Admin.MapController, only: [:new, :create, :edit, :delete]
+    resources "/maps", Admin.MapController, except: [:show]
     resources "/games", Admin.GameController, only: [:index, :delete]
     resources "/users", Admin.UserController
   end

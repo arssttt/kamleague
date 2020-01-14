@@ -56,6 +56,11 @@ main {
   height: 100%;
 }
 
+strong {
+  font-family: "Beaufort", "Roboto";
+  color: $beige !important;
+}
+
 .box {
   opacity: 0.9;
 }
