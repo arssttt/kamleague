@@ -403,14 +403,22 @@ defmodule Kamleague.Leagues do
             game_id: winner.game_id,
             player_id: winner.player_id,
             new_elo: winner_new_elo,
-            old_elo: winner_info.elo
+            old_elo: winner_info.elo,
+            new_wins: winner_info.wins + 1,
+            old_wins: winner_info.wins,
+            new_losses: winner_info.losses,
+            old_losses: winner_info.losses
           },
           %{
             id: loser.id,
             game_id: loser.game_id,
             player_id: loser.player_id,
             new_elo: loser_new_elo,
-            old_elo: loser_info.elo
+            old_elo: loser_info.elo,
+            new_wins: loser_info.wins,
+            old_wins: loser_info.wins,
+            new_losses: loser_info.losses + 1,
+            old_losses: loser_info.losses
           }
         ])
 
@@ -462,7 +470,7 @@ defmodule Kamleague.Leagues do
   """
   def update_game(%Game{} = game, attrs) do
     game
-    |> Game.changeset(attrs)
+    |> Game.changeset_update(attrs)
     |> Repo.update()
   end
 

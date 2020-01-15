@@ -67,7 +67,7 @@ defmodule KamleagueWeb.Router do
     resources "/posts", Admin.PostController
     resources "/tags", Admin.TagController
     resources "/maps", Admin.MapController, except: [:show]
-    resources "/games", Admin.GameController, only: [:index, :delete]
+    resources "/games", Admin.GameController, only: [:index, :delete, :update]
     resources "/users", Admin.UserController
   end
 end

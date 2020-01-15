@@ -2,10 +2,18 @@
   <div class="box">
     <h1 class="title is-3">Recent games</h1>
     <table class="table is-fullwidth">
+      <colgroup>
+        <col width="20%">
+        <col width="10%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="10%">
+      </colgroup>
       <thead>
         <tr>
           <th></th>
-          <th>Players</th>
+          <th class="has-text-centered">Players</th>
           <th></th>
           <th>Map</th>
           <th>Winner</th>
@@ -14,11 +22,22 @@
       </thead>
       <tbody>
         <%= for game <- @games do %>
-          <tr phx-click="select_game" phx-value-id="<%= game.id %>">
+          <tr class="game_row" game="<%= game.id %>">
             <%= for {player, index} <- Enum.with_index(game.players) do %>
-              <td><strong><%= player.player_info.nickname %></strong></td>
+              <td class="has-text-centered">
+                <strong><%= player.player_info.nickname %></strong>
+                <%= if game.approved do %>
+                  <%= if player.new_elo - player.old_elo > 0 do %>
+                    <span class="has-text-green">(+<%= player.new_elo - player.old_elo %>)</span>
+                  <% else %>
+                    <span class="has-text-red">(<%= player.new_elo - player.old_elo %>)</span>
+                  <% end %>
+                <% end %>
+              </td>
               <%= unless index + 1 == length(game.players)  do %>
-                <td>VS</td>
+                <td class="has-text-centered">
+                  <img src="<%= Routes.static_path(@conn, "/images/swords.png") %>">
+                </td>
               <% end %>
             <% end %>
             <td><%= game.map.name %></td>
@@ -31,6 +50,41 @@
             </td>
             <td>
               <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+            </td>
+          </tr>
+          <tr class="game_row_sub hidden" game="<%= game.id %>">
+            <%= for {player, index} <- Enum.with_index(game.players) do %>
+              <td class="has-text-centered">
+                <p class="label">Location: <%= player.location %></p>
+                <p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p>
+                <p class="label">
+                  Wins/Losses: <strike><%= player.old_wins %>/<%= player.old_losses %></strike>
+                  ⇒
+                  <%= player.new_wins %>/<%= player.new_losses %>
+                </p>
+                <p class="label">
+                  <%= if player.old_wins + player.old_losses == 0 do %>
+                    Win ratio: <strike>0%</strike>
+                    ⇒
+                    <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                  <% else %>
+                    Win ratio: <strike><%= round(player.old_wins / (player.old_wins + player.old_losses) * 100) %>%</strike>
+                    ⇒
+                    <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                  <% end %>
+                </p>
+              </td>
+              <%= unless index + 1 == length(game.players)  do %>
+                <td></td>
+              <% end %>
+            <% end %>
+            <td>
+              <img src="/images/maps/locs/<%= game.map.slug %>.jpg">
+            </td>
+            <td colspan="2">
+              <p class="label">Played on: <%= Timex.format!(game.played_at, "%d.%m.%Y", :strftime) %></p>
+              <p class="label">Time: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %></p>
+
             </td>
           </tr>
         <% end %>

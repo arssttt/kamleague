@@ -34,7 +34,17 @@
               <td class="has-text-centered"><%= game.k_factor %></td>
               <td class="has-text-centered"><%= game.deleted %></td>
               <td class="has-text-centered"><%= game.approved %></td>
-              <td><%= button "Delete", to: Routes.admin_game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %></td>
+              <td>
+                <%= if game.deleted do %>
+                  <%= form_for @conn, Routes.admin_game_path(@conn, :update, game), [method: :put], fn f -> %>
+                    <input id="deleted" name="game[deleted]" type="hidden", value="false">
+                    <%= submit "Add back", class: "button is-info is-small" %>
+                  <% end %>
+                <% else %>
+                  <%= button "Delete", to: Routes.admin_game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
+                <% end %>
+              </td>
+              <td>
             </tr>
         <% end %>
       </tbody>

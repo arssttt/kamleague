@@ -17,6 +17,8 @@
 
 // Set your brand colors
 $purple: #8a4d76;
+$green: #0dc790;
+$red: #d65258;
 $pink: #fa7c91;
 $brown: #757763;
 $beige: #f1e6d0;
@@ -63,6 +65,14 @@ strong {
 
 .box {
   opacity: 0.9;
+}
+
+.has-text-green {
+  color: $green;
+}
+
+.has-text-red {
+  color: $red;
 }
 
 // Navbar styles
@@ -154,7 +164,7 @@ $dropdown-divider-background-color: $black-light;
     position: absolute;
     left: 0;
     top: 0;
-    background: #f14668;
+    background: $red;
     height: 100%;
     width: 100%;
     border-radius: 4px;
@@ -215,16 +225,52 @@ $table-head-cell-color: $beige;
 $table-cell-border-width: 2px 0 0;
 $table-color: $beige;
 $table-row-hover-background-color: $primary;
-table form {
-  margin-bottom: 0;
-}
-table th {
-  font-family: "Beaufort", "Roboto";
+
+table {
+  .hidden {
+    display: none;
+  }
+
+  form {
+    margin-bottom: 0;
+  }
+
+  th {
+    font-family: "Beaufort", "Roboto";
+    font-size: 1.1rem;
+  }
+
+  td {
+    font-family: "Beaufort", "Roboto";
+    strong {
+      font-size: 1.1rem;
+    }
+  }
 }
 
 table td:not([align]),
 table th:not([align]) {
   vertical-align: middle;
+}
+
+.game_row {
+  cursor: pointer;
+  img {
+    width: 25px;
+  }
+  &:hover {
+    background-color: #222222;
+  }
+
+  &.is-active {
+    background-color: #222222;
+  }
+}
+
+.game_row_sub {
+  td {
+    vertical-align: top !important;
+  }
 }
 
 // Title styles

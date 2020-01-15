@@ -10,6 +10,10 @@ defmodule Kamleague.Leagues.PlayersGames do
     field :win, :boolean
     field :old_elo, :integer
     field :new_elo, :integer
+    field :old_wins, :integer
+    field :new_wins, :integer
+    field :old_losses, :integer
+    field :new_losses, :integer
     field :approved, :boolean, default: false
 
     timestamps()
@@ -24,9 +28,24 @@ defmodule Kamleague.Leagues.PlayersGames do
       :win,
       :old_elo,
       :new_elo,
+      :old_wins,
+      :new_wins,
+      :old_losses,
+      :new_losses,
       :approved
     ])
-    |> validate_required([:player_id, :game_id, :location, :win, :old_elo, :new_elo])
+    |> validate_required([
+      :player_id,
+      :game_id,
+      :location,
+      :win,
+      :old_elo,
+      :new_elo,
+      :old_wins,
+      :new_wins,
+      :old_losses,
+      :new_losses
+    ])
   end
 
   def changeset_approve(changeset, params) do

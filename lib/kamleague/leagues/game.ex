@@ -21,6 +21,11 @@ defmodule Kamleague.Leagues.Game do
     |> validate_current_or_past_date(:played_at)
   end
 
+  def changeset_update(game_or_changset, attrs) do
+    game_or_changset
+    |> cast(attrs, [:deleted])
+  end
+
   def changeset_k_factor(game_or_changset, attrs) do
     game_or_changset
     |> cast(attrs, [:k_factor])

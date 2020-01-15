@@ -28,6 +28,18 @@ flatpickr("#played_at", {
   defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff)
 });
 
+$(".game_row").on("click", function() {
+  var gameID = $(this).attr("game");
+  if (gameID == undefined) return;
+
+  $("tr.game_row_sub[game=" + gameID + "]").fadeToggle();
+  if ($(this).hasClass("is-active")) {
+    $(this).removeClass("is-active");
+  } else {
+    $(this).addClass("is-active");
+  }
+});
+
 let dropdown = $("#info-dropdown");
 if (dropdown != null) {
   dropdown.on("click", function(event) {
