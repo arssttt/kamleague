@@ -6,6 +6,7 @@ defmodule Kamleague.Accounts.User do
     field :username, :string
     field :role, :string, default: "user"
     field :locked_at, :utc_datetime
+    field :country_code, :string
 
     pow_user_fields()
 
@@ -19,17 +20,17 @@ defmodule Kamleague.Accounts.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
-    |> Ecto.Changeset.cast(attrs, [:username, :locked_at])
+    |> Ecto.Changeset.cast(attrs, [:username, :locked_at, :country_code])
     |> Ecto.Changeset.cast_assoc(:player)
-    |> Ecto.Changeset.validate_required([:username, :player])
+    |> Ecto.Changeset.validate_required([:username, :player, :country_code])
   end
 
   def update_changeset(user_or_changeset, attrs) do
     user_or_changeset
-    |> Ecto.Changeset.cast(attrs, [:username, :role, :locked_at])
+    |> Ecto.Changeset.cast(attrs, [:username, :role, :locked_at, :country_code])
     |> Ecto.Changeset.cast_assoc(:player)
     |> Ecto.Changeset.validate_inclusion(:role, ~w(user admin))
-    |> Ecto.Changeset.validate_required([:username, :player])
+    |> Ecto.Changeset.validate_required([:username, :player, :country_code])
   end
 
   @spec lock_changeset(Ecto.Schema.t() | Ecto.Changeset.t()) :: Ecto.Changeset.t()

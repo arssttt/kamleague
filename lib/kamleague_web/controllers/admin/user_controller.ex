@@ -2,6 +2,7 @@ defmodule KamleagueWeb.Admin.UserController do
   use KamleagueWeb, :controller
 
   alias Kamleague.Accounts
+  alias Kamleague.Accounts.CountryCodes
 
   @spec index(Plug.Conn.t(), any) :: Plug.Conn.t()
   def index(conn, _params) do
@@ -11,13 +12,15 @@ defmodule KamleagueWeb.Admin.UserController do
 
   def edit(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
+    country_codes = CountryCodes.list_country_codes()
     changeset = Accounts.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+    render(conn, "edit.html", user: user, changeset: changeset, country_codes: country_codes)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Kamleague.Accounts.get_user!(id)
     user_params = Map.put(user_params, "id", id)
+    country_codes = CountryCodes.list_country_codes()
 
     case Accounts.update_user(user, user_params) do
       {:ok, _user} ->
@@ -26,7 +29,7 @@ defmodule KamleagueWeb.Admin.UserController do
         |> redirect(to: Routes.admin_user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", user: user, changeset: changeset)
+        render(conn, "edit.html", user: user, changeset: changeset, country_codes: country_codes)
     end
   end
 

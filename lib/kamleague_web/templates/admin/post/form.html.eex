@@ -29,7 +29,23 @@
   <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 
   <script>
-    var simplemde = new SimpleMDE({ element: document.getElementById("editor") });
+    $(function () {
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+      });
+      var QUEUE = MathJax.Hub.queue;
+      var simplemde = new SimpleMDE({
+        element: document.getElementById("editor"),
+        spellChecker: false,
+        previewRender: function(plainText) {
+          var preview = document.getElementsByClassName("editor-preview-side")[0];
+          preview.innerHTML = this.parent.markdown(plainText);
+          preview.setAttribute('id','editor-preview')
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub,"editor-preview"]);
+          return preview.innerHTML;
+        },
+    });
+    })
   </script>
 
   <div>

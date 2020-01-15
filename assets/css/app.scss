@@ -202,6 +202,8 @@ $dropdown-divider-background-color: $black-light;
   }
 }
 
+.flag
+
 // Content styles
 .content {
   h1,
@@ -425,3 +427,4 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/components/level.sass";
 @import "../node_modules/bulma/sass/grid/columns.sass";
+@import "./flags.scss";

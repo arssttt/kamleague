@@ -13,14 +13,14 @@
           </div>
 
           <div class="field">
-          <%= inputs_for f, :player, fn player -> %>
-            <%= label player, :nickname, "Display name", class: "label" %>
-            <div class="control">
-              <%= text_input player, :nickname, class: "input" %>
-            </div>
-             <%= error_tag player, :nickname %>
-            <% end %>
-            <p class="help">Will be displayed in rankings. Should be the same as your ingame name.</p>
+            <%= inputs_for f, :player, fn player -> %>
+              <%= label player, :nickname, "Display name", class: "label" %>
+                <div class="control">
+                  <%= text_input player, :nickname, class: "input" %>
+                </div>
+                <%= error_tag player, :nickname %>
+              <% end %>
+            <p class="help">Will be displayed in the rankings. Should be the same as your ingame name.</p>
           </div>
 
           <div class="field">
@@ -36,16 +36,25 @@
             <%= label f, :password, "Password", class: "label" %>
             <div class="control">
               <%= password_input f, :password, class: "input" %>
-              <%= error_tag f, :password %>
             </div>
+            <%= error_tag f, :password %>
           </div>
           
           <div class="field">
             <%= label f, :confirm_password, "Confirm password", class: "label" %>
             <div class="control">
               <%= password_input f, :confirm_password, class: "input" %>
-              <%= error_tag f, :confirm_password %>
             </div>
+            <%= error_tag f, :confirm_password %>
+          </div>
+
+          <div class="field">
+            <%= label f, :country_code, "Country", class: "label" %>
+            <div class="select">
+              <%= select f, :country_code, Enum.map(@country_codes, &{&1.name, &1.code}) %>
+            </div>
+            <%= error_tag f, :country_code %>
+            <p class="help">Will be displayed as a flag in the rankings.</p>
           </div>
 
           <div class="field">

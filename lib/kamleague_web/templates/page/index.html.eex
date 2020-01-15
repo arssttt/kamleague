@@ -8,9 +8,18 @@
   <div class="box">
     <div class="tab-content">
       <table class="table is-fullwidth">
+        <colgroup>
+          <col width="10%">
+          <col width="5%">
+          <col width="20%">
+          <col width="15%">
+          <col width="20%">
+          <col width="30%">
+        </colgroup>
         <thead>
           <tr>
             <th>#</th>
+            <th></th>
             <th>Player</th>
             <th>Tier</th>
             <th>Elo</th>
@@ -21,6 +30,9 @@
           <%= for {player, index} <- Enum.with_index(@players) do %>
             <tr>
               <td><%= index + 1 %></td>
+              <td>
+                <div class="flag flag-<%= String.downcase player.user.country_code %>">  
+              </td>
               <td><%= player.nickname %></td>
               <td></td>
               <td><%= player.elo %></td>

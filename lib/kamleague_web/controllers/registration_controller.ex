@@ -1,10 +1,13 @@
 defmodule KamleagueWeb.RegistrationController do
   use KamleagueWeb, :controller
 
+  alias Kamleague.Accounts.CountryCodes
+
   def new(conn, _params) do
+    country_codes = CountryCodes.list_country_codes()
     changeset = Pow.Plug.change_user(conn)
 
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, country_codes: country_codes)
   end
 
   def create(conn, %{"user" => user_params}) do

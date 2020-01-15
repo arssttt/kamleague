@@ -25,7 +25,8 @@ defmodule Kamleague.Leagues do
     Repo.all(
       from p in Player,
         where: p.active == true,
-        order_by: [desc: p.elo]
+        order_by: [desc: p.elo],
+        preload: [:user]
     )
   end
 
