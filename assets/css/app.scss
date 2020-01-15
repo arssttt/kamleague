@@ -268,6 +268,11 @@ table {
     strong {
       font-size: 1.1rem;
     }
+
+    .flag {
+      width: 25px;
+      vertical-align: middle;
+    }
   }
 }
 
@@ -429,4 +434,3 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/components/level.sass";
 @import "../node_modules/bulma/sass/grid/columns.sass";
-@import "./flags.scss";

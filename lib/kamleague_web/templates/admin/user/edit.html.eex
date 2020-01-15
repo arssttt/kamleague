@@ -34,7 +34,7 @@
           <div class="field">
             <%= label f, :country_code, "Country", class: "label" %>
             <div class="select">
-              <%= select f, :country_code, Enum.map(@country_codes, &{&1.name, &1.code}),  selected: @current_user.country_code %>
+              <%= select f, :country_code, Enum.map(@country_codes, &{&1.name, &1.code}),  selected: @user.country_code %>
             </div>
             <%= error_tag f, :country_code %>
             <p class="help">Will be displayed as a flag in the rankings.</p>
