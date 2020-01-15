@@ -83,8 +83,8 @@
             </td>
             <td colspan="2">
               <p class="label">Played on: <%= Timex.format!(game.played_at, "%d.%m.%Y", :strftime) %></p>
-              <p class="label">Time: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %></p>
-
+              <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %></p>
+              <p class="label">K factor: <%= game.k_factor %></p>
             </td>
           </tr>
         <% end %>

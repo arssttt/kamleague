@@ -31,6 +31,7 @@ $black-light: #262626;
 // Update Bulma's global variables
 $family-sans-serif: "Roboto", sans-serif;
 $title-family: "Beaufort", sans-serif;
+$text: #c4b998;
 $scheme-main: $black;
 $grey-dark: $brown;
 $grey-light: $beige-light;
@@ -44,18 +45,16 @@ $body-background-color: $black;
 
 html {
   /* To make use of full height of page*/
-  height: 100%;
-  margin: 0;
+  min-height: 100vh;
 }
 body {
-  height: 100%;
-  margin: 0;
+  min-height: 100vh;
   background: url("/images/background4.jpg") no-repeat;
-  background-size: cover;
-  background-position: center;
+  background-size: auto;
+  background-position: top;
 }
 main {
-  height: 100%;
+  min-height: 100vh;
 }
 
 strong {
@@ -148,6 +147,7 @@ $dropdown-divider-background-color: $black-light;
   width: 150px;
   height: 20px;
   vertical-align: middle;
+  margin-top: -4px;
 
   .fill.left {
     position: absolute;
@@ -202,6 +202,23 @@ $dropdown-divider-background-color: $black-light;
   }
 }
 
+// Content styles
+.content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Beaufort", "Roboto";
+    color: $beige !important;
+  }
+
+  hr {
+    background-color: $black-light;
+  }
+}
+
 // Tabs styles
 $tabs-border-bottom-style: "none";
 .tab-content {
@@ -237,11 +254,13 @@ table {
 
   th {
     font-family: "Beaufort", "Roboto";
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
   td {
     font-family: "Beaufort", "Roboto";
+    font-size: 1.1rem;
+    color: #ded0bb;
     strong {
       font-size: 1.1rem;
     }
