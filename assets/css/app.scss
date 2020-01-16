@@ -202,6 +202,10 @@ $dropdown-divider-background-color: $black-light;
   }
 }
 
+hr {
+  background-color: $black-light !important;
+}
+
 // Content styles
 .content {
   h1,
@@ -214,9 +218,6 @@ $dropdown-divider-background-color: $black-light;
     color: $beige !important;
   }
 
-  hr {
-    background-color: $black-light;
-  }
   .MJXc-display {
     text-align: left !important;
     display: inline !important;
@@ -403,10 +404,34 @@ $menu-label-color: $beige;
 
 // Article styles
 article {
-  padding: 2rem;
-  border-bottom: 2px solid $black-light;
-  &:last-child {
-    border-bottom: none;
+  border: 1px solid $black-light;
+
+  h3 {
+    letter-spacing: 0.025em;
+  }
+  &.columns {
+    margin: 0 0 1.5rem !important;
+  }
+  .column {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .column:first-child {
+    padding: 0;
+  }
+
+  img {
+    height: auto;
+  }
+
+  .date {
+    margin-top: 2em;
+    font-weight: 800;
+    font-size: 0.85em;
+    color: #aba79e;
+    opacity: 0.3;
   }
 }
 

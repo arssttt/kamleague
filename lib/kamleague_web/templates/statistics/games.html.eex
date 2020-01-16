@@ -1,6 +1,6 @@
 <section class="section">
   <div class="box">
-    <h1 class="title is-3">Recent games</h1>
+    <h1 class="title is-1">Recent games</h1>
     <table class="table is-fullwidth">
       <colgroup>
         <col width="20%">
