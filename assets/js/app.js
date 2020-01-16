@@ -17,15 +17,48 @@ import "phoenix_html";
 // import socket from "./socket"
 //import { Socket } from "phoenix";
 import flatpickr from "flatpickr";
+var moment = require("moment-timezone");
+
+let timeZone = "Europe/Helsinki";
 
 var coeff = 1000 * 60 * 5;
 var date = new Date(Date.now());
 // Datetime picker
 flatpickr("#played_at", {
+  altInput: true,
+  altFormat: "L H:m A",
   enableTime: true,
-  dateFormat: "d-m-Y H:i",
+  dateFormat: "YYYY-MM-DD\\\\THH:mm:ssZ",
+  time_24hr: true,
   maxDate: new Date(Math.round(date.getTime() / coeff) * coeff),
-  defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff)
+  defaultDate: new Date(Math.round(date.getTime() / coeff) * coeff),
+  parseDate(dateString, format) {
+    let timezonedDate = new moment.tz(dateString, format, timeZone);
+
+    return new Date(
+      timezonedDate.year(),
+      timezonedDate.month(),
+      timezonedDate.date(),
+      timezonedDate.hour(),
+      timezonedDate.minute(),
+      timezonedDate.second()
+    );
+  },
+  formatDate(date, format) {
+    return moment
+      .tz(
+        [
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+          date.getHours(),
+          date.getMinutes(),
+          date.getSeconds()
+        ],
+        timeZone
+      )
+      .format(format);
+  }
 });
 
 $(".game_row").on("click", function() {

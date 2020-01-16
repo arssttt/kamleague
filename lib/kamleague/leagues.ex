@@ -328,6 +328,8 @@ defmodule Kamleague.Leagues do
       loser
       |> Elixir.Map.put(:win, false)
 
+    IO.inspect(attrs)
+
     # Format played_at to a DateTime
     attrs =
       case Elixir.Map.fetch(attrs, "played_at") do
@@ -335,12 +337,17 @@ defmodule Kamleague.Leagues do
           Elixir.Map.put(
             attrs,
             "played_at",
-            Timex.parse!(attrs["played_at"], "%d-%m-%Y %H:%M", :strftime)
+            Timex.Timezone.convert(
+              Timex.parse!(attrs["played_at"], "{ISO:Extended}"),
+              Timex.Timezone.get("UTC", Timex.now())
+            )
           )
 
         :error ->
           attrs
       end
+
+    IO.inspect(attrs)
 
     %Game{}
     |> Game.changeset(attrs)

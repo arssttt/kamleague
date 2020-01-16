@@ -28,7 +28,7 @@
               <td class="has-text-centered"><%= user.role %></td>
               <td class="has-text-centered">
                 <%= for ip_address <- user.ip_addresses do %>
-                  <%= ip_address.ip_address %>
+                  <p><%= ip_address.ip_address %></p>
                 <% end %>
               </td>
               <td class="has-text-centered"><%= user.locked_at %></td>

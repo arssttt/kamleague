@@ -56,23 +56,25 @@
             <%= for {player, index} <- Enum.with_index(game.players) do %>
               <td class="has-text-centered">
                 <p class="label">Location: <%= player.location %></p>
-                <p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p>
-                <p class="label">
-                  Wins/Losses: <strike><%= player.old_wins %>/<%= player.old_losses %></strike>
-                  ⇒
-                  <%= player.new_wins %>/<%= player.new_losses %>
-                </p>
-                <p class="label">
-                  <%= if player.old_wins + player.old_losses == 0 do %>
-                    Win ratio: <strike>0%</strike>
+                <%= if game.approved do %>
+                  <p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p>
+                  <p class="label">
+                    Wins/Losses: <strike><%= player.old_wins %>/<%= player.old_losses %></strike>
                     ⇒
-                    <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
-                  <% else %>
-                    Win ratio: <strike><%= round(player.old_wins / (player.old_wins + player.old_losses) * 100) %>%</strike>
-                    ⇒
-                    <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
-                  <% end %>
-                </p>
+                    <%= player.new_wins %>/<%= player.new_losses %>
+                  </p>
+                  <p class="label">
+                    <%= if player.old_wins + player.old_losses == 0 do %>
+                      Win ratio: <strike>0%</strike>
+                      ⇒
+                      <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                    <% else %>
+                      Win ratio: <strike><%= round(player.old_wins / (player.old_wins + player.old_losses) * 100) %>%</strike>
+                      ⇒
+                      <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                    <% end %>
+                  </p>
+                <% end %>
               </td>
               <%= unless index + 1 == length(game.players)  do %>
                 <td></td>
@@ -83,7 +85,7 @@
             </td>
             <td colspan="2">
               <p class="label">Played on: <%= Timex.format!(game.played_at, "%d.%m.%Y", :strftime) %></p>
-              <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %></p>
+              <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %> GMT</p>
               <p class="label">K factor: <%= game.k_factor %></p>
             </td>
           </tr>
