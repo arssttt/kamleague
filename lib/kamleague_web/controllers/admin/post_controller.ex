@@ -45,6 +45,7 @@ defmodule KamleagueWeb.Admin.PostController do
 
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = Contents.get_post!(id)
+    tags = Contents.list_tags()
 
     case Contents.update_post(post, post_params) do
       {:ok, _post} ->
@@ -53,7 +54,7 @@ defmodule KamleagueWeb.Admin.PostController do
         |> redirect(to: Routes.admin_post_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", post: post, changeset: changeset)
+        render(conn, "edit.html", post: post, changeset: changeset, tags: tags)
     end
   end
 

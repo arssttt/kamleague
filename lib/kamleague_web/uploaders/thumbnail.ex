@@ -19,7 +19,7 @@ defmodule Kamleague.Thumbnail do
 
   # Define a thumbnail transformation:
   def transform(:thumb, _) do
-    {:convert, "-resize 475x335 -gravity center -extent 475x335"}
+    {:convert, "-resize 475x335^ -gravity center -extent 475x335"}
   end
 
   # Override the persisted filenames:
