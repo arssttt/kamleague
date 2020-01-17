@@ -8,7 +8,8 @@
         <col width="20%">
         <col width="20%">
         <col width="20%">
-        <col width="10%">
+        <col width="5%">
+        <col width="5%">
       </colgroup>
       <thead>
         <tr>
@@ -18,6 +19,7 @@
           <th>Map</th>
           <th>Winner</th>
           <th>Date</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -50,6 +52,22 @@
             </td>
             <td>
               <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+            </td>
+            <td>
+              <%= if not game.approved do %>
+                <div class="dropdown is-hoverable">
+                  <div class="dropdown-trigger">
+                    <span class="warning-icon"></span>
+                  </div>
+                  <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <div class="dropdown-item">
+                        <p>This game has not yet been approved.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
             </td>
           </tr>
           <tr class="game_row_sub hidden" game="<%= game.id %>">
@@ -88,6 +106,7 @@
               <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %> GMT</p>
               <p class="label">K factor: <%= game.k_factor %></p>
             </td>
+            <td></td>
           </tr>
         <% end %>
       </tbody>

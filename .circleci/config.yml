@@ -99,7 +99,7 @@ jobs:
           name: Move the project to the server
           command:
             rsync -av --chown=deploy -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --rsync-path="sudo rsync"
-            ~/kamleague/website deploy@beta.kamleague.com:$APP_PATH --delete --exclude=/uploads
+            ~/kamleague/website deploy@beta.kamleague.com:$APP_PATH --delete --exclude=~/kamleague/website/uploads
 
       - run:
           name: Build the project
