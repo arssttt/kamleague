@@ -6,9 +6,11 @@ defmodule Kamleague.Accounts do
   @type t :: %User{}
 
   def list_users() do
-    User
-    |> Repo.all()
-    |> Repo.preload([:player, :ip_addresses])
+    Repo.all(
+      from u in User,
+        order_by: u.id,
+        preload: [[:player, :ip_addresses]]
+    )
   end
 
   def get_user!(id) do

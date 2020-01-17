@@ -254,7 +254,7 @@ defmodule Kamleague.Leagues do
     Repo.all(
       from g in Game,
         preload: [[players: :player_info], :map],
-        order_by: [desc: g.played_at]
+        order_by: g.id
     )
   end
 
@@ -499,6 +499,15 @@ defmodule Kamleague.Leagues do
 
   """
   def update_game(%Game{} = game, attrs) do
+    # Update both players approved status
+    if attrs["approved"] do
+      Enum.each(game.players, fn player ->
+        player
+        |> PlayersGames.changeset_approve(%{approved: true})
+        |> Repo.update()
+      end)
+    end
+
     game
     |> Game.changeset_update(attrs)
     |> Repo.update()

@@ -23,7 +23,7 @@ defmodule Kamleague.Leagues.Game do
 
   def changeset_update(game_or_changset, attrs) do
     game_or_changset
-    |> cast(attrs, [:deleted])
+    |> cast(attrs, [:deleted, :approved])
   end
 
   def changeset_k_factor(game_or_changset, attrs) do

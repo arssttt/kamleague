@@ -58,7 +58,6 @@ defmodule KamleagueWeb.Router do
     pipe_through [:browser, :protected]
     resources "/games", GameController, only: [:update, :delete]
     resources "/players", PlayerController, only: [:update]
-    resources "/teams", TeamController
     delete "/logout", SessionController, :delete, as: :logout
   end
 
@@ -69,5 +68,6 @@ defmodule KamleagueWeb.Router do
     resources "/maps", Admin.MapController, except: [:show]
     resources "/games", Admin.GameController, only: [:index, :delete, :update]
     resources "/users", Admin.UserController
+    resources "/teams", TeamController
   end
 end

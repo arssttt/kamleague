@@ -132,6 +132,23 @@ $dropdown-divider-background-color: $black-light;
     }
   }
 
+  .danger-icon {
+    background-image: url("/images/info-sprites.png");
+    background-position: 50px -40px;
+    width: 30px;
+    height: 30px;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      background-position: -80px 0px;
+    }
+  }
+
+  &.is-active .danger-icon {
+    background-position: -40px -40px;
+  }
+
   form {
     margin-bottom: 0;
   }

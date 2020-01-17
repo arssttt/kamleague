@@ -120,7 +120,11 @@
                 <div class="navbar-item">
                   <div id="info-dropdown" class="dropdown">
                     <div class="dropdown-trigger">
-                      <span class="info-icon"></span>
+                      <%= if length(@unapproved_games) > 0 do %>
+                        <span class="danger-icon"></span>
+                      <% else %>
+                        <span class="info-icon"></span>
+                      <% end %>
                     </div>
                     <div class="dropdown-menu" role="menu">
                       <div class="dropdown-content">
