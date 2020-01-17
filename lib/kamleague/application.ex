@@ -11,9 +11,10 @@ defmodule Kamleague.Application do
       # Start the Ecto repository
       Kamleague.Repo,
       # Start the endpoint when the application starts
-      KamleagueWeb.Endpoint
+      KamleagueWeb.Endpoint,
       # Starts a worker by calling: Kamleague.Worker.start_link(arg)
       # {Kamleague.Worker, arg},
+      Kamleague.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

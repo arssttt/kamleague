@@ -464,6 +464,28 @@ defmodule Kamleague.Leagues do
     end
   end
 
+  def check_inactive() do
+    players =
+      Player
+      |> preload(games: :game)
+      |> Repo.all()
+
+    for player <- players do
+      Enum.find(player.games, fn g ->
+        g.game.approved == true and g.game.deleted == false and
+          Timex.diff(DateTime.utc_now(), g.game.played_at, :weeks) >=
+            2
+      end)
+      |> case do
+        %PlayersGames{} ->
+          update_player(player, %{active: false})
+
+        nil ->
+          nil
+      end
+    end
+  end
+
   @doc """
   Updates a game.
 

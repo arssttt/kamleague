@@ -35,6 +35,12 @@ config :kamleague, :pow,
 config :arc,
   storage: Arc.Storage.Local
 
+# Configures Quantum
+config :kamleague, Kamleague.Scheduler,
+  jobs: [
+    {"@daily", {Kamleague.Leagues, :check_inactive, []}}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
