@@ -107,7 +107,7 @@ jobs:
 
       - run:
           name: Copy the project
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cp -r kamleague/builds/website kamleague"
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "sudo cp -r kamleague/builds/website kamleague"
 
       - run:
           name: Stop service
