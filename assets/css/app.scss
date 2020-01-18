@@ -98,6 +98,15 @@ $navbar-divider-background-color: $black-light;
 
 // Modal styles
 $modal-content-width: 840px;
+.modal {
+  .is-one-quarter {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
 
 // Dropdown styles
 $dropdown-divider-background-color: $black-light;
