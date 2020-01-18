@@ -325,8 +325,6 @@ defmodule Kamleague.Leagues do
       loser
       |> Elixir.Map.put(:win, false)
 
-    IO.inspect(attrs)
-
     # Format played_at to a DateTime
     attrs =
       case Elixir.Map.fetch(attrs, "played_at") do

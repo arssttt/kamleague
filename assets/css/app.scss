@@ -307,6 +307,10 @@ table {
       vertical-align: middle;
     }
   }
+
+  &.recent-games th {
+    font-weight: normal;
+  }
 }
 
 table td:not([align]),

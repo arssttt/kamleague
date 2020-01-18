@@ -44,8 +44,8 @@
                 </a>
 
                 <div class="navbar-dropdown">
-                  <%= link "How to play", to: Routes.page_path(@conn, :howtoplay), class: "navbar-item" %>
                   <%= link "Rules", to: Routes.page_path(@conn, :rules), class: "navbar-item" %>
+                  <%= link "Elo", to: Routes.page_path(@conn, :elo), class: "navbar-item" %>
                   <%= link "FAQ", to: Routes.page_path(@conn, :faq), class: "navbar-item" %>
                   <%= link "News", to: Routes.page_path(@conn, :news), class: "navbar-item" %>
                 </div>
@@ -61,6 +61,7 @@
                   <a class="navbar-item">
                     Map statistics
                   </a>
+                  <%= link "Old rankings", to: Routes.page_path(@conn, :oldrankings), class: "navbar-item" %>
                 </div>
               </div>
 

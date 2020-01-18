@@ -20,7 +20,14 @@ defmodule KamleagueWeb.GameController do
     teams = Leagues.list_teams()
 
     changeset = Leagues.change_game(%Game{})
-    render(conn, "new.html", changeset: changeset, map: map, players: players, teams: teams)
+
+    render(conn, "new.html",
+      changeset: changeset,
+      map: map,
+      players: players,
+      teams: teams,
+      error: ""
+    )
   end
 
   def create(conn, %{"game" => game_params, "map_id" => map_id}) do
@@ -31,6 +38,17 @@ defmodule KamleagueWeb.GameController do
       |> put_in(["players", "1", "approved"], true)
 
     map = Leagues.get_map!(map_id)
+    changeset = Leagues.change_game(%Game{})
+
+    players =
+      Enum.reject(Leagues.list_active_players(), fn player ->
+        player.id == Pow.Plug.current_user(conn).player.id
+      end)
+
+    if is_nil(game_params["winner_id"]) || game_params["players"]["2"]["player_id"] == "" do
+      error = "Please fill in everything."
+      render(conn, "new.html", changeset: changeset, map: map, players: players, error: error)
+    end
 
     case Leagues.create_game(map, game_params) do
       {:ok, _game} ->
@@ -39,11 +57,6 @@ defmodule KamleagueWeb.GameController do
         |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        players =
-          Enum.reject(Leagues.list_active_players(), fn player ->
-            player.id == Pow.Plug.current_user(conn).player.id
-          end)
-
         render(conn, "new.html", changeset: changeset, map: map, players: players)
     end
   end

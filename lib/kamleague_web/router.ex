@@ -30,11 +30,12 @@ defmodule KamleagueWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/how-to-play", PageController, :howtoplay
     get "/rules", PageController, :rules
+    get "/elo", PageController, :elo
     get "/faq", PageController, :faq
     get "/news", PageController, :news
     get "/downloads", PageController, :downloads
+    get "/old-rankings", PageController, :oldrankings
 
     scope "/statistics" do
       get "/games", StatisticsController, :games

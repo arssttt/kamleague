@@ -1,7 +1,7 @@
 <section class="section">
   <div class="box">
     <h1 class="title is-1">Recent games</h1>
-    <table class="table is-fullwidth">
+    <table class="table is-fullwidth recent-games">
       <colgroup>
         <col width="20%">
         <col width="10%">

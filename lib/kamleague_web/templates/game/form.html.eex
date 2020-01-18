@@ -1,8 +1,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
+  <%= if @error do %>
+    <p class="has-text-red"><%= @error %></p>
+  <% end %>
   <div class="columns is-multiline">
     <div class="field column is-half">
       <%= label f, :player_1, "You", class: "label" %>
+      <%= hidden_input f, :player_1, value: @current_user.player.id, name: "game[players][1][player_id]" %>
       <a class="button is-static"><%= @current_user.player.nickname %></a>
     </div>
     <div class="field column is-half has-text-centered">
