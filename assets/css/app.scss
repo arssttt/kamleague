@@ -21,7 +21,7 @@ $green: #0dc790;
 $red: #d65258;
 $pink: #fa7c91;
 $brown: #757763;
-$blue: #2e8bda;
+$blue: #2d7fc5;
 $beige: #f1e6d0;
 $white: #fff;
 $grey: #ccc;
@@ -468,9 +468,15 @@ article {
 }
 
 // Pagination styles
-$pagination-hover-border-color: $beige;
-$pagination-focus-border-color: $beige;
+$pagination-hover-border-color: $beige-light;
+$pagination-focus-border-color: $beige-light;
+$pagination-current-background-color: transparent;
+$pagination-current-border-color: $black-light;
+$pagination-current-color: $beige-light;
+$pagination-border-color: $black-light;
+$pagination-color: $black-light;
 .pagination-link {
+  font-family: "Beaufort", "Roboto";
   border-radius: 0 !important;
 }
 
