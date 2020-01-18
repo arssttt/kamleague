@@ -21,6 +21,7 @@ $green: #0dc790;
 $red: #d65258;
 $pink: #fa7c91;
 $brown: #757763;
+$blue: #2e8bda;
 $beige: #f1e6d0;
 $white: #fff;
 $grey: #ccc;
@@ -170,7 +171,7 @@ $dropdown-divider-background-color: $black-light;
     position: absolute;
     left: 0;
     top: 0;
-    background: #2b6e9c;
+    background: $blue;
     height: 100%;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -238,6 +239,20 @@ hr {
   .MJXc-display {
     text-align: left !important;
     display: inline !important;
+  }
+
+  table {
+    max-width: 50%;
+    th {
+      color: $beige !important;
+    }
+    td a {
+      color: #2b6e9c;
+    }
+
+    td a:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -452,6 +467,13 @@ article {
   }
 }
 
+// Pagination styles
+$pagination-hover-border-color: $beige;
+$pagination-focus-border-color: $beige;
+.pagination-link {
+  border-radius: 0 !important;
+}
+
 // Footer styles
 $footer-background-color: $black;
 
@@ -472,6 +494,7 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/components/dropdown.sass";
 @import "../node_modules/bulma/sass/components/modal.sass";
 @import "../node_modules/bulma/sass/components/menu.sass";
+@import "../node_modules/bulma/sass/components/pagination.sass";
 @import "../node_modules/bulma/sass/layout/footer.sass";
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/components/level.sass";

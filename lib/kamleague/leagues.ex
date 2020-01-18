@@ -239,15 +239,12 @@ defmodule Kamleague.Leagues do
       [%Game{}, ...]
 
   """
-  def list_games(current_page, per_page) do
-    Repo.all(
-      from g in Game,
-        preload: [[players: :player_info], :map],
-        where: not g.deleted,
-        order_by: [desc: g.played_at],
-        offset: ^((current_page - 1) * per_page),
-        limit: ^per_page
-    )
+  def list_games(params) do
+    Game
+    |> where([g], not g.deleted)
+    |> order_by([g], desc: g.played_at)
+    |> preload([[players: :player_info], :map])
+    |> Repo.paginate(params)
   end
 
   def list_all_games() do

@@ -50,7 +50,9 @@ defmodule Kamleague.MixProject do
       {:remote_ip, "~> 0.2.0"},
       {:arc, "~> 0.11.0"},
       {:arc_ecto, "~> 0.11.3"},
-      {:quantum, "~> 2.3"}
+      {:quantum, "~> 2.3"},
+      {:scrivener_ecto, "~> 2.2"},
+      {:scrivener_html, "~> 1.8"}
     ]
   end
 

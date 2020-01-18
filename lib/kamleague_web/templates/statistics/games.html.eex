@@ -111,5 +111,6 @@
         <% end %>
       </tbody>
     </table>
+    <%= pagination_links @page, previous: Phoenix.HTML.raw("&leftarrow;"), next: Phoenix.HTML.raw("&rightarrow;"), view_style: :bulma %>
   </div>
 </section>

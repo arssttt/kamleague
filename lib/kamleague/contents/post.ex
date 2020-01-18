@@ -18,6 +18,6 @@ defmodule Kamleague.Contents.Post do
     post
     |> cast(attrs, [:title, :body, :tag_id])
     |> cast_attachments(attrs, [:thumbnail])
-    |> validate_required([:thumbnail, :title, :body, :tag_id])
+    |> validate_required([:title, :body, :tag_id])
   end
 end
