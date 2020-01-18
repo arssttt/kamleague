@@ -17,7 +17,7 @@ defmodule KamleagueWeb.Endpoint do
 
   plug Plug.Static,
     at: "/uploads",
-    from: Path.expand("./uploads"),
+    from: {:kamleague, "/uploads"},
     gzip: false
 
   # Code reloading can be explicitly enabled under the
