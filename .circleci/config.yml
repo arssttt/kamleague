@@ -102,12 +102,16 @@ jobs:
             ~/kamleague/website deploy@beta.kamleague.com:$BUILD_PATH --delete
 
       - run:
-          name: Build the project
+          name: Build the project assets
           command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/builds/website && ./build.sh"
 
       - run:
           name: Copy the project
           command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "sudo cp -r kamleague/builds/website kamleague"
+
+      - run:
+          name: Build the release
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/website && MIX_ENV=prod mix release --overwrite"
 
       - run:
           name: Stop service
