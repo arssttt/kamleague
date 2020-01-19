@@ -35,8 +35,14 @@
         </div>
         <div class="level-item has-text-centered">
           <div>
-            <p class="heading">win ratio</p>
-            <p class="title">0%</p>
+            <p class="heading">Win ratio</p>
+            <p class="title">
+              <%= if @player.wins + @player.losses == 0 do %>
+                0%
+              <% else %>
+                <%= round(@player.wins / (@player.wins + @player.losses) * 100) %>%
+              <% end %>
+            </p>
           </div>
         </div>
       </div>

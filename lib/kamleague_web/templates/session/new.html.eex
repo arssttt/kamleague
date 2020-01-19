@@ -29,7 +29,7 @@
             <%= link "Register", to: Routes.signup_path(@conn, :new) %>
           </div>
           <div class="level-item">
-            <a>Password reset</a>
+            <%= link "Reset password", to: Routes.reset_password_path(@conn, :new) %>
           </div>
         </nav>
       </div>

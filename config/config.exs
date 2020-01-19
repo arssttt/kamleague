@@ -29,7 +29,10 @@ config :phoenix, :json_library, Jason
 config :kamleague, :pow,
   user: Kamleague.Accounts.User,
   repo: Kamleague.Repo,
-  web_module: KamleagueWeb
+  web_module: KamleagueWeb,
+  mailer_backend: KamleagueWeb.PowMailer,
+  extensions: [PowResetPassword],
+  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks
 
 # Configures Arc
 config :arc,
@@ -44,6 +47,18 @@ config :kamleague, Kamleague.Scheduler,
 # Configures Scrivener
 config :scrivener_html,
   routes_helper: Kamleague.Router.Helpers
+
+# Configures Bamboo
+config :kamleague, KamleagueWeb.PowMailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: "mail.privateemail.com",
+  hostname: "kamleague.com",
+  port: 465,
+  username: {:system, "SMTP_USERNAME"},
+  password: {:system, "SMTP_PASSWORD"},
+  tls: :never,
+  ssl: true,
+  retries: 10
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

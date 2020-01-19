@@ -27,7 +27,7 @@
           <tr class="game_row" game="<%= game.id %>">
             <%= for {player, index} <- Enum.with_index(game.players) do %>
               <td class="has-text-centered">
-                <strong><%= player.player_info.nickname %></strong>
+                <%= player.player_info.nickname %>
                 <%= if game.approved do %>
                   <%= if player.new_elo - player.old_elo > 0 do %>
                     <span class="has-text-green">(+<%= player.new_elo - player.old_elo %>)</span>

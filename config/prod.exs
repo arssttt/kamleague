@@ -17,6 +17,8 @@ config :kamleague, KamleagueWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :kamleague, KamleagueWeb.PowMailer, adapter: Bamboo.SMTPAdapter
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

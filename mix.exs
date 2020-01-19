@@ -52,7 +52,9 @@ defmodule Kamleague.MixProject do
       {:arc_ecto, "~> 0.11.3"},
       {:quantum, "~> 2.3"},
       {:scrivener_ecto, "~> 2.2"},
-      {:scrivener_html, "~> 1.8"}
+      {:scrivener_html, "~> 1.8"},
+      {:bamboo, "~> 1.3"},
+      {:bamboo_smtp, "~> 2.1.0"}
     ]
   end
 

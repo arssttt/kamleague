@@ -55,6 +55,8 @@ defmodule KamleagueWeb.Router do
     post "/signup", RegistrationController, :create, as: :signup
     get "/login", SessionController, :new, as: :login
     post "/login", SessionController, :create, as: :login
+    resources "/reset-password", ResetPasswordController, only: [:new, :create, :update]
+    get "/reset-password/:id", ResetPasswordController, :edit
   end
 
   scope "/", KamleagueWeb do

@@ -2,6 +2,9 @@ defmodule Kamleague.Accounts.User do
   use Ecto.Schema
   use Pow.Ecto.Schema
 
+  use Pow.Extension.Ecto.Schema,
+    extensions: [PowResetPassword]
+
   schema "users" do
     field :username, :string
     field :role, :string, default: "user"
@@ -20,9 +23,16 @@ defmodule Kamleague.Accounts.User do
   def changeset(user_or_changeset, attrs) do
     user_or_changeset
     |> pow_changeset(attrs)
+    |> pow_extension_changeset(attrs)
     |> Ecto.Changeset.cast(attrs, [:username, :locked_at, :country_code])
     |> Ecto.Changeset.cast_assoc(:player)
     |> Ecto.Changeset.validate_required([:username, :player, :country_code])
+  end
+
+  def update_password_changeset(user_or_changeset, attrs) do
+    user_or_changeset
+    |> pow_password_changeset(attrs)
+    |> pow_current_password_changeset(attrs)
   end
 
   def update_changeset(user_or_changeset, attrs) do
