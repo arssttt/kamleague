@@ -11,7 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :kamleague, KamleagueWeb.Endpoint,
   http: [port: 4000],
-  url: [host: "beta.kamleague.com", port: 80],
+  url: [host: "kamleague.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production

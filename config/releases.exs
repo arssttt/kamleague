@@ -24,7 +24,7 @@ secret_key_base =
     """
 
 config :kamleague, KamleagueWeb.Endpoint,
-  url: [host: "beta.kamleague.com", port: 80],
+  url: [host: "kamleague.com", port: 80],
   http: [:inet6, port: 4000],
   secret_key_base: secret_key_base,
   server: true
