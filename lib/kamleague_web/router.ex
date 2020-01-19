@@ -33,9 +33,10 @@ defmodule KamleagueWeb.Router do
     get "/rules", PageController, :rules
     get "/elo", PageController, :elo
     get "/faq", PageController, :faq
-    get "/news", PageController, :news
     get "/downloads", PageController, :downloads
     get "/old-rankings", PageController, :oldrankings
+
+    resources "/news", PostController, only: [:index, :show], param: "slug"
 
     scope "/statistics" do
       get "/games", StatisticsController, :games

@@ -1,0 +1,19 @@
+<section class="section">
+  <div class="box">
+    <h1 class="title is-1">Most recent news</h1>
+    <%= for post <- @posts do %>
+        <%= link to: Routes.post_path(@conn, :show, post.slug) do %>
+        <article class="post columns">
+        <div class="thumbnail column is-two-fifths">
+            <img src=" <%= Kamleague.Image.url({post.image, post}, :thumb) %>">
+        </div>
+        <div class="column">
+            <h3 class="title is-3"><%= post.title %></h3>
+            <p><%= post.subtitle %></p>
+            <p class="date">Posted on: <%= Timex.format!(post.inserted_at, "%B %d, %Y", :strftime) %></p>
+        </div>
+        </article>
+        <% end %>
+    <% end %>
+  </div>
+</section>

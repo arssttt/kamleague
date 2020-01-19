@@ -23,11 +23,6 @@ defmodule KamleagueWeb.PageController do
     render(conn, "faq.html", post: post)
   end
 
-  def news(conn, _params) do
-    posts = Kamleague.Contents.list_posts("News")
-    render(conn, "news.html", posts: posts)
-  end
-
   def downloads(conn, _params) do
     post = Kamleague.Contents.get_post_by_tag!("Downloads")
     render(conn, "downloads.html", post: post)

@@ -1,4 +1,4 @@
-defmodule Kamleague.Thumbnail do
+defmodule Kamleague.Image do
   use Arc.Definition
 
   # Include ecto support (requires package arc_ecto installed):
@@ -23,13 +23,13 @@ defmodule Kamleague.Thumbnail do
   end
 
   # Override the persisted filenames:
-  # def filename(version, _) do
-  #   version
-  # end
+  def filename(version, _) do
+    version
+  end
 
   # Override the storage directory:
-  def storage_dir(_version, {_file, _scope}) do
-    "uploads/thumbnails/"
+  def storage_dir(_version, {_file, scope}) do
+    "uploads/images/#{scope.id}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded

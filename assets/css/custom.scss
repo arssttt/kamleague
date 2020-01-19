@@ -1,0 +1,11 @@
+@include until($tablet) {
+  .box {
+    padding: 0;
+  }
+
+  .tabs {
+    .title {
+      font-size: 2rem;
+    }
+  }
+}

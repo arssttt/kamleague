@@ -6,11 +6,11 @@
   <% end %>
 
  <div class="field">
-    <%= label f, :thumbnail, "Thumbnail", class: "label" %>
+    <%= label f, :image, "Image", class: "label" %>
     <div class="control">
-      <%= file_input  f, :thumbnail %>
+      <%= file_input  f, :image %>
     </div>
-    <%= error_tag f, :thumbnail %>
+    <%= error_tag f, :image %>
   </div>
 
   <div class="field">
@@ -19,6 +19,13 @@
       <%= text_input f, :title, class: "input" %>
     </div>
     <%= error_tag f, :title %>
+  </div>
+  <div class="field">
+    <%= label f, :subtitle, "Sub title", class: "label" %>
+    <div class="control">
+      <%= text_input f, :subtitle, class: "input" %>
+    </div>
+    <%= error_tag f, :subtitle %>
   </div>
 
   <div class="field">

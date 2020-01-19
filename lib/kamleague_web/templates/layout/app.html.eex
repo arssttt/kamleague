@@ -47,7 +47,7 @@
                   <%= link "Rules", to: Routes.page_path(@conn, :rules), class: "navbar-item" %>
                   <%= link "Elo", to: Routes.page_path(@conn, :elo), class: "navbar-item" %>
                   <%= link "FAQ", to: Routes.page_path(@conn, :faq), class: "navbar-item" %>
-                  <%= link "News", to: Routes.page_path(@conn, :news), class: "navbar-item" %>
+                  <%= link "News", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
                 </div>
               </div>
 
