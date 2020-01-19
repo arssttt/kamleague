@@ -106,6 +106,10 @@ $modal-content-width: 840px;
       transform: scale(1.1);
     }
   }
+
+  .modal-card {
+    overflow: auto;
+  }
 }
 
 // Dropdown styles
