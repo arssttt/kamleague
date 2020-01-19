@@ -21,14 +21,14 @@
           </div>
 
           <div class="field">
-          <%= inputs_for f, :player, fn player -> %>
-            <%= label player, :nickname, "Display name", class: "label" %>
-            <div class="control">
-              <%= text_input player, :nickname, class: "input" %>
-            </div>
-             <%= error_tag player, :nickname %>
+            <%= inputs_for f, :player, fn player -> %>
+              <%= label player, :nickname, "Display name", class: "label" %>
+              <div class="control">
+                <%= text_input player, :nickname, class: "input" %>
+              </div>
+              <%= error_tag player, :nickname %>
+              <p class="help">Will be displayed in rankings. Should be the same as the ingame name.</p>
             <% end %>
-            <p class="help">Will be displayed in rankings. Should be the same as the ingame name.</p>
           </div>
 
           <div class="field">

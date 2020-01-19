@@ -33,7 +33,7 @@
               <td>
                 <img src="/images/flags/<%= String.downcase player.user.country_code %>.png" class="flag">
               </td>
-              <td><%= player.nickname %></td>
+              <td><%= link player.nickname, to: Routes.player_path(@conn, :show, player.slug) %></td>
               <td></td>
               <td><%= player.elo %></td>
               <td>

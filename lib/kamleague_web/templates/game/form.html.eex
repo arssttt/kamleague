@@ -60,6 +60,7 @@
       <%= label f, :played_at, "Played on", class: "label" %>
       <input id="played_at" name="game[played_at]", class="input">
       <%= error_tag f, :played_at %>
+      <p class="help">The time will be automatically converted to GMT.</p>
     </div>
   </div>
   <div class="field">

@@ -47,6 +47,12 @@ defmodule Kamleague.Leagues do
   def get_player!(%_{} = user), do: Repo.get_by!(Player, user_id: user.id)
   def get_player!(id), do: Repo.get!(Player, id)
 
+  def get_player_by_slug(slug) do
+    Player
+    |> Repo.get_by(slug: slug)
+    |> Repo.preload([[games: :game], :user])
+  end
+
   def get_player_with_games!(id) do
     Player
     |> Repo.get!(id)
@@ -263,6 +269,19 @@ defmodule Kamleague.Leagues do
           p.player_id == ^player.id and not p.approved and p.game_id == game.id and
             not game.deleted,
         preload: [[players: :player_info], :map]
+
+    Repo.all(query)
+  end
+
+  def list_player_games(player) do
+    query =
+      from game in Game,
+        join: p in PlayersGames,
+        on:
+          p.player_id == ^player.id and p.game_id == game.id and
+            not game.deleted,
+        preload: [[players: :player_info], :map],
+        order_by: [desc: game.played_at]
 
     Repo.all(query)
   end

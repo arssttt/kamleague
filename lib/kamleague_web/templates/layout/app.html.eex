@@ -185,9 +185,7 @@
                     <%= @current_user.player.nickname %>
                   </a>
                   <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                      Profile
-                    </a>
+                    <%= link "Profile", to: Routes.player_path(@conn, :show, @current_user.player.slug), class: "navbar-item" %>
                     <%= for player_team <- @current_user.player.teams do %>
                       <a class="navbar-item">
                         <%= player_team.team.name %>

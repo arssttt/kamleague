@@ -41,8 +41,10 @@ defmodule KamleagueWeb.Router do
       get "/games", StatisticsController, :games
     end
 
+    resources "/players", PlayerController, only: [:show], param: "slug"
+
     resources "/maps", MapController, only: [:index] do
-      resources "/games", GameController
+      resources "/games", GameController, only: [:new, :create]
     end
   end
 

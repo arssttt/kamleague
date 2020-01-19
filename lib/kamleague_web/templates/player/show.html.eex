@@ -1,0 +1,157 @@
+<section class="section">
+  <div class="box">
+    <div class="level">
+      <div class="level-left">
+        <img src="/images/flags/<%= String.downcase @player.user.country_code %>.png" class="flag level-item">
+        <h1 class="title is-1 level-item"><%= @player.nickname %></h1>
+      </div>
+    </div>
+    <hr>
+    <div class="stats">
+      <div class="level">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Games played</p>
+            <p class="title"><%= length(@games) %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Wins</p>
+            <p class="title"><%= @player.wins %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Elo</p>
+            <p class="title is-1"><%= @player.elo %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Losses</p>
+            <p class="title"><%= @player.losses %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">win ratio</p>
+            <p class="title">0%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h3 class="title is-3">Recent games</h3>
+    <table class="table is-fullwidth recent-games">
+      <colgroup>
+        <col width="20%">
+        <col width="10%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="5%">
+        <col width="5%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="has-text-centered">Players</th>
+          <th></th>
+          <th>Map</th>
+          <th>Winner</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for game <- @games do %>
+          <tr class="game_row" game="<%= game.id %>">
+            <%= for {player, index} <- Enum.with_index(game.players) do %>
+              <td class="has-text-centered">
+                <strong><%= player.player_info.nickname %></strong>
+                <%= if game.approved do %>
+                  <%= if player.new_elo - player.old_elo > 0 do %>
+                    <span class="has-text-green">(+<%= player.new_elo - player.old_elo %>)</span>
+                  <% else %>
+                    <span class="has-text-red">(<%= player.new_elo - player.old_elo %>)</span>
+                  <% end %>
+                <% end %>
+              </td>
+              <%= unless index + 1 == length(game.players)  do %>
+                <td class="has-text-centered">
+                  <img src="<%= Routes.static_path(@conn, "/images/swords.png") %>">
+                </td>
+              <% end %>
+            <% end %>
+            <td><%= game.map.name %></td>
+            <td>
+              <%= for player <- game.players do %>
+                <%= if player.win do %> 
+                  <strong><%= player.player_info.nickname %></strong>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+            </td>
+            <td>
+              <%= if not game.approved do %>
+                <div class="dropdown is-hoverable">
+                  <div class="dropdown-trigger">
+                    <span class="warning-icon"></span>
+                  </div>
+                  <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <div class="dropdown-item">
+                        <p>This game has not yet been approved.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+          <tr class="game_row_sub hidden" game="<%= game.id %>">
+            <%= for {player, index} <- Enum.with_index(game.players) do %>
+              <td class="has-text-centered">
+                <p class="label">Location: <%= player.location %></p>
+                <%= if game.approved do %>
+                  <p class="label">Elo: <strike><%= player.old_elo %></strike> ⇒ <%= player.new_elo %></p>
+                  <p class="label">
+                    Wins/Losses: <strike><%= player.old_wins %>/<%= player.old_losses %></strike>
+                    ⇒
+                    <%= player.new_wins %>/<%= player.new_losses %>
+                  </p>
+                  <p class="label">
+                    <%= if player.old_wins + player.old_losses == 0 do %>
+                      Win ratio: <strike>0%</strike>
+                      ⇒
+                      <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                    <% else %>
+                      Win ratio: <strike><%= round(player.old_wins / (player.old_wins + player.old_losses) * 100) %>%</strike>
+                      ⇒
+                      <%= round(player.new_wins / (player.new_wins + player.new_losses) * 100) %>%
+                    <% end %>
+                  </p>
+                <% end %>
+              </td>
+              <%= unless index + 1 == length(game.players)  do %>
+                <td></td>
+              <% end %>
+            <% end %>
+            <td>
+              <img src="/images/maps/locs/<%= game.map.slug %>.jpg">
+            </td>
+            <td colspan="2">
+              <p class="label">Played on: <%= Timex.format!(game.played_at, "%d.%m.%Y", :strftime) %></p>
+              <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %> GMT</p>
+              <p class="label">K factor: <%= game.k_factor %></p>
+            </td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

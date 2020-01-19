@@ -4,11 +4,6 @@ defmodule KamleagueWeb.GameController do
   alias Kamleague.Leagues
   alias Kamleague.Leagues.Game
 
-  def index(conn, _params) do
-    games = Leagues.list_games()
-    render(conn, "index.html", games: games)
-  end
-
   def new(conn, %{"map_id" => map_id}) do
     map = Leagues.get_map!(map_id)
 
