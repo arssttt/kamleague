@@ -19,7 +19,7 @@ import "phoenix_html";
 import flatpickr from "flatpickr";
 var moment = require("moment-timezone");
 
-let timeZone = "Europe/Helsinki";
+let timeZone = moment.tz.guess();
 
 var coeff = 1000 * 60 * 5;
 var date = new Date(Date.now());
