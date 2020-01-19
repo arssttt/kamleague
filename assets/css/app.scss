@@ -315,6 +315,11 @@ table {
       width: 25px;
       vertical-align: middle;
     }
+
+    a:hover {
+      text-decoration: underline;
+      color: $beige;
+    }
   }
 
   &.recent-games th {

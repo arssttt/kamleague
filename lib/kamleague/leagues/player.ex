@@ -22,7 +22,7 @@ defmodule Kamleague.Leagues.Player do
     attrs = Map.merge(attrs, slugify_nickname(attrs))
 
     player
-    |> cast(attrs, [:nickname, :active])
+    |> cast(attrs, [:nickname, :active, :slug])
     |> validate_required([:nickname])
     |> unique_constraint(:nickname)
   end
