@@ -11,6 +11,8 @@ defmodule KamleagueWeb.RegistrationController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    country_codes = CountryCodes.list_country_codes()
+
     conn
     |> Pow.Plug.create_user(user_params)
     |> case do
@@ -21,7 +23,7 @@ defmodule KamleagueWeb.RegistrationController do
         |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, changeset, conn} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, country_codes: country_codes)
     end
   end
 end

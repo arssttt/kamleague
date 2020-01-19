@@ -249,7 +249,10 @@ defmodule Kamleague.Leagues do
     Game
     |> where([g], not g.deleted)
     |> order_by([g], desc: g.played_at)
-    |> preload([[players: :player_info], :map])
+    |> preload([
+      [players: ^from(pg in PlayersGames, order_by: [desc: pg.player_id]), players: :player_info],
+      :map
+    ])
     |> Repo.paginate(params)
   end
 
@@ -280,7 +283,13 @@ defmodule Kamleague.Leagues do
         on:
           p.player_id == ^player.id and p.game_id == game.id and
             not game.deleted,
-        preload: [[players: :player_info], :map],
+        preload: [
+          [
+            players: ^from(pg in PlayersGames, order_by: [desc: pg.player_id]),
+            players: :player_info
+          ],
+          :map
+        ],
         order_by: [desc: game.played_at]
 
     Repo.all(query)
