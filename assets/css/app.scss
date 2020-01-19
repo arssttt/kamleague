@@ -21,24 +21,26 @@ $green: #0dc790;
 $red: #d65258;
 $pink: #fa7c91;
 $brown: #757763;
+$brown-light: #c4b998;
 $blue: #2d7fc5;
 $beige: #f1e6d0;
 $white: #fff;
 $grey: #ccc;
-$beige-light: #eff0eb;
+$beige-light: #ded0bb;
 $black: #121212;
 $black-light: #262626;
+$gold: #c9aa71;
 
 // Update Bulma's global variables
 $family-sans-serif: "Roboto", sans-serif;
 $title-family: "Beaufort", sans-serif;
-$text: #c4b998;
+$text: $brown-light;
 $scheme-main: $black;
 $grey-dark: $brown;
 $grey-light: $beige-light;
 $primary: #1f394b;
 $link: $beige;
-$link-hover: $grey;
+$link-hover: $beige;
 $border: $black-light;
 
 // Update some of Bulma's component variables
@@ -85,6 +87,7 @@ $navbar-divider-background-color: $black-light;
   border-bottom: 2px solid $black-light;
 
   a {
+    color: $gold;
     text-transform: uppercase;
     font-weight: bold;
     font-family: "Beaufort", "Roboto";
@@ -310,7 +313,7 @@ table {
   td {
     font-family: "Beaufort", "Roboto";
     font-size: 1.1rem;
-    color: #ded0bb;
+    color: $beige-light;
     strong {
       font-size: 1.1rem;
     }
@@ -320,9 +323,13 @@ table {
       vertical-align: middle;
     }
 
+    a {
+      color: $beige-light;
+    }
+
     a:hover {
       text-decoration: underline;
-      color: $beige;
+      color: $beige-light;
     }
   }
 
@@ -353,6 +360,9 @@ table th:not([align]) {
 .game_row_sub {
   td {
     vertical-align: top !important;
+    p {
+      color: $brown;
+    }
   }
 }
 

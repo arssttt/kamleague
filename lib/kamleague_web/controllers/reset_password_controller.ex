@@ -64,7 +64,7 @@ defmodule KamleagueWeb.ResetPasswordController do
   end
 
   defp deliver_email(conn, user, token) do
-    url = Routes.reset_password_path(conn, :edit, token)
+    url = Routes.reset_password_url(conn, :edit, token)
     email = PowResetPassword.Phoenix.Mailer.reset_password(conn, user, url)
 
     Pow.Phoenix.Mailer.deliver(conn, email)
