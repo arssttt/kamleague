@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>KaM League</title>
     <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous">
+      src="https://code.jquery.com/jquery-3.4.1.min.js">
     </script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js">
