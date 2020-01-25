@@ -44,11 +44,6 @@ defmodule KamleagueWeb.Router do
 
     resources "/players", PlayerController, only: [:show], param: "slug"
     resources "/teams", TeamController, only: [:show], param: "slug"
-
-    resources "/maps", MapController, only: [:index] do
-      post "/games", GameController, :create_team
-      resources "/games", GameController, only: [:new, :create]
-    end
   end
 
   scope "/", KamleagueWeb do
@@ -65,6 +60,11 @@ defmodule KamleagueWeb.Router do
   scope "/", KamleagueWeb do
     pipe_through [:browser, :protected]
     resources "/games", GameController, only: [:update, :delete]
+
+    resources "/maps", MapController, only: [:index] do
+      post "/games/team", GameController, :create_team
+      resources "/games", GameController, only: [:new, :create]
+    end
 
     resources "/teams", TeamController, only: [:create, :update, :delete]
     resources "/players", PlayerController, only: [:update]

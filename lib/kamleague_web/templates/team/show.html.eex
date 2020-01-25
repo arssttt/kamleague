@@ -14,7 +14,7 @@
           </div>
         </div>
         <%= for player <- @team.players do %>
-          <%= if player.id != @team.owner.id do %>
+          <%= if player.player_info.id != @team.owner.id do %>
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Member</p>

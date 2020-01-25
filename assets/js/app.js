@@ -88,6 +88,9 @@ $("#game_team_1").on("change", function() {
       $(this).addClass("hidden");
     });
   } else {
+    $("div.game-team-1").each(function() {
+      $(this).addClass("hidden");
+    });
     $("div.game-team-1[team=" + teamID + "]").removeClass("hidden");
     if ($(this).hasClass("is-active")) {
       $(this).removeClass("is-active");
@@ -104,6 +107,9 @@ $("#game_team_2").on("change", function() {
       $(this).addClass("hidden");
     });
   } else {
+    $("div.game-team-2").each(function() {
+      $(this).addClass("hidden");
+    });
     $("div.game-team-2[team=" + teamID + "]").removeClass("hidden");
     if ($(this).hasClass("is-active")) {
       $(this).removeClass("is-active");

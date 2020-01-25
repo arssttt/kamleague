@@ -826,6 +826,7 @@ defmodule Kamleague.Leagues do
     Team
     |> preload(players: :player_info)
     |> where([t], t.approved)
+    |> order_by([t], desc: t.elo)
     |> Repo.all()
   end
 
