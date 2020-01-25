@@ -3,6 +3,10 @@ defmodule KamleagueWeb.StatisticsController do
 
   def games(conn, params) do
     page = Kamleague.Leagues.list_games(params)
-    render(conn, "games.html", games: page.entries, page: page)
+
+    render(conn, "games.html",
+      games: page.entries,
+      page: page
+    )
   end
 end

@@ -6,7 +6,9 @@
         <div class="tabs is-centered is-size-1 is-uppercase">
           <ul>
             <li class="is-active"><h1 class="title is-3"><a>Solo</a></h1></li>
-            <li><h1 class="title is-3"><a>Duo</a></h1></li>
+             <%= if @map.locations >= 4 do %>
+              <li><h1 class="title is-3"><a>Duo</a></h1></li>
+            <% end %>
           </ul>
         </div>
         <div class="has-text-centered">
@@ -16,9 +18,11 @@
         <div class="tab-content">
           <%= render "form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create, @map.id)) %>
         </div>
-        <div class="tab-content">
-          <%= render "form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create, @map.id)) %>
-        </div>
+        <%= if @map.locations >= 4 do %>
+          <div class="tab-content">
+            <%= render "duo_form.html", Map.put(assigns, :action, Routes.map_game_path(@conn, :create_team, @map.id)) %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

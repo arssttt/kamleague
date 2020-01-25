@@ -6,11 +6,15 @@ defmodule Kamleague.Leagues.TeamsGames do
   schema "teams_games" do
     belongs_to :team, Kamleague.Leagues.Team, foreign_key: :team_id
     belongs_to :game, Kamleague.Leagues.Game, foreign_key: :game_id
-    has_many :players, Kamleague.Leagues.PlayersTeamsGames
+    has_many :players, Kamleague.Leagues.TeamsGamesPlayers
     field :win, :boolean
     field :old_elo, :integer
     field :new_elo, :integer
-    field :approved, :boolean, default: false
+    field :old_wins, :integer
+    field :new_wins, :integer
+    field :old_losses, :integer
+    field :new_losses, :integer
+    field :approved, :boolean
 
     timestamps()
   end
@@ -23,9 +27,23 @@ defmodule Kamleague.Leagues.TeamsGames do
       :win,
       :old_elo,
       :new_elo,
+      :old_wins,
+      :new_wins,
+      :old_losses,
+      :new_losses,
       :approved
     ])
-    |> validate_required([:player_id, :game_id, :win, :old_elo, :new_elo])
+    |> validate_required([
+      :player_id,
+      :game_id,
+      :win,
+      :old_elo,
+      :new_elo,
+      :old_wins,
+      :new_wins,
+      :old_losses,
+      :new_losses
+    ])
   end
 
   def changeset_approve(changeset, params) do

@@ -1,16 +1,40 @@
 <section class="section">
+  <div class="tabs is-centered is-size-1 is-uppercase">
+    <ul>
+      <li class="is-active"><h1 class="title is-1"><a>Solo</a></h1></li>
+      <li><h1 class="title is-1"><a>Duo</a></h1></li>
+    </ul>
+  </div>
   <div class="box">
-    <div class="columns is-variable is-8">
-      <div class="column">
-        <h1 class="title is-1"><%= @post.title %><h1>
-        <div class="content">
-          <%= {:safe, markdown(@post.body)} %>
+    <div class="tab-content">
+      <div class="columns is-variable is-8">
+        <div class="column">
+          <h1 class="title is-1">Rules<h1>
+          <div class="content">
+            <%= {:safe, markdown(@rules_solo.body)} %>
+          </div>
+        </div>
+        <div class="column">
+          <h1 class="title is-1">Map list<h1>
+          <div class="content">
+            <%= {:safe, markdown(@map_list_solo.body)} %>
+          </div>
         </div>
       </div>
-      <div class="column">
-        <h1 class="title is-1"><%= @map_list.title %><h1>
-        <div class="content">
-          <%= {:safe, markdown(@map_list.body)} %>
+    </div>
+    <div class="tab-content">
+      <div class="columns is-variable is-8">
+        <div class="column">
+          <h1 class="title is-1">Rules<h1>
+          <div class="content">
+            <%= {:safe, markdown(@rules_duo.body)} %>
+          </div>
+        </div>
+        <div class="column">
+          <h1 class="title is-1">Map list<h1>
+          <div class="content">
+            <%= {:safe, markdown(@map_list_duo.body)} %>
+          </div>
         </div>
       </div>
     </div>

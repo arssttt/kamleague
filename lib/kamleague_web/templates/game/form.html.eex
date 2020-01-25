@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
+  <%= hidden_input f, :type, value: "1v1" %>
   <%= if @error do %>
     <p class="has-text-red"><%= @error %></p>
   <% end %>

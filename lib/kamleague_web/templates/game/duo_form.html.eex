@@ -1,65 +1,90 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<%= form_for @changeset, @action, [id: "add-game-form"], fn f -> %>
+<%= form_for @changeset, @action, [id: "add-game-form", class: "game-form"], fn f -> %>
+  <%= hidden_input f, :type, value: "2v2" %>
   <div class="columns is-multiline">
-    <div class="field column is-half">
+    <div class="column is-full">
       <%= label f, :team_1, "Your team", class: "label" %>
       <div class="select">
         <%= select f, :team_1,
-          Enum.map(@teams, &{&1.name, &1.id}), prompt: "Select your team", name: "game[teams][1][team_id]" %>
+          Enum.map(@current_user.player.teams, &{&1.team.name, &1.team.id}), prompt: "Select your team", name: "game[teams][1][team_id]" %>
       </div>
-      <%= for team <- @teams do %>
-      <div class="field">
-        <%= label f, "Players", class: "label" %>
-      </div>
-        <%= for player <- team.players do %>
-          <p class="button is-static"><%= player.player_info.nickname %></p>
-        <% end %>
-      <% end %>
     </div>
-    <div class="field column is-half has-text-centered">
-      <%= label f, :location, "Location", class: "label" %>
-      <div class="level">
-        <%= for location <- 1..@map.locations do %>
-          <div class="level-item">
-            <div>
-              <label class="label"><%= location %></label>
-              <input name="game[players][1][location]" type="radio" value="<%= location %>" id="location[1]_<%= location %>">
+    <div class="column is-half">
+      <%= label f, "Players", class: "label" %>
+    </div>
+    <div class="column is-half has-text-centered">
+      <%= label f, "Location", class: "label" %>
+    </div>
+    <%= for team <- @current_user.player.teams do %>
+      <div class="column is-full">
+        <div class="game-team-1 hidden columns is-multiline" team="<%= team.team.id %>">
+          <%= for {player, index} <- Enum.with_index(team.team.players) do %>
+            <div class="player column is-half">
+              <p class="button is-static"><%= player.player_info.nickname %></p>
+              <input name="game[teams][1][players][<%= index + 1 %>][player_id]" type="hidden" value="<%= player.player_info.id %>">
             </div>
-          </div>
-        <% end %>
+            <div class="column is-half has-text-centered">
+              <div class="level">
+                <%= for location <- 1..@map.locations do %>
+                  <div class="level-item">
+                    <div>
+                      <label class="label"><%= location %></label>
+                      <input name="game[teams][1][players][<%= index + 1 %>][location]" type="radio" value="<%= location %>" id="location[<%= index + 1 %>]_<%= location %>">
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              <%= error_tag f, :location %>
+            </div>
+          <% end %>
+        </div>
       </div>
-      <%= error_tag f, :location %>
-    </div>
-    <div class="field column is-half">
-      <%= label f, "Opponent team", class: "label" %>
+    <% end %>
+    
+    <div class="column is-full">
+      <%= label f, :team_2, "Opponent team", class: "label" %>
       <div class="select">
-        <%= select f, :player_2,
-          Enum.map(@players, &{&1.nickname, &1.id}), prompt: "Select a player", name: "game[players][2][player_id]" %>
+        <%= select f, :team_2,
+          Enum.map(@teams, &{&1.name, &1.id}), prompt: "Select a team", name: "game[teams][2][team_id]" %>
       </div>
     </div>
-    <div class="field column is-half has-text-centered">
-      <%= label f, :location, "Location", class: "label" %>
-      <div class="level">
-        <%= for location <- 1..@map.locations do %>
-          <div class="level-item">
-            <div>
-              <label class="label"><%= location %></label>
-              <input name="game[players][2][location]" type="radio" value="<%= location %>" id="location[2]_<%= location %>">
+    <div class="column is-half">
+      <%= label f, "Players", class: "label" %>
+    </div>
+    <div class="column is-half has-text-centered">
+      <%= label f, "Location", class: "label" %>
+    </div>
+    <%= for team <- @teams do %>
+      <div class="column is-full">
+        <div class="game-team-2 hidden columns is-multiline" team="<%= team.id %>">
+          <%= for {player, index} <- Enum.with_index(team.players) do %>
+            <div class="player column is-half">
+              <p class="button is-static"><%= player.player_info.nickname %></p>
+              <input name="game[teams][2][players][<%= index + 1 %>][player_id]" type="hidden" value="<%= player.player_info.id %>">
             </div>
-          </div>
-        <% end %>
+            <div class="column is-half has-text-centered">
+              <div class="level">
+                <%= for location <- 1..@map.locations do %>
+                  <div class="level-item">
+                    <div>
+                      <label class="label"><%= location %></label>
+                      <input name="game[teams][2][players][<%= index + 1 %>][location]" type="radio" value="<%= location %>" id="location[<%= index + 1 %>]_<%= location %>">
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              <%= error_tag f, :location %>
+            </div>
+          <% end %>
+        </div>
       </div>
-      <%= error_tag f, :location %>
-    </div>
+    <% end %>
     <div class="field column is-half">
       <%= label f, :win, "Winner", class: "label" %>
-      <div>
-        <label>
-          <input name="game[winner_id]" type="radio" value="<%= @current_user.player.id %>" class="is-hidden">
-          <a class="button is-player"><%= @current_user.player.nickname %></a>
-        </label>
+      <div id="team">
+        
       </div>
-      <div id="opponent">
+      <div id="opponent-team">
         
       </div>
     </div>
@@ -67,6 +92,7 @@
       <%= label f, :played_at, "Played on", class: "label" %>
       <input id="played_at" name="game[played_at]", class="input">
       <%= error_tag f, :played_at %>
+      <p class="help">The time will be automatically converted to GMT.</p>
     </div>
   </div>
   <div class="field">
@@ -75,15 +101,41 @@
 <% end %>
 
 <script>
-  $("#game_player_2").on("change", function(){  
-    $("#opponent").empty();
+  $("#game_team_1").on("change", function(){  
+    $("#team").empty();
     var value = $(this).val();
+ 
     var name = $(this).find('option:selected').text();
     if ($(this).val() == "") {
-      $("#opponent").empty();
+      $("#team").empty();
     }
     else {
-      var $label = $("<label>").appendTo($("#opponent"));
+      var $label = $("<label>").appendTo($("#team"));
+
+      $("<input>", {
+        "name": "game[winner_id]",
+        "type": "radio",
+        "class": "is-hidden",
+        "value": value
+      }).appendTo($label);
+      $("<a>", {
+        "class": "button is-player",
+        "text": name
+      }).appendTo($label);
+    }
+  });
+
+  $("#game_team_2").on("change", function(){  
+    $("#opponent-team").empty();
+    var value = $(this).val();
+ 
+    var name = $(this).find('option:selected').text();
+       console.log(name)
+    if ($(this).val() == "") {
+      $("#opponent-team").empty();
+    }
+    else {
+      var $label = $("<label>").appendTo($("#opponent-team"));
 
       $("<input>", {
         "name": "game[winner_id]",

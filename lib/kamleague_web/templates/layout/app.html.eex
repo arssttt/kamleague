@@ -86,7 +86,7 @@
               <%= if @current_user do %>
                 <%= if length(@current_user.player.teams) < 2 do %>
                 <div class="navbar-item">
-                  <%= link "Create team", to: "#", class: "button is-primary is-small" %>
+                  <%= link "Create team", to: Routes.team_path(@conn, :new), class: "button is-primary is-small" %>
                 </div>
                 <% end %>
 
@@ -119,13 +119,13 @@
                 <div class="navbar-item">
                   <div id="info-dropdown" class="dropdown">
                     <div class="dropdown-trigger">
-                      <%= if length(@unapproved_games) > 0 do %>
+                      <%= if length(@unapproved_team_games) > 0 or length(@unapproved_games) > 0 do %>
                         <span class="danger-icon"></span>
                       <% else %>
                         <span class="info-icon"></span>
                       <% end %>
                     </div>
-                    <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-menu info" role="menu">
                       <div class="dropdown-content">
                         <%= if not @current_user.player.active do %>
                         <div class="dropdown-item">
@@ -138,8 +138,7 @@
                         <hr class="dropdown-divider">
                         <% end %>
                         <div class="dropdown-item">
-                          <%= if length(@unapproved_games) > 0 do %>
-                            <p>You have unapproved games.</p>
+                          <%= if length(@unapproved_team_games) > 0 or length(@unapproved_games) > 0 do %>
                             <%= for game <- @unapproved_games do %>
                               <hr class="dropdown-divider">
                               <p class="label"><%= game.map.name %> (<%= Timex.format!(game.played_at, "%d.%m", :strftime) %>)</p>
@@ -170,8 +169,74 @@
                                 <%= submit "Delete", class: "button is-danger is-small" %>
                               <% end %>
                             <% end %>
+                            <%= for game <- @unapproved_team_games do %>
+                              <hr class="dropdown-divider">
+                              <div class="has-text-centered">
+                                <p class="label"><%= game.map.name %> (<%= Timex.format!(game.played_at, "%d.%m", :strftime) %>)</p>
+                              </div>
+                              <div class="columns">
+                              <%= for {team, index} <- Enum.with_index(game.teams) do %>
+                                <div class="column has-text-centered is-two-fifths">
+                                  <p class="label">
+                                    <%= team.team.name %>
+                                  </p>
+                                  <%= for player <- team.players do %>
+                                    <p><%= player.player.nickname %> (<%= player.location %>)</p>
+                                  <% end %>
+                                </div>
+                                <%= unless index + 1 == length(game.teams)  do %>
+                                  <div class="column has-text-centered">
+                                    <span>vs</span>
+                                  </div>
+                                <% end %>
+                              <% end %>
+                              </div>
+                              <p class="label has-text-centered">Winner: 
+                                <%= for team <- game.teams do %>
+                                  <%= if team.win do %> 
+                                    <%= team.team.name %>
+                                  <% end %>
+                                <% end %>
+                              </p>
+                              <div class="level">
+                                <div class="level-item">
+                                  <%= form_for @conn, Routes.game_path(@conn, :update, game.id), [method: :put], fn f -> %>
+                                    <%= hidden_input f, :approved, value: true %>
+                                    <%= hidden_input f, :type, value: "2v2" %>
+
+                                    <%= submit "Approve", class: "button is-primary is-small" %>
+                                  <% end %>
+                                 </div>
+                                 <div class="level-item">
+                                  <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
+                                    <%= hidden_input f, :deleted, value: true %>
+                                    <%= submit "Delete", class: "button is-danger is-small" %>
+                                  <% end %>
+                                </div>
+                              </div>
+                            <% end %>
                           <% else %>
                             <p>You have no unapproved games.</p>
+                          <% end %>
+                          <%= if length(@unapproved_teams) > 0 do %>
+                            <%= for team <- @unapproved_teams do %>
+                              <hr class="dropdown-divider">
+                              <p class="label">Invitation</p>
+                              <p>You have recieved an invitation from <strong><%= team.owner.nickname %></strong> join <strong><%= team.name %></strong></p>
+                              <br>
+                              <div class="level">
+                                <div class="level-item">
+                                  <%= form_for @conn, Routes.team_path(@conn, :update, team.id), [method: :put], fn f -> %>
+                                    <%= submit "Join", class: "button is-primary is-small" %>
+                                  <% end %>
+                                 </div>
+                                 <div class="level-item">
+                                  <%= form_for @conn, Routes.team_path(@conn, :delete, team), [method: :delete], fn f -> %>
+                                    <%= submit "Deny", class: "button is-danger is-small" %>
+                                  <% end %>
+                                </div>
+                              </div>
+                            <% end %>
                           <% end %>
                         </div>
                       </div>
@@ -186,7 +251,7 @@
                     <%= link "Profile", to: Routes.player_path(@conn, :show, @current_user.player.slug), class: "navbar-item" %>
                     <%= for player_team <- @current_user.player.teams do %>
                       <a class="navbar-item">
-                        <%= player_team.team.name %>
+                        <%= link player_team.team.name, to: Routes.team_path(@conn, :show, player_team.team.slug), class: "navbar-item" %>
                       </a>
                     <% end %>
                     <hr class="navbar-divider">

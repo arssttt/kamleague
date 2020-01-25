@@ -4,10 +4,7 @@ defmodule KamleagueWeb.TeamController do
   alias Kamleague.Leagues
   alias Kamleague.Leagues.Team
 
-  def index(conn, _params) do
-    teams = Leagues.list_teams()
-    render(conn, "index.html", teams: teams)
-  end
+  plug :check_amount_of_teams when action in [:new, :create, :update]
 
   def new(conn, _params) do
     players =
@@ -24,32 +21,32 @@ defmodule KamleagueWeb.TeamController do
       {:ok, _team} ->
         conn
         |> put_flash(:info, "Team created successfully.")
-        |> redirect(to: Routes.team_path(conn, :index))
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        players =
+          Enum.reject(Leagues.list_players(), fn player ->
+            player.id == Pow.Plug.current_user(conn).player.id
+          end)
+
+        render(conn, "new.html", changeset: changeset, players: players)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    team = Leagues.get_team!(id)
-    render(conn, "show.html", team: team)
+  def show(conn, %{"slug" => slug}) do
+    team = Leagues.get_team_by_slug!(slug)
+    games = Leagues.list_games_team(team)
+    render(conn, "show.html", team: team, games: games)
   end
 
-  def edit(conn, %{"id" => id}) do
-    team = Leagues.get_team!(id)
-    changeset = Leagues.change_team(team)
-    render(conn, "edit.html", team: team, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "team" => team_params}) do
+  def update(conn, %{"id" => id}) do
     team = Leagues.get_team!(id)
 
-    case Leagues.update_team(team, team_params) do
-      {:ok, team} ->
+    case Leagues.approve_team(team) do
+      {:ok, _team} ->
         conn
         |> put_flash(:info, "Team updated successfully.")
-        |> redirect(to: Routes.team_path(conn, :show, team))
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", team: team, changeset: changeset)
@@ -62,6 +59,16 @@ defmodule KamleagueWeb.TeamController do
 
     conn
     |> put_flash(:info, "Team deleted successfully.")
-    |> redirect(to: Routes.team_path(conn, :index))
+    |> redirect(to: Routes.page_path(conn, :index))
+  end
+
+  defp check_amount_of_teams(conn, _opts) do
+    if length(Pow.Plug.current_user(conn).player.teams) >= 2 do
+      conn
+      |> put_flash(:info, "You have already reached the maximum amount of teams allowed.")
+      |> redirect(to: Routes.page_path(conn, :index))
+    else
+      conn
+    end
   end
 end

@@ -10,14 +10,15 @@ defmodule Kamleague.Leagues.Game do
     field :k_factor, :integer
     field :deleted, :boolean, default: false
     field :approved, :boolean, default: false
+    field :type, :string
     timestamps()
   end
 
   @doc false
   def changeset(game, attrs) do
     game
-    |> cast(attrs, [:played_at])
-    |> validate_required([:played_at])
+    |> cast(attrs, [:played_at, :type])
+    |> validate_required([:played_at, :type])
     |> validate_current_or_past_date(:played_at)
   end
 

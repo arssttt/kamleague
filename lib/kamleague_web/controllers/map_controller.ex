@@ -2,7 +2,6 @@ defmodule KamleagueWeb.MapController do
   use KamleagueWeb, :controller
 
   alias Kamleague.Leagues
-  alias Kamleague.Leagues.Map
 
   def index(conn, _params) do
     maps = Leagues.list_maps()

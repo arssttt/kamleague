@@ -5,20 +5,15 @@ defmodule Kamleague.Leagues.TeamsGamesPlayers do
 
   schema "teams_games_players" do
     belongs_to :teams_games, Kamleague.Leagues.TeamsGames
+    belongs_to :player, Kamleague.Leagues.Player
     field :location, :integer
-    field :approved, :boolean, default: false
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:location, :approved])
-    |> validate_required([:location, :approved])
-  end
-
-  def changeset_approve(changeset, params) do
-    changeset
-    |> cast(params, [:approved])
+    |> cast(params, [:location, :player_id])
+    |> validate_required([:location, :player_id])
   end
 end

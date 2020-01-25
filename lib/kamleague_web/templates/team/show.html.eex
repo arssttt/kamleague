@@ -1,13 +1,191 @@
-<h1>Show Team</h1>
-
-<ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @team.name %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: Routes.team_path(@conn, :edit, @team) %></span>
-<span><%= link "Back", to: Routes.team_path(@conn, :index) %></span>
+<section class="section">
+  <div class="box">
+    <div class="level">
+      <div class="level-left">
+        <h1 class="title is-1 level-item"><%= @team.name %></h1>
+      </div>
+    </div>
+    <div class="members">
+      <div class="level-left">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Owner</p>
+            <p class="title is-4"><%= @team.owner.nickname %></p>
+          </div>
+        </div>
+        <%= for player <- @team.players do %>
+          <%= if player.id != @team.owner.id do %>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Member</p>
+                <p class="title is-4"><%= player.player_info.nickname %></p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <hr>
+    <div class="stats">
+      <div class="level">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Games played</p>
+            <p class="title"><%= length(@games) %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Wins</p>
+            <p class="title"><%= @team.wins %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Elo</p>
+            <p class="title is-1"><%= @team.elo %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Losses</p>
+            <p class="title"><%= @team.losses %></p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Win ratio</p>
+            <p class="title">
+              <%= if @team.wins + @team.losses == 0 do %>
+                0%
+              <% else %>
+                <%= round(@team.wins / (@team.wins + @team.losses) * 100) %>%
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h3 class="title is-3">Recent games</h3>
+    <table class="table is-fullwidth recent-games">
+      <colgroup>
+        <col width="20%">
+        <col width="10%">
+        <col width="20%">
+        <col width="20%">
+        <col width="20%">
+        <col width="5%">
+        <col width="5%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="has-text-centered">Teams</th>
+          <th></th>
+          <th>Map</th>
+          <th>Winner</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for game <- @games do %>
+          <tr class="game_row" game="<%= game.id %>">
+            <%= for {team, index} <- Enum.with_index(game.teams) do %>
+              <td class="has-text-centered">
+                <%= team.team.name %>
+                <%= if game.approved do %>
+                  <%= if team.new_elo - team.old_elo > 0 do %>
+                    <span class="has-text-green">(+<%= team.new_elo - team.old_elo %>)</span>
+                  <% else %>
+                    <span class="has-text-red">(<%= team.new_elo - team.old_elo %>)</span>
+                  <% end %>
+                <% end %>
+              </td>
+              <%= unless index + 1 == length(game.teams)  do %>
+                <td class="has-text-centered">
+                  <img src="<%= Routes.static_path(@conn, "/images/swords.png") %>">
+                </td>
+              <% end %>
+            <% end %>
+            <td><%= game.map.name %></td>
+            <td>
+              <%= for team <- game.teams do %>
+                <%= if team.win do %> 
+                  <strong><%= team.team.name %></strong>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= Timex.format!(game.played_at, "%d.%m", :strftime) %>
+            </td>
+            <td>
+              <%= if not game.approved do %>
+                <div class="dropdown is-hoverable">
+                  <div class="dropdown-trigger">
+                    <span class="warning-icon"></span>
+                  </div>
+                  <div class="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <div class="dropdown-item">
+                        <p>This game has not yet been approved.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+          <tr class="game_row_sub hidden" game="<%= game.id %>">
+            <%= for {team, index} <- Enum.with_index(game.teams) do %>
+              <td>
+                <div class="columns is-multiline has-text-centered">
+                  <p class="label column is-half">Player</p>
+                  <p class="label column is-half">Location</p>
+                  <%= for player <- team.players do %>
+                    <p class="label column is-half"><%= player.player.nickname %></p>
+                    <p class="label column is-half"><%= player.location %></p>
+                  <% end %>
+                </div>
+                <%= if game.approved do %>
+                  <div class="has-text-centered">
+                    <p class="label">Elo: <strike><%= team.old_elo %></strike> ⇒ <%= team.new_elo %></p>
+                    <p class="label">
+                      Wins/Losses: <strike><%= team.old_wins %>/<%= team.old_losses %></strike>
+                      ⇒
+                      <%= team.new_wins %>/<%= team.new_losses %>
+                    </p>
+                    <p class="label">
+                      <%= if team.old_wins + team.old_losses == 0 do %>
+                        Win ratio: <strike>0%</strike>
+                        ⇒
+                        <%= round(team.new_wins / (team.new_wins + team.new_losses) * 100) %>%
+                      <% else %>
+                        Win ratio: <strike><%= round(team.old_wins / (team.old_wins + team.old_losses) * 100) %>%</strike>
+                        ⇒
+                        <%= round(team.new_wins / (team.new_wins + team.new_losses) * 100) %>%
+                      <% end %>
+                    </p>
+                  </div>
+                <% end %>
+              </td>
+              <%= unless index + 1 == length(game.teams)  do %>
+                <td></td>
+              <% end %>
+            <% end %>
+            <td>
+              <img src="/images/maps/locs/<%= game.map.slug %>.jpg">
+            </td>
+            <td colspan="2">
+              <p class="label">Played on: <%= Timex.format!(game.played_at, "%d.%m.%Y", :strftime) %></p>
+              <p class="label">Played at: <%= Timex.format!(game.played_at, "%H:%M", :strftime) %> GMT</p>
+              <p class="label">K factor: <%= game.k_factor %></p>
+            </td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

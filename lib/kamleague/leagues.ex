@@ -9,7 +9,15 @@ defmodule Kamleague.Leagues do
   alias Ecto.Multi
 
   alias Timex
-  alias Kamleague.Leagues.{Player, PlayersGames}
+
+  alias Kamleague.Leagues.{
+    Player,
+    PlayersGames,
+    PlayersTeams,
+    TeamsGames,
+    Team,
+    TeamsGamesPlayers
+  }
 
   @doc """
   Returns the list of players.
@@ -250,7 +258,12 @@ defmodule Kamleague.Leagues do
     |> where([g], not g.deleted)
     |> order_by([g], desc: g.played_at)
     |> preload([
-      [players: ^from(pg in PlayersGames, order_by: [desc: pg.player_id]), players: :player_info],
+      [
+        players: ^from(pg in PlayersGames, order_by: [desc: pg.player_id]),
+        players: :player_info,
+        teams: :team,
+        teams: [players: :player]
+      ],
       :map
     ])
     |> Repo.paginate(params)
@@ -276,7 +289,21 @@ defmodule Kamleague.Leagues do
     Repo.all(query)
   end
 
-  def list_player_games(player) do
+  def list_unapproved_team_games(player) do
+    query =
+      from game in Game,
+        join: t in Team,
+        on: t.owner_id == ^player.id,
+        join: tg in TeamsGames,
+        on:
+          tg.team_id == t.id and not tg.approved and tg.game_id == game.id and
+            not game.deleted,
+        preload: [[teams: [players: :player]], [teams: :team], :map]
+
+    Repo.all(query)
+  end
+
+  def list_games_player(player) do
     query =
       from game in Game,
         join: p in PlayersGames,
@@ -287,6 +314,25 @@ defmodule Kamleague.Leagues do
           [
             players: ^from(pg in PlayersGames, order_by: [desc: pg.player_id]),
             players: :player_info
+          ],
+          :map
+        ],
+        order_by: [desc: game.played_at]
+
+    Repo.all(query)
+  end
+
+  def list_games_team(team) do
+    query =
+      from game in Game,
+        join: tg in TeamsGames,
+        on:
+          tg.team_id == ^team.id and tg.game_id == game.id and
+            not game.deleted,
+        preload: [
+          [
+            teams: :team,
+            teams: [players: :player]
           ],
           :map
         ],
@@ -310,6 +356,8 @@ defmodule Kamleague.Leagues do
 
   """
   def get_game!(id), do: Repo.get!(Game, id) |> Repo.preload([[players: :player_info], :map])
+
+  def get_team_game!(id), do: Repo.get!(Game, id) |> Repo.preload([[teams: :players], :map])
 
   @doc """
   Creates a game.
@@ -379,6 +427,73 @@ defmodule Kamleague.Leagues do
     |> Repo.insert()
   end
 
+  def create_team_game(%Map{} = map, attrs \\ %{}) do
+    # Convert the teams map to atoms and add win parameter
+    teams =
+      attrs["teams"]
+      |> Elixir.Map.values()
+      |> Enum.map(fn x -> convert_to_atom_map(x) end)
+
+    # Get winner
+    winner =
+      teams
+      |> Enum.filter(fn team ->
+        team.team_id == String.to_integer(attrs["winner_id"])
+      end)
+      |> List.first()
+
+    # Get loser
+    loser =
+      Enum.filter(teams, fn team ->
+        team.team_id != String.to_integer(attrs["winner_id"])
+      end)
+      |> List.first()
+
+    winner_players =
+      winner.players
+      |> Elixir.Map.values()
+
+    winner =
+      winner
+      |> Elixir.Map.put(:win, true)
+      |> Elixir.Map.put(:players, winner_players)
+
+    loser_players =
+      loser.players
+      |> Elixir.Map.values()
+
+    loser =
+      loser
+      |> Elixir.Map.put(:win, false)
+      |> Elixir.Map.put(:players, loser_players)
+
+    # Format played_at to a DateTime
+    attrs =
+      case Elixir.Map.fetch(attrs, "played_at") do
+        {:ok, _} ->
+          Elixir.Map.put(
+            attrs,
+            "played_at",
+            Timex.Timezone.convert(
+              Timex.parse!(attrs["played_at"], "{ISO:Extended}"),
+              Timex.Timezone.get("UTC", Timex.now())
+            )
+          )
+
+        :error ->
+          attrs
+      end
+
+    IO.inspect(winner)
+
+    %Game{}
+    |> Game.changeset(attrs)
+    |> Ecto.Changeset.put_change(:map_id, map.id)
+    |> Ecto.Changeset.put_assoc(:teams, [winner, loser])
+    |> IO.inspect()
+    |> Repo.insert()
+  end
+
   @doc """
   Changes String Map to Map of Atoms e.g. %{"c"=> "d", "x" => %{"yy" => "zz"}} to
           %{c: d, x: %{yy: zz}}, i.e changes even the nested maps.
@@ -408,13 +523,13 @@ defmodule Kamleague.Leagues do
       Game
       |> preload(:players)
       |> order_by([g], asc: g.played_at)
-      |> where([g], g.deleted == false and g.approved == true)
+      |> where([g], g.deleted == false and g.approved == true and g.type == "1v1")
       |> Repo.all()
 
     for game <- games do
       # Get winner and loser information
       winner = Enum.find(game.players, fn player -> player.win end)
-      winner_info = get_player_with_games!(winner.player_id)
+      winner_info = get_player!(winner.player_id)
       loser = Enum.find(game.players, fn player -> !player.win end)
       loser_info = get_player!(loser.player_id)
 
@@ -432,7 +547,7 @@ defmodule Kamleague.Leagues do
           %{
             id: winner.id,
             game_id: winner.game_id,
-            player_id: winner.player_id,
+            team_id: winner.player_id,
             new_elo: winner_new_elo,
             old_elo: winner_info.elo,
             new_wins: winner_info.wins + 1,
@@ -443,7 +558,7 @@ defmodule Kamleague.Leagues do
           %{
             id: loser.id,
             game_id: loser.game_id,
-            player_id: loser.player_id,
+            team_id: loser.player_id,
             new_elo: loser_new_elo,
             old_elo: loser_info.elo,
             new_wins: loser_info.wins,
@@ -471,19 +586,103 @@ defmodule Kamleague.Leagues do
 
   defp set_k_factor(game, games, ids) do
     count =
-      games
-      |> Enum.filter(fn g -> Enum.all?(g.players, fn p -> p.player_id in ids end) end)
-      |> Enum.filter(fn g -> g.played_at <= game.played_at end)
-      |> Enum.filter(fn g ->
-        g.played_at >= Timex.beginning_of_month(game.played_at) and
-          g.played_at <= Timex.end_of_month(game.played_at)
-      end)
-      |> Enum.count()
+      if game.type == "1v1" do
+        games
+        |> Enum.filter(fn g -> Enum.all?(g.players, fn p -> p.player_id in ids end) end)
+        |> Enum.filter(fn g -> g.played_at <= game.played_at end)
+        |> Enum.filter(fn g ->
+          g.played_at >= Timex.beginning_of_month(game.played_at) and
+            g.played_at <= Timex.end_of_month(game.played_at)
+        end)
+        |> Enum.count()
+      else
+        games
+        |> Enum.filter(fn g -> Enum.all?(g.teams, fn p -> p.team_id in ids end) end)
+        |> Enum.filter(fn g -> g.played_at <= game.played_at end)
+        |> Enum.filter(fn g ->
+          g.played_at >= Timex.beginning_of_month(game.played_at) and
+            g.played_at <= Timex.end_of_month(game.played_at)
+        end)
+        |> Enum.count()
+      end
 
     cond do
       count == 1 -> 100
       count == 2 -> 75
       count > 2 -> 50
+    end
+  end
+
+  @doc """
+  Calculates the elo for all the games. This calculates all the games from the beginning
+  to calculate the elo correctly when approving and deleting games.
+  """
+  def calculate_team_elo() do
+    # Reset all team data
+    Repo.update_all(Team, set: [elo: 1000, wins: 0, losses: 0])
+
+    games =
+      Game
+      |> preload(:teams)
+      |> order_by([g], asc: g.played_at)
+      |> where([g], g.deleted == false and g.approved == true and g.type == "2v2")
+      |> Repo.all()
+
+    for game <- games do
+      # Get winner and loser information
+      winner = Enum.find(game.teams, fn team -> team.win end)
+      winner_info = get_team!(winner.team_id)
+      loser = Enum.find(game.teams, fn team -> !team.win end)
+      loser_info = get_team!(loser.team_id)
+
+      # Set the k factor
+      k_factor = set_k_factor(game, games, [winner.team_id, loser.team_id])
+
+      # Calculate their new elos
+      {winner_new_elo, loser_new_elo} =
+        Elo.rate(winner_info.elo, loser_info.elo, :win, round: true, k_factor: k_factor)
+
+      game_changeset =
+        game
+        |> Game.changeset_k_factor(%{k_factor: k_factor})
+        |> Ecto.Changeset.put_assoc(:teams, [
+          %{
+            id: winner.id,
+            game_id: winner.game_id,
+            team_id: winner.team_id,
+            new_elo: winner_new_elo,
+            old_elo: winner_info.elo,
+            new_wins: winner_info.wins + 1,
+            old_wins: winner_info.wins,
+            new_losses: winner_info.losses,
+            old_losses: winner_info.losses
+          },
+          %{
+            id: loser.id,
+            game_id: loser.game_id,
+            team_id: loser.team_id,
+            new_elo: loser_new_elo,
+            old_elo: loser_info.elo,
+            new_wins: loser_info.wins,
+            old_wins: loser_info.wins,
+            new_losses: loser_info.losses + 1,
+            old_losses: loser_info.losses
+          }
+        ])
+
+      winner_changeset =
+        winner_info
+        |> Team.changeset_game(%{elo: winner_new_elo, wins: winner_info.wins + 1})
+
+      loser_changeset =
+        loser_info
+        |> Team.changeset_game(%{elo: loser_new_elo, losses: loser_info.losses + 1})
+
+      Multi.new()
+      |> Multi.update(:game, game_changeset)
+      |> Multi.update(:winner, winner_changeset)
+      |> Multi.update(:loser, loser_changeset)
+      |> Repo.transaction()
     end
   end
 
@@ -522,8 +721,15 @@ defmodule Kamleague.Leagues do
 
   """
   def update_game(%Game{} = game, attrs) do
-    # Update both players approved status
-    if attrs["approved"] do
+    if attrs["type"] == "2v2" do
+      # Update both teams approved status
+      Enum.each(game.teams, fn team ->
+        team
+        |> TeamsGames.changeset_approve(%{approved: true})
+        |> Repo.update()
+      end)
+    else
+      # Update both players approved status
       Enum.each(game.players, fn player ->
         player
         |> PlayersGames.changeset_approve(%{approved: true})
@@ -539,21 +745,39 @@ defmodule Kamleague.Leagues do
   @doc """
   Approves a game
   """
-  def approve_game(game, approved, id) do
-    player = Enum.find(game.players, fn player -> player.player_id == id end)
+  def approve_game(game, approved) do
+    if game.type == "1v1" do
+      player = Enum.find(game.players, fn player -> !player.approved end)
 
-    game_changeset =
-      game
-      |> Game.changeset_approve()
+      game_changeset =
+        game
+        |> Game.changeset_approve()
 
-    player_changeset =
-      player
-      |> PlayersGames.changeset_approve(%{approved: approved})
+      player_changeset =
+        player
+        |> PlayersGames.changeset_approve(%{approved: approved})
 
-    Multi.new()
-    |> Multi.update(:game, game_changeset)
-    |> Multi.update(:player, player_changeset)
-    |> Repo.transaction()
+      Multi.new()
+      |> Multi.update(:game, game_changeset)
+      |> Multi.update(:player, player_changeset)
+      |> Repo.transaction()
+    else
+      team = Enum.find(game.teams, fn team -> !team.approved end)
+
+      game_changeset =
+        game
+        |> Game.changeset_approve()
+
+      team_changeset =
+        team
+        |> IO.inspect()
+        |> TeamsGames.changeset_approve(%{approved: approved})
+
+      Multi.new()
+      |> Multi.update(:game, game_changeset)
+      |> Multi.update(:team, team_changeset)
+      |> Repo.transaction()
+    end
   end
 
   @doc """
@@ -598,10 +822,21 @@ defmodule Kamleague.Leagues do
       [%Team{}, ...]
 
   """
-  def list_teams do
+  def list_approved_teams do
     Team
     |> preload(players: :player_info)
+    |> where([t], t.approved)
     |> Repo.all()
+  end
+
+  def list_unapproved_teams(player) do
+    query =
+      from team in Team,
+        join: pt in PlayersTeams,
+        on: pt.player_id == ^player.id and not pt.joined and pt.team_id == team.id,
+        preload: [:owner]
+
+    Repo.all(query)
   end
 
   @doc """
@@ -618,7 +853,10 @@ defmodule Kamleague.Leagues do
       ** (Ecto.NoResultsError)
 
   """
-  def get_team!(id), do: Repo.get!(Team, id)
+  def get_team!(id), do: Repo.get!(Team, id) |> Repo.preload(:players)
+
+  def get_team_by_slug!(slug),
+    do: Repo.get_by!(Team, slug: slug) |> Repo.preload([[players: :player_info], :owner])
 
   @doc """
   Creates a team.
@@ -637,10 +875,24 @@ defmodule Kamleague.Leagues do
     |> Team.changeset(attrs)
     |> Ecto.Changeset.put_change(:owner_id, player.id)
     |> Ecto.Changeset.put_assoc(:players, [
-      %{player_id: player.id},
+      %{player_id: player.id, joined: true},
       %{player_id: String.to_integer(attrs["teammate"])}
     ])
+    |> check_amount_teams(attrs["teammate"])
     |> Repo.insert()
+  end
+
+  defp check_amount_teams(changeset, id) do
+    player = Repo.get!(Player, id) |> Repo.preload(:teams)
+
+    case length(player.teams) do
+      2 ->
+        changeset
+        |> Ecto.Changeset.add_error(:teammate, "Teammate is already in 2 teams.")
+
+      _ ->
+        changeset
+    end
   end
 
   @doc """
@@ -655,9 +907,15 @@ defmodule Kamleague.Leagues do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_team(%Team{} = team, attrs) do
+  def approve_team(%Team{} = team) do
+    Enum.each(team.players, fn player ->
+      player
+      |> PlayersTeams.changeset_join(%{joined: true})
+      |> Repo.update()
+    end)
+
     team
-    |> Team.changeset(attrs)
+    |> Team.changeset_approve()
     |> Repo.update()
   end
 

@@ -13,8 +13,16 @@ defmodule KamleagueWeb.AssignUser do
     case Pow.Plug.current_user(conn) do
       %User{} = user ->
         conn
-        |> assign(:current_user, Repo.preload(user, player: [:games, [teams: :team]]))
+        |> assign(
+          :current_user,
+          Repo.preload(user, player: [:games, [teams: [team: [players: :player_info]]]])
+        )
         |> assign(:unapproved_games, Leagues.list_unapproved_games(Leagues.get_player!(user)))
+        |> assign(
+          :unapproved_team_games,
+          Leagues.list_unapproved_team_games(Leagues.get_player!(user))
+        )
+        |> assign(:unapproved_teams, Leagues.list_unapproved_teams(Leagues.get_player!(user)))
         |> assign(:maps, Kamleague.Leagues.list_maps())
 
       _ ->

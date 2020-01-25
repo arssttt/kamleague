@@ -81,6 +81,43 @@ if (dropdown != null) {
   });
 }
 
+$("#game_team_1").on("change", function() {
+  var teamID = $(this).val();
+  if (teamID == "" || undefined) {
+    $("div.game-team-1").each(function() {
+      $(this).addClass("hidden");
+    });
+  } else {
+    $("div.game-team-1[team=" + teamID + "]").removeClass("hidden");
+    if ($(this).hasClass("is-active")) {
+      $(this).removeClass("is-active");
+    } else {
+      $(this).addClass("is-active");
+    }
+  }
+});
+
+$("#game_team_2").on("change", function() {
+  var teamID = $(this).val();
+  if (teamID == "" || undefined) {
+    $("div.game-team-2").each(function() {
+      $(this).addClass("hidden");
+    });
+  } else {
+    $("div.game-team-2[team=" + teamID + "]").removeClass("hidden");
+    if ($(this).hasClass("is-active")) {
+      $(this).removeClass("is-active");
+    } else {
+      $(this).addClass("is-active");
+    }
+  }
+});
+
+$(document).on("click", "a.is-player", function(e) {
+  $("a.is-player").removeClass("is-active");
+  $(this).addClass("is-active");
+});
+
 // Tabs
 let tabsWithContent = (function() {
   let tabs = $(".tabs li");
@@ -133,6 +170,137 @@ $("a#map-modal").on("click", function(event) {
 });
 
 // Uncheck radio buttons if they are the same when selecting locations
+// TODO: REWRITE THIS
+$(function() {
+  $('input[name="game[teams][1][players][1][location]"]').on(
+    "change",
+    function() {
+      // If others are already selected, uncheck it
+      if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      }
+    }
+  );
+
+  $('input[name="game[teams][1][players][2][location]"]').on(
+    "change",
+    function() {
+      // If others are already selected, uncheck it
+      if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      }
+    }
+  );
+
+  $('input[name="game[teams][2][players][1][location]"]').on(
+    "change",
+    function() {
+      // If others are already selected, uncheck it
+      if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      }
+    }
+  );
+
+  $('input[name="game[teams][2][players][2][location]"]').on(
+    "change",
+    function() {
+      // If others are already selected, uncheck it
+      if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][1][players][2][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][1][players][2][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      } else if (
+        $(this).val() ==
+        $('input[name="game[teams][2][players][1][location]"]:checked').val()
+      ) {
+        $('input[name="game[teams][2][players][1][location]"]:checked').prop(
+          "checked",
+          false
+        );
+      }
+    }
+  );
+});
+
 $(function() {
   $('input[name="game[players][1][location]"]').on("change", function() {
     var other = $('input[name="game[players][2][location]"]:checked');

@@ -116,6 +116,11 @@ $dropdown-divider-background-color: $black-light;
 .dropdown {
   margin-left: 1rem;
   vertical-align: middle !important;
+
+  .info {
+    min-width: 15rem;
+  }
+
   .info-icon {
     background-image: url("/images/info-sprites.png");
     background-position: 0px -40px;
@@ -168,6 +173,15 @@ $dropdown-divider-background-color: $black-light;
 }
 .dropdown-divider {
   height: 2px !important;
+}
+
+.team-icon {
+  background-image: url("/images/2v2logo.png");
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  vertical-align: middle;
 }
 
 // Win ratio graph
@@ -361,6 +375,14 @@ table th:not([align]) {
       color: $brown;
     }
   }
+
+  .columns {
+    margin: 0;
+
+    .column {
+      padding: 0;
+    }
+  }
 }
 
 // Title styles
@@ -426,6 +448,12 @@ label,
   &.is-active:active {
     color: $beige;
     border-color: $beige;
+  }
+}
+
+.game-form {
+  .hidden {
+    display: none !important;
   }
 }
 
@@ -532,6 +560,10 @@ article {
 .stats {
   font-family: "Beaufort", "Roboto";
   margin-bottom: 1.5rem;
+}
+
+.members {
+  font-family: "Beaufort", "Roboto";
 }
 
 // Pagination styles
