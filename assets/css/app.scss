@@ -579,6 +579,20 @@ $pagination-color: $black-light;
   border-radius: 0 !important;
 }
 
+// Tag styles
+.tag {
+  position: absolute;
+  bottom: 0px;
+  right: 0.15rem;
+  padding: 0 !important;
+  font-size: 0.6rem !important;
+  color: $brown !important;
+  opacity: 0.5;
+  &.is-transparent {
+    background-color: transparent;
+  }
+}
+
 // Footer styles
 $footer-background-color: $black;
 
@@ -592,6 +606,7 @@ $footer-background-color: $black;
 @import "../node_modules/bulma/sass/elements/box.sass";
 @import "../node_modules/bulma/sass/elements/image.sass";
 @import "../node_modules/bulma/sass/elements/content.sass";
+@import "../node_modules/bulma/sass/elements/tag.sass";
 @import "../node_modules/bulma/sass/elements/other.sass";
 @import "../node_modules/bulma/sass/form/_all.sass";
 @import "../node_modules/bulma/sass/components/navbar.sass";

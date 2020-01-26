@@ -36,6 +36,10 @@
             <div class="navbar-start">
               <%= link "Home", to: Routes.page_path(@conn, :index), class: "navbar-item" %>
 
+              <%= link to: Routes.post_path(@conn, :index), class: "navbar-item" do %>
+                <p>News</p><span class="tag is-transparent">New update!</span>
+              <% end %>
+
              <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
                   Information
@@ -45,7 +49,7 @@
                   <%= link "Rules", to: Routes.page_path(@conn, :rules), class: "navbar-item" %>
                   <%= link "Elo", to: Routes.page_path(@conn, :elo), class: "navbar-item" %>
                   <%= link "FAQ", to: Routes.page_path(@conn, :faq), class: "navbar-item" %>
-                  <%= link "News", to: Routes.post_path(@conn, :index), class: "navbar-item" %>
+                  <%= link "Downloads", to: Routes.page_path(@conn, :downloads), class: "navbar-item" %>
                 </div>
               </div>
 
@@ -62,8 +66,6 @@
                   <%= link "Old rankings", to: Routes.page_path(@conn, :oldrankings), class: "navbar-item" %>
                 </div>
               </div>
-
-              <%= link "Downloads", to: Routes.page_path(@conn, :downloads), class: "navbar-item" %>
 
               <%= if @current_user && @current_user.role == "admin" do %>
                 <div class="navbar-item has-dropdown is-hoverable">
