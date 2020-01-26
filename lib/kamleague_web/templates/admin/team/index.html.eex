@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="box">
+    <h1 class="title is-3">All users</h1>
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th class="has-text-centered">Id</th>
+          <th class="has-text-centered">Name</th>
+          <th class="has-text-centered">Owner</th>
+          <th class="has-text-centered">Members</th>
+          <th class="has-text-centered">Approved</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for team <- @teams do %>
+          <tr>
+              <td class="has-text-centered"><%= team.id %></td>
+              <td class="has-text-centered"><%= team.name %></td>
+              <td class="has-text-centered"><%= team.owner.nickname %></td>
+              <td class="has-text-centered">
+                <%= for player <- team.players do %>
+                  <p><%= player.player_info.nickname %></p>
+                <% end %>
+              </td>
+              <td class="has-text-centered"><%= team.approved %></td>
+              <td class="has-text-centered">
+                <div class="buttons">
+                  <%= link "Edit", to: Routes.admin_team_path(@conn, :edit, team), class: "button is-primary is-small" %>
+                  <%= if team.wins + team.losses == 0 do %>
+                    <%= button "Delete", to: Routes.admin_team_path(@conn, :delete, team), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure you want to delete this team? This is a one way delete and no way to undo this action."] %>
+                  <% end %>
+                <div>
+              </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

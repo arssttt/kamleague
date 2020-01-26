@@ -75,6 +75,7 @@
                     <%= link "Games", to: Routes.admin_game_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Maps", to: Routes.admin_map_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Users", to: Routes.admin_user_path(@conn, :index), class: "navbar-item" %>
+                    <%= link "Teams", to: Routes.admin_team_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Posts", to: Routes.admin_post_path(@conn, :index), class: "navbar-item" %>
 
                   </div>
@@ -160,11 +161,13 @@
                               </p>
                               <%= form_for @conn, Routes.game_path(@conn, :update, game.id), [method: :put], fn f -> %>
                                 <%= hidden_input f, :approved, value: true %>
+                                <%= hidden_input f, :type, value: "1v1" %>
 
                                 <%= submit "Approve", class: "button is-primary is-small" %>
                               <% end %>
                               <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
                                 <%= hidden_input f, :deleted, value: true %>
+                                <%= hidden_input f, :type, value: "1v1" %>
 
                                 <%= submit "Delete", class: "button is-danger is-small" %>
                               <% end %>
@@ -210,6 +213,7 @@
                                  <div class="level-item">
                                   <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
                                     <%= hidden_input f, :deleted, value: true %>
+                                    <%= hidden_input f, :type, value: "2v2" %>
                                     <%= submit "Delete", class: "button is-danger is-small" %>
                                   <% end %>
                                 </div>

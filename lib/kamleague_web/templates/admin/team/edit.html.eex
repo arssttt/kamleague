@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="columns is-centered">
+    <div class="column is-6">
+      <div class="box">
+        <h1 class="title is-3">Edit team</h1>
+        <%= form_for @changeset, Routes.admin_team_path(@conn, :update, @team), fn f -> %>
+          <div class="field">
+            <%= label f, :name, "Name", class: "label" %>
+            <div class="control">
+              <%= text_input f, :name, class: "input" %>
+            </div>
+            <%= error_tag f, :name %>
+          </div>
+
+          <div class="field">
+            <%= submit "Save", class: "button is-fullwidth is-primary is-large" %>
+          </div>
+        <% end %>
+        <%= link "Back", to: Routes.admin_team_path(@conn, :index), class: "button is-fullwidth is-info is-large" %>
+      </div>
+    </div>
+  </div>
+</section>

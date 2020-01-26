@@ -55,11 +55,16 @@ defmodule KamleagueWeb.TeamController do
 
   def delete(conn, %{"id" => id}) do
     team = Leagues.get_team!(id)
-    {:ok, _team} = Leagues.delete_team(team)
+    case Leagues.delete_team(team) do
+      {:ok, _team} ->
+        conn
+        |> put_flash(:info, "Team deleted successfully.")
+        |> redirect(to: Routes.page_path(conn, :index))
 
-    conn
-    |> put_flash(:info, "Team deleted successfully.")
-    |> redirect(to: Routes.page_path(conn, :index))
+      {:error, _changeset} ->
+        conn
+        |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 
   defp check_amount_of_teams(conn, _opts) do

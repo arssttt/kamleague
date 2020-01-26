@@ -17,6 +17,7 @@
       </thead>
       <tbody>
         <%= for game <- @games do %>
+          <%= if game.type == "1v1" do %>
             <tr>
               <td class="has-text-centered"><%= game.id %></td>
               <td class="has-text-centered"><%= game.map.name %></td>
@@ -39,21 +40,72 @@
                   <%= if not game.approved do %>
                     <%= form_for @conn, Routes.admin_game_path(@conn, :update, game), [method: :put], fn f -> %>
                       <input id="approved" name="game[approved]" type="hidden", value="true">
+                      <%= hidden_input f, :type, value: "1v1" %>
                       <%= submit "Approve", class: "button is-primary is-small" %>
                     <% end %>
                   <% end %>
                   <%= if game.deleted do %>
                     <%= form_for @conn, Routes.admin_game_path(@conn, :update, game), [method: :put], fn f -> %>
                       <input id="deleted" name="game[deleted]" type="hidden", value="false">
+                      <%= hidden_input f, :type, value: "1v1" %>
                       <%= submit "Add back", class: "button is-info is-small" %>
                     <% end %>
                   <% else %>
-                    <%= button "Delete", to: Routes.admin_game_path(@conn, :delete, game), method: :delete, class: "button is-danger is-small", data: [confirm: "Are you sure?"] %>
+                    <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
+                      <%= hidden_input f, :deleted, value: true %>
+                      <%= hidden_input f, :type, value: "1v1" %>
+                      <%= submit "Delete", class: "button is-danger is-small" %>
+                    <% end %>
                   <% end %>
                 </div>
               </td>
               <td>
             </tr>
+          <% else %>
+            <tr>
+              <td class="has-text-centered"><%= game.id %></td>
+              <td class="has-text-centered"><%= game.map.name %></td>
+              <%= for team <- game.teams do %>
+                <%= if team.win do %>
+                  <td class="has-text-centered"><%= team.team.name %></td>
+                <% end %>
+              <% end %>
+              <%= for team <- game.teams do %>
+                <%= if not team.win do %>
+                  <td class="has-text-centered"><%= team.team.name %></td>
+                <% end %>
+              <% end %>
+              <td class="has-text-centered"><%= game.played_at %></td>
+              <td class="has-text-centered"><%= game.k_factor %></td>
+              <td class="has-text-centered"><%= game.deleted %></td>
+              <td class="has-text-centered"><%= game.approved %></td>
+              <td>
+                <div class="buttons">
+                  <%= if not game.approved do %>
+                    <%= form_for @conn, Routes.admin_game_path(@conn, :update, game), [method: :put], fn f -> %>
+                      <input id="approved" name="game[approved]" type="hidden", value="true">
+                      <%= hidden_input f, :type, value: "2v2" %>
+                      <%= submit "Approve", class: "button is-primary is-small" %>
+                    <% end %>
+                  <% end %>
+                  <%= if game.deleted do %>
+                    <%= form_for @conn, Routes.admin_game_path(@conn, :update, game), [method: :put], fn f -> %>
+                      <input id="deleted" name="game[deleted]" type="hidden", value="false">
+                      <%= hidden_input f, :type, value: "2v2" %>
+                      <%= submit "Add back", class: "button is-info is-small" %>
+                    <% end %>
+                  <% else %>
+                    <%= form_for @conn, Routes.game_path(@conn, :delete, game), [method: :delete], fn f -> %>
+                      <%= hidden_input f, :deleted, value: true %>
+                      <%= hidden_input f, :type, value: "2v2" %>
+                      <%= submit "Delete", class: "button is-danger is-small" %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+              <td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

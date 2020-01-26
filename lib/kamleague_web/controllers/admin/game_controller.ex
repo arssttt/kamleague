@@ -8,12 +8,19 @@ defmodule KamleagueWeb.Admin.GameController do
     render(conn, "index.html", games: games)
   end
 
-  def update(conn, %{"id" => id, "game" => game_params}) do
-    game = Leagues.get_game!(id)
-
-    case Leagues.update_game(game, game_params) do
+  def update(conn, %{"id" => id, "game" => game_params, "type" => type}) do
+    game =
+    case type do
+      "2v2" -> Leagues.get_team_game!(id)
+      "1v1" -> Leagues.get_game!(id)
+    end
+    case Leagues.update_game(game, game_params, type) do
       {:ok, _game} ->
-        Leagues.calculate_elo()
+        case type do
+          "2v2" -> Leagues.calculate_team_elo()
+          "1v1" -> Leagues.calculate_elo()
+          _ -> Leagues.calculate_elo()
+        end
 
         conn
         |> put_flash(:info, "Game updated successfully.")
@@ -26,8 +33,13 @@ defmodule KamleagueWeb.Admin.GameController do
 
   def delete(conn, %{"id" => id}) do
     game = Leagues.get_game!(id)
-    {:ok, _game} = Leagues.delete_game(game)
-    Leagues.calculate_elo()
+    {:ok, game} = Leagues.delete_game(game)
+
+    case game.type do
+      "2v2" -> Leagues.calculate_team_elo()
+      "1v1" -> Leagues.calculate_elo()
+      _ -> Leagues.calculate_elo()
+    end
 
     conn
     |> put_flash(:info, "Game deleted successfully.")

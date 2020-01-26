@@ -272,7 +272,7 @@ defmodule Kamleague.Leagues do
   def list_all_games() do
     Repo.all(
       from g in Game,
-        preload: [[players: :player_info], :map],
+        preload: [[players: :player_info], [teams: :team], :map],
         order_by: g.id
     )
   end
@@ -547,7 +547,7 @@ defmodule Kamleague.Leagues do
           %{
             id: winner.id,
             game_id: winner.game_id,
-            team_id: winner.player_id,
+            player_id: winner.player_id,
             new_elo: winner_new_elo,
             old_elo: winner_info.elo,
             new_wins: winner_info.wins + 1,
@@ -558,7 +558,7 @@ defmodule Kamleague.Leagues do
           %{
             id: loser.id,
             game_id: loser.game_id,
-            team_id: loser.player_id,
+            player_id: loser.player_id,
             new_elo: loser_new_elo,
             old_elo: loser_info.elo,
             new_wins: loser_info.wins,
@@ -720,8 +720,8 @@ defmodule Kamleague.Leagues do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_game(%Game{} = game, attrs) do
-    if attrs["type"] == "2v2" do
+  def update_game(%Game{} = game, attrs, type) do
+    if type == "2v2" do
       # Update both teams approved status
       Enum.each(game.teams, fn team ->
         team
@@ -822,6 +822,13 @@ defmodule Kamleague.Leagues do
       [%Team{}, ...]
 
   """
+  def list_teams do
+    Team
+    |> preload([[players: :player_info], :owner])
+    |> order_by([t], desc: t.id)
+    |> Repo.all()
+  end
+
   def list_approved_teams do
     Team
     |> preload(players: :player_info)
@@ -908,6 +915,12 @@ defmodule Kamleague.Leagues do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset(attrs)
+    |> Repo.update()
+  end
+
   def approve_team(%Team{} = team) do
     Enum.each(team.players, fn player ->
       player
