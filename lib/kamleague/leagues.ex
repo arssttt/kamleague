@@ -19,11 +19,18 @@ defmodule Kamleague.Leagues do
     TeamsGamesPlayers
   }
 
+  alias Kamleague.Accounts.User
+
   @doc """
   Returns the list of players.
   """
   def list_players do
-    Repo.all(Player)
+    Repo.all(
+      from p in Player,
+        join: u in User,
+        on: p.user_id == u.id and is_nil(u.locked_at),
+        order_by: [desc: p.elo]
+    )
   end
 
   @doc """
@@ -32,6 +39,8 @@ defmodule Kamleague.Leagues do
   def list_active_players do
     Repo.all(
       from p in Player,
+        join: u in User,
+        on: p.user_id == u.id and is_nil(u.locked_at),
         where: p.active == true,
         order_by: [desc: p.elo],
         preload: [:user]
