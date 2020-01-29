@@ -130,7 +130,6 @@
     var value = $(this).val();
  
     var name = $(this).find('option:selected').text();
-       console.log(name)
     if ($(this).val() == "") {
       $("#opponent-team").empty();
     }

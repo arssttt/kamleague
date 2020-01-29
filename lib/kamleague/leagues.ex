@@ -418,8 +418,6 @@ defmodule Kamleague.Leagues do
           attrs
       end
 
-    IO.inspect(attrs)
-
     %Game{}
     |> Game.changeset(attrs)
     |> Ecto.Changeset.put_change(:map_id, map.id)
@@ -484,13 +482,10 @@ defmodule Kamleague.Leagues do
           attrs
       end
 
-    IO.inspect(winner)
-
     %Game{}
     |> Game.changeset(attrs)
     |> Ecto.Changeset.put_change(:map_id, map.id)
     |> Ecto.Changeset.put_assoc(:teams, [winner, loser])
-    |> IO.inspect()
     |> Repo.insert()
   end
 
@@ -770,7 +765,6 @@ defmodule Kamleague.Leagues do
 
       team_changeset =
         team
-        |> IO.inspect()
         |> TeamsGames.changeset_approve(%{approved: approved})
 
       Multi.new()

@@ -86,16 +86,37 @@ $("#game_team_1").on("change", function() {
   if (teamID == "" || undefined) {
     $("div.game-team-1").each(function() {
       $(this).addClass("hidden");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).attr("disabled", "disabled");
+        });
     });
   } else {
     $("div.game-team-1").each(function() {
       $(this).addClass("hidden");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).attr("disabled", "disabled");
+        });
     });
     $("div.game-team-1[team=" + teamID + "]").removeClass("hidden");
+    $("div.game-team-1[team=" + teamID + "]")
+      .find(":input")
+      .each(function() {
+        console.log($(this));
+        $(this).removeAttr("disabled");
+      });
     if ($(this).hasClass("is-active")) {
       $(this).removeClass("is-active");
     } else {
       $(this).addClass("is-active");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).removeAttr("disabled");
+        });
     }
   }
 });
@@ -105,16 +126,37 @@ $("#game_team_2").on("change", function() {
   if (teamID == "" || undefined) {
     $("div.game-team-2").each(function() {
       $(this).addClass("hidden");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).attr("disabled", "disabled");
+        });
     });
   } else {
     $("div.game-team-2").each(function() {
       $(this).addClass("hidden");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).attr("disabled", "disabled");
+        });
     });
     $("div.game-team-2[team=" + teamID + "]").removeClass("hidden");
+    $("div.game-team-2[team=" + teamID + "]")
+      .find(":input")
+      .each(function() {
+        console.log($(this));
+        $(this).removeAttr("disabled");
+      });
     if ($(this).hasClass("is-active")) {
       $(this).removeClass("is-active");
     } else {
       $(this).addClass("is-active");
+      $(this)
+        .find(":input")
+        .each(function() {
+          $(this).removeAttr("disabled");
+        });
     }
   }
 });
