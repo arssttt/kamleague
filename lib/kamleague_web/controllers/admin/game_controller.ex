@@ -10,10 +10,11 @@ defmodule KamleagueWeb.Admin.GameController do
 
   def update(conn, %{"id" => id, "game" => game_params, "type" => type}) do
     game =
-    case type do
-      "2v2" -> Leagues.get_team_game!(id)
-      "1v1" -> Leagues.get_game!(id)
-    end
+      case type do
+        "2v2" -> Leagues.get_team_game!(id)
+        "1v1" -> Leagues.get_game!(id)
+      end
+
     case Leagues.update_game(game, game_params, type) do
       {:ok, _game} ->
         case type do
