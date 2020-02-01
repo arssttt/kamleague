@@ -10,7 +10,7 @@ The following packages are required to build KaM League:
 * npm >= 6.13.4
 * PostgreSQL
 
-Clone the repository with:
+Run the following commands:
 
 ```bash
 git clone git@github.com:isacsund/kamleague.git
