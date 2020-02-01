@@ -850,6 +850,16 @@ defmodule Kamleague.Leagues do
     Repo.all(query)
   end
 
+  def list_approved_teams(player) do
+    query =
+      from team in Team,
+        join: pt in PlayersTeams,
+        on: pt.player_id == ^player.id and team.approved and pt.team_id == team.id,
+        preload: [:owner]
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single team.
 

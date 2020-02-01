@@ -55,6 +55,7 @@ defmodule KamleagueWeb.TeamController do
 
   def delete(conn, %{"id" => id}) do
     team = Leagues.get_team!(id)
+
     case Leagues.delete_team(team) do
       {:ok, _team} ->
         conn
@@ -68,7 +69,9 @@ defmodule KamleagueWeb.TeamController do
   end
 
   defp check_amount_of_teams(conn, _opts) do
-    if length(Pow.Plug.current_user(conn).player.teams) >= 2 do
+    user = Pow.Plug.current_user(conn)
+
+    if length(Leagues.list_approved_teams(user.player)) >= 2 do
       conn
       |> put_flash(:info, "You have already reached the maximum amount of teams allowed.")
       |> redirect(to: Routes.page_path(conn, :index))
