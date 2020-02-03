@@ -693,14 +693,14 @@ defmodule Kamleague.Leagues do
   def check_inactive() do
     players =
       Player
-      |> preload(games: :game)
+      |> preload(games: ^from(g in Game, order_by: [desc: g.player_at]))
       |> Repo.all()
 
     for player <- players do
       Enum.find(player.games, fn g ->
         g.game.approved == true and g.game.deleted == false and
           Timex.diff(DateTime.utc_now(), g.game.played_at, :weeks) >=
-            2
+            3
       end)
       |> case do
         %PlayersGames{} ->
