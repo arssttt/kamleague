@@ -13,7 +13,7 @@
     </script>
     <script src="https://kit.fontawesome.com/69b634ccb1.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="<%= Routes.static_url(@conn, "/css/app.css") %>"/>
     
   </head>
   <body>
@@ -22,7 +22,7 @@
         <div class="container">
           <div class="navbar-brand">
             <%= link to: Routes.page_path(@conn, :index), class: "navbar-item" do %>
-              <img src="<%= Routes.static_path(@conn, "/images/kamleague_logo_gold.svg") %>">
+              <img src="<%= Routes.static_url(@conn, "/images/kamleague_logo_gold.svg") %>">
             <% end %>
 
             <a role="button" id="navbar-burger" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
@@ -285,6 +285,6 @@
         </p>
       </div>
     </footer>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script type="text/javascript" src="<%= Routes.static_url(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

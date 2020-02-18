@@ -12,6 +12,7 @@ use Mix.Config
 config :kamleague, KamleagueWeb.Endpoint,
   http: [port: 4000],
   url: [host: "www.kamleague.com", port: 80],
+  static_url: [scheme: "https", host: "di4uyngxcqrr1.cloudfront.net/assets", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production

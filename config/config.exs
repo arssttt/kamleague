@@ -15,7 +15,8 @@ config :kamleague, KamleagueWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "nF8lfhQpllrrwpoIM1DaKCZqmuQQOGVM10gc0sXJ3asRORjaGFTzVoHyW19YDeUa",
   render_errors: [view: KamleagueWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Kamleague.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Kamleague.PubSub, adapter: Phoenix.PubSub.PG2],
+  static_url: [scheme: "https", host: "di4uyngxcqrr1.cloudfront.net/assets", port: 443]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -36,7 +37,20 @@ config :kamleague, :pow,
 
 # Configures Arc
 config :arc,
-  storage: Arc.Storage.Local
+  bucket: "kamleague",
+  virtual_host: true
+
+# Configures Arc AWS
+config :ex_aws,
+  json_codec: Jason,
+  access_key_id: System.get_env("ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("SECRET_ACCESS_KEY"),
+  region: "eu-central-1",
+  s3: [
+    scheme: "https://",
+    host: "s3.eu-central-1.amazonaws.com",
+    region: "eu-central-1"
+  ]
 
 # Configures Quantum
 config :kamleague, Kamleague.Scheduler,

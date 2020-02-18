@@ -11,9 +11,10 @@ defmodule KamleagueWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :kamleague,
+    from: Path.expand("./"),
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt),
+    headers: [{"access-control-allow-origin", "*"}]
 
   plug Plug.Static,
     at: "/uploads",

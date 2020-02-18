@@ -86,7 +86,7 @@
               </td>
               <%= unless index + 1 == length(game.players)  do %>
                 <td class="has-text-centered">
-                  <img src="<%= Routes.static_path(@conn, "/images/swords.png") %>">
+                  <img src="<%= Routes.static_url(@conn, "/images/swords.png") %>">
                 </td>
               <% end %>
             <% end %>

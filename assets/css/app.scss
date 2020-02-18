@@ -4,13 +4,15 @@
   font-family: "Beaufort";
   font-style: normal;
   font-weight: 400;
-  src: url("/fonts/Beaufort-Regular.woff") format("woff");
+  src: url("https://di4uyngxcqrr1.cloudfront.net/assets/fonts/Beaufort-Regular.woff")
+    format("woff");
 }
 @font-face {
   font-family: "Beaufort";
   font-style: bold;
   font-weight: 700;
-  src: url("/fonts/Beaufort-Bold.woff") format("woff");
+  src: url("https://di4uyngxcqrr1.cloudfront.net/assets/fonts/Beaufort-Bold.woff")
+    format("woff");
 }
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
@@ -52,7 +54,7 @@ html {
 }
 body {
   min-height: 100vh;
-  background: url("/images/background4.jpg") no-repeat;
+  background: url("/assets/images/background4.jpg") no-repeat;
   background-size: auto;
   background-position: top;
 }
