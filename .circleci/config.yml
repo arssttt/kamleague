@@ -1,7 +1,10 @@
 # Elixir CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-elixir/ for more details
-version: 2
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.15
+  aws-code-deploy: circleci/aws-code-deploy@1.0.0
 jobs:
   test:
     docker:
@@ -72,7 +75,7 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
 
-  deploy:
+  build:
     docker:
       - image: circleci/elixir:1.9
         environment:
@@ -83,46 +86,65 @@ jobs:
     working_directory: ~/kamleague/website
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "17:5b:cc:32:77:0d:41:0b:bf:20:d0:54:3f:7f:b7:ef"
+      - run:
+          name: Set up hex and rebar
+          command: mix local.hex --force && mix local.rebar --force
+
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
 
       - run:
-          name: Install OpenSSL
-          command: sudo apt-get install -y openssl
+          name: Install and compile Elixir dependencies
+          command: mix do deps.get, compile
+
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache
+          paths: "deps"
+
+      - save_cache:
+          key: v1-build-cache-{{ .Branch }}
+          paths: "_build"
+      - save_cache:
+          key: v1-build-cache
+          paths: "_build"
 
       - run:
-          name: Install rsync
-          command: sudo apt install -y rsync
+          name: Install npm packages
+          command: npm install --prefix ./assets
 
       - run:
-          name: Move the project to the server
-          command:
-            rsync -av --chown=deploy -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --rsync-path="sudo rsync"
-            ~/kamleague/website deploy@beta.kamleague.com:$BUILD_PATH --delete
+          name: Compile the assets
+          command: npm run deploy --prefix ./assets
 
       - run:
-          name: Build the project assets
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/builds/website && ./build.sh"
-
-      - run:
-          name: Copy the project
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "sudo cp -r kamleague/builds/website kamleague"
-
-      - run:
-          name: Build the release
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com "cd kamleague/website && MIX_ENV=prod mix release --overwrite"
-
-      - run:
-          name: Stop service
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com sudo systemctl stop $SERVICE_NAME
-
-      - run:
-          name: Start service
-          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t deploy@beta.kamleague.com sudo systemctl start $SERVICE_NAME
+          name: Build release
+          command: mix release --overwrite
 
 workflows:
-  version: 2
-  test-deploy:
+  version: 2.1
+  test_build_deploy:
     jobs:
       - test
+      - build:
+          requires:
+            - test
+      - aws-code-deploy/deploy:
+          application-name: kamleague
+          bundle-bucket: kamleague
+          bundle-key: kamleague
+          deployment-group: production
+          service-role-arn: arn:aws:iam::794323266463:role/AWSCodeDeployRole
