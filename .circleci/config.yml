@@ -90,6 +90,10 @@ jobs:
           name: Set up hex and rebar
           command: mix local.hex --force && mix local.rebar --force
 
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@latest"
+
       - restore_cache:
           keys:
             - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
