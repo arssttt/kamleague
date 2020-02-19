@@ -10,9 +10,6 @@ hooks:
   AfterInstall:
     - location: bin/unpack
   ApplicationStart:
-    - location: bin/migrate
-      runas: ec2-user
-      timeout: 300
     - location: bin/start
       timeout: 3600
   ValidateService:
