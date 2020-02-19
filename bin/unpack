@@ -6,9 +6,9 @@ set -x
 cd /opt/app || exit 1
 
 # Extract release
-tar -xzf kamleague.tar.gz
+unzip kamleague.zip
 # Clean up archive
-rm kamleague.tar.gz
+rm kamleague.zip
 # Set permissions
 chown -R ubuntu:ubuntu /opt/app
 
