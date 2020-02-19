@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+if systemctl is-active kamleague-website.service; then
+    systemctl stop kamleague-website.service
+fi
+
+exit 0
