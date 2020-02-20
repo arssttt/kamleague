@@ -3,14 +3,10 @@
 set -e
 set -x
 
-cd /opt/app || exit 1
+cd /opt/kamleague/website || exit 1
 
-# Extract release
-#unzip kamleague.zip
-# Clean up archive
-#rm kamleague.zip
 # Set permissions
-sudo chown -R ubuntu:ubuntu /opt/app
+sudo chown -R ubuntu:ubuntu /opt/kamleague/website
 
 # Set up systemd service if not already done
 __cwd="$(pwd)"

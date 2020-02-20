@@ -75,7 +75,7 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
 
-  build:
+  build_deploy:
     docker:
       - image: circleci/elixir:1.9
         environment:
@@ -140,17 +140,19 @@ jobs:
           name: Build release
           command: mix release --overwrite
 
+      - aws-code-deploy/deploy:
+          application-name: kamleague
+          bundle-bucket: kamleague
+          bundle-key: kamleague
+          bundle-source: _build
+          deployment-group: production
+          service-role-arn: arn:aws:iam::794323266463:role/AWSCodeDeployRole
+
 workflows:
   version: 2.1
   test_build_deploy:
     jobs:
       - test
-      - build:
+      - build_deploy:
           requires:
             - test
-      - aws-code-deploy/deploy:
-          application-name: kamleague
-          bundle-bucket: kamleague
-          bundle-key: kamleague
-          deployment-group: production
-          service-role-arn: arn:aws:iam::794323266463:role/AWSCodeDeployRole

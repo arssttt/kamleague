@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: .
-    destination: /opt/app
+    destination: /opt/kamleague/website
 hooks:
   ApplicationStop:
     - location: bin/stop
