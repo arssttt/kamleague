@@ -5,6 +5,7 @@ version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.15
   aws-code-deploy: circleci/aws-code-deploy@1.0.0
+  aws-cli: circleci/aws-cli@0.1.20
 jobs:
   test:
     docker:
@@ -20,6 +21,7 @@ jobs:
     working_directory: ~/kamleague/website
     steps:
       - checkout
+      - aws-cli/setup
       - run:
           name: Set up hex and rebar
           command: mix local.hex --force && mix local.rebar --force
