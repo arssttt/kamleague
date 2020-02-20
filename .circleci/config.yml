@@ -145,7 +145,6 @@ jobs:
           application-name: kamleague
           bundle-bucket: kamleague
           bundle-key: kamleague
-          bundle-source: _build
 
       - aws-code-deploy/deploy-bundle:
           application-name: kamleague
