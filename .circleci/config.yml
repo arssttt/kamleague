@@ -140,13 +140,17 @@ jobs:
           name: Build release
           command: mix release --overwrite
 
-      - aws-code-deploy/deploy:
+      - aws-code-deploy/push-bundle:
           application-name: kamleague
           bundle-bucket: kamleague
           bundle-key: kamleague
           bundle-source: _build
+
+      - aws-code-deploy/deploy-bundle:
+          application-name: kamleague
+          bundle-bucket: kamleague
+          bundle-key: kamleague
           deployment-group: production
-          service-role-arn: arn:aws:iam::794323266463:role/AWSCodeDeployRole
 
 workflows:
   version: 2.1
