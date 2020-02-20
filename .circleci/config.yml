@@ -17,10 +17,8 @@ jobs:
           POSTGRES_USER: circleci
 
     working_directory: ~/kamleague/website
-    executor: aws-cli/default
     steps:
       - checkout
-      - aws-cli/setup
       - run:
           name: Set up hex and rebar
           command: mix local.hex --force && mix local.rebar --force
@@ -85,8 +83,10 @@ jobs:
           SERVICE_NAME: kamleague-website.service
 
     working_directory: ~/kamleague/website
+    executor: aws-cli/default
     steps:
       - checkout
+      - aws-cli/setup
       - run:
           name: Set up hex and rebar
           command: mix local.hex --force && mix local.rebar --force
