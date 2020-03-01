@@ -37,7 +37,7 @@
               <%= link "Home", to: Routes.page_path(@conn, :index), class: "navbar-item" %>
 
               <%= link to: Routes.post_path(@conn, :index), class: "navbar-item" do %>
-                <p>News</p><span class="tag is-transparent">New update!</span>
+                <p>News</p>
               <% end %>
 
              <div class="navbar-item has-dropdown is-hoverable">
