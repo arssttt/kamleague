@@ -593,19 +593,31 @@ defmodule Kamleague.Leagues do
       if game.type == "1v1" do
         games
         |> Enum.filter(fn g -> Enum.all?(g.players, fn p -> p.player_id in ids end) end)
-        |> Enum.filter(fn g -> g.played_at <= game.played_at end)
         |> Enum.filter(fn g ->
-          g.played_at >= Timex.beginning_of_month(game.played_at) and
-            g.played_at <= Timex.end_of_month(game.played_at)
+          Timex.between?(
+            g.played_at,
+            Timex.beginning_of_month(game.played_at),
+            Timex.end_of_month(game.played_at)
+          )
+        end)
+        |> Enum.filter(fn g ->
+          Timex.compare(g.played_at, game.played_at) == -1 or
+            Timex.compare(g.played_at, game.played_at) == 0
         end)
         |> Enum.count()
       else
         games
         |> Enum.filter(fn g -> Enum.all?(g.teams, fn p -> p.team_id in ids end) end)
-        |> Enum.filter(fn g -> g.played_at <= game.played_at end)
         |> Enum.filter(fn g ->
-          g.played_at >= Timex.beginning_of_month(game.played_at) and
-            g.played_at <= Timex.end_of_month(game.played_at)
+          Timex.between?(
+            g.played_at,
+            Timex.beginning_of_month(game.played_at),
+            Timex.end_of_month(game.played_at)
+          )
+        end)
+        |> Enum.filter(fn g ->
+          Timex.compare(g.played_at, game.played_at) == -1 or
+            Timex.compare(g.played_at, game.played_at) == 0
         end)
         |> Enum.count()
       end
