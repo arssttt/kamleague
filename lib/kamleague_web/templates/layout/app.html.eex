@@ -74,6 +74,7 @@
                   </a>
 
                   <div class="navbar-dropdown">
+                    <%= link "Dashboard", to: Routes.live_dashboard_path(@conn, :home), class: "navbar-item" %>
                     <%= link "Games", to: Routes.admin_game_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Maps", to: Routes.admin_map_path(@conn, :index), class: "navbar-item" %>
                     <%= link "Users", to: Routes.admin_user_path(@conn, :index), class: "navbar-item" %>

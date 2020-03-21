@@ -14,7 +14,8 @@ defmodule Kamleague.Application do
       KamleagueWeb.Endpoint,
       # Starts a worker by calling: Kamleague.Worker.start_link(arg)
       # {Kamleague.Worker, arg},
-      Kamleague.Scheduler
+      Kamleague.Scheduler,
+      KamleagueWeb.Telemetry
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -2,6 +2,8 @@ defmodule KamleagueWeb.Router do
   use KamleagueWeb, :router
   use Pow.Phoenix.Router
 
+  import Phoenix.LiveDashboard.Router
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -83,5 +85,6 @@ defmodule KamleagueWeb.Router do
     resources "/games", Admin.GameController, only: [:index, :delete, :update]
     resources "/users", Admin.UserController
     resources "/teams", Admin.TeamController
+    live_dashboard "/dashboard", metrics: KamleagueWeb.Telemetry
   end
 end

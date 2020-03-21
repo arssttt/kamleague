@@ -40,11 +40,11 @@ defmodule Kamleague.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_dashboard, github: "phoenixframework/phoenix_live_dashboard"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:pow, "~> 1.0.15"},
-      {:phoenix_live_view, "~> 0.4.0"},
       {:earmark, "~> 1.4.3"},
       {:timex, "~> 3.6"},
       {:remote_ip, "~> 0.2.0"},
@@ -54,7 +54,9 @@ defmodule Kamleague.MixProject do
       {:scrivener_ecto, "~> 2.2"},
       {:scrivener_html, "~> 1.8"},
       {:bamboo, "~> 1.3"},
-      {:bamboo_smtp, "~> 2.1.0"}
+      {:bamboo_smtp, "~> 2.1.0"},
+      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.4"}
     ]
   end
 
