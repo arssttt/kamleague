@@ -254,6 +254,33 @@ defmodule Kamleague.Leagues do
   alias Kamleague.Leagues.Game
 
   @doc """
+  game check on list of games and fix by recalculation
+
+  ## Examples
+
+      iex> check_games()
+
+  """
+
+  def check_games() do
+    if Repo.one(
+      from(g in Game,
+      where: g.approved == true and g.deleted == false and is_nil(g.k_factor) and g.type == "1v1",
+      select: count())
+      )  do
+        calculate_elo()
+    end
+
+    if Repo.one(
+      from(g in Game,
+      where: g.approved == true and g.deleted == false and is_nil(g.k_factor) and g.type == "2v2",
+      select: count())
+      )  do
+        calculate_team_elo()
+    end
+  end
+
+  @doc """
   Returns the list of games.
 
   ## Examples
@@ -263,6 +290,7 @@ defmodule Kamleague.Leagues do
 
   """
   def list_games(params) do
+    check_games()
     Game
     |> where([g], not g.deleted)
     |> order_by([g], desc: g.played_at)
