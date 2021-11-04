@@ -13,7 +13,7 @@ The following packages are required to build KaM League:
 Run the following commands:
 
 ```bash
-git clone git@github.com:isacsund/kamleague.git
+git clone git@github.com:arssttt/kamleague.git
 cd kamleague
 mix deps.get
 mix ecto.setup
