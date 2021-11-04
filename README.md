@@ -9,6 +9,7 @@ The following packages are required to build KaM League:
 * Elixir >= 1.9
 * npm >= 6.13.4
 * PostgreSQL
+* inotify-tools
 
 Run the following commands:
 
